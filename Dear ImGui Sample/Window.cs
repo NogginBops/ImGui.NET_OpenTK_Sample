@@ -35,7 +35,11 @@ namespace Dear_ImGui_Sample
         {
             base.OnResize(e);
 
-            //_controller.WindowResized(Width, Height);
+            // Update the opengl viewport
+            GL.Viewport(0, 0, Width, Height);
+
+            // Tell ImGui of the new size
+            _controller.WindowResized(Width, Height);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
