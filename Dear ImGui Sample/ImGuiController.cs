@@ -19,14 +19,16 @@ namespace Dear_ImGui_Sample
         // Veldrid objects
         private int _vertexArray;
         private int _vertexBuffer;
+        private int _vertexBufferSize;
         private int _indexBuffer;
-        private int _projMatrixBuffer;
+        private int _indexBufferSize;
+
         private Texture _fontTexture;
-        //private TextureView _fontTextureView;
         private Shader _shader;
         
         private int _windowWidth;
         private int _windowHeight;
+
         private System.Numerics.Vector2 _scaleFactor = System.Numerics.Vector2.One;
 
         /// <summary>
@@ -68,10 +70,13 @@ namespace Dear_ImGui_Sample
         {
             Util.CreateVertexArray("ImGui", out _vertexArray);
 
+            _vertexBufferSize = 10000;
+            _indexBufferSize = 2000;
+
             Util.CreateVertexBuffer("ImGui", out _vertexBuffer);
             Util.CreateElementBuffer("ImGui", out _indexBuffer);
-            GL.NamedBufferData(_vertexBuffer, 100000, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-            GL.NamedBufferData(_indexBuffer, 20000, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            GL.NamedBufferData(_vertexBuffer, _vertexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            GL.NamedBufferData(_indexBuffer, _indexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
             RecreateFontDeviceTexture();
 
@@ -272,22 +277,26 @@ void main()
                 return;
             }
 
-            // FIXME: We don't handle this in this sample
-            /**
             uint totalVBSize = (uint)(draw_data.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
-            if (totalVBSize > _vertexBuffer.SizeInBytes)
+            if (totalVBSize > _vertexBufferSize)
             {
-                gd.DisposeWhenIdle(_vertexBuffer);
-                _vertexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalVBSize * 1.5f), BufferUsage.VertexBuffer | BufferUsage.Dynamic));
+                int newSize = (int)Math.Max(_vertexBufferSize * 1.5f, totalVBSize);
+                GL.NamedBufferData(_vertexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                _vertexBufferSize = newSize;
+
+                Console.WriteLine($"Resized vertex buffer to new size {_vertexBufferSize}");
             }
 
             uint totalIBSize = (uint)(draw_data.TotalIdxCount * sizeof(ushort));
-            if (totalIBSize > _indexBuffer.SizeInBytes)
+            if (totalIBSize > _indexBufferSize)
             {
-                gd.DisposeWhenIdle(_indexBuffer);
-                _indexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalIBSize * 1.5f), BufferUsage.IndexBuffer | BufferUsage.Dynamic));
+                int newSize = (int)Math.Max(_indexBufferSize * 1.5f, totalIBSize);
+                GL.NamedBufferData(_indexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                _indexBufferSize = newSize;
+
+                Console.WriteLine($"Resized index buffer to new size {_indexBufferSize}");
             }
-            */
+
 
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
