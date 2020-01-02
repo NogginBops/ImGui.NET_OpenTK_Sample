@@ -31,14 +31,14 @@ namespace Dear_ImGui_Sample
             _controller = new ImGuiController(Width, Height);
         }
 
-		protected override void OnResize(EventArgs e)
-		{
-			base.OnResize(e);
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
 
-			//_controller.WindowResized(Width, Height);
-		}
+            //_controller.WindowResized(Width, Height);
+        }
 
-		protected override void OnRenderFrame(FrameEventArgs e)
+        protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
 

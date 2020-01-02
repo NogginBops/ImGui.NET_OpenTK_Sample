@@ -95,7 +95,7 @@ void main()
 {
     gl_Position = projection_matrix * vec4(in_position, 0, 1);
     color = in_color;
-	texCoord = in_texCoord;
+    texCoord = in_texCoord;
 }";
             string FragmentSource = @"#version 330 core
 
@@ -112,14 +112,14 @@ void main()
 }";
             _shader = new Shader("ImGui", VertexSource, FragmentSource);
 
-			var imDrawVertSize = 0;
+            var imDrawVertSize = 0;
 
-			// public Vector2 pos;
-			imDrawVertSize += 2 * sizeof(float);
+            // public Vector2 pos;
+            imDrawVertSize += 2 * sizeof(float);
             // public Vector2 uv;
-			imDrawVertSize += 2 * sizeof(float);
+            imDrawVertSize += 2 * sizeof(float);
             // public uint col;
-			imDrawVertSize += 1 * sizeof(uint);
+            imDrawVertSize += 1 * sizeof(uint);
 
             GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, imDrawVertSize);
             GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
