@@ -112,16 +112,7 @@ void main()
 }";
             _shader = new Shader("ImGui", VertexSource, FragmentSource);
 
-            var imDrawVertSize = 0;
-
-            // public Vector2 pos;
-            imDrawVertSize += 2 * sizeof(float);
-            // public Vector2 uv;
-            imDrawVertSize += 2 * sizeof(float);
-            // public uint col;
-            imDrawVertSize += 1 * sizeof(uint);
-
-            GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, imDrawVertSize);
+            GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, Unsafe.SizeOf<ImDrawVert>());
             GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
 
             GL.EnableVertexArrayAttrib(_vertexArray, 0);
