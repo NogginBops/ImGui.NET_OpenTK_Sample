@@ -27,15 +27,18 @@ namespace Dear_ImGui_Sample
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             _controller = new ImGuiController(Width, Height);
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs e)
-        {
-            base.OnUpdateFrame(e);
-        }
-        
-        protected override void OnRenderFrame(FrameEventArgs e)
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+
+			//_controller.WindowResized(Width, Height);
+		}
+
+		protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
 
