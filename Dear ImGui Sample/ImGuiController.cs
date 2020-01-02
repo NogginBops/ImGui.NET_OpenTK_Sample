@@ -112,8 +112,16 @@ void main()
 }";
             _shader = new Shader("ImGui", VertexSource, FragmentSource);
 
-            // We use unsafe just to be able to do sizeof(...)
-            unsafe { GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, sizeof(ImDrawVert)); }
+			var imDrawVertSize = 0;
+
+			// public Vector2 pos;
+			imDrawVertSize += 2 * sizeof(float);
+            // public Vector2 uv;
+			imDrawVertSize += 2 * sizeof(float);
+            // public uint col;
+			imDrawVertSize += 1 * sizeof(uint);
+
+            GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, imDrawVertSize);
             GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
 
             GL.EnableVertexArrayAttrib(_vertexArray, 0);
@@ -167,7 +175,7 @@ void main()
         /// <summary>
         /// Updates ImGui input and IO configuration state.
         /// </summary>
-        public void Update(Window wnd, float deltaSeconds)
+        public void Update(GameWindow wnd, float deltaSeconds)
         {
             if (_frameBegun)
             {
@@ -199,7 +207,7 @@ void main()
         KeyboardState PrevKeyboardState;
         readonly List<char> PressedChars = new List<char>();
 
-        private void UpdateImGuiInput(Window wnd)
+        private void UpdateImGuiInput(GameWindow wnd)
         {
             ImGuiIOPtr io = ImGui.GetIO();
 
