@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OpenToolkit.Windowing.Desktop;
+using OpenTK.Graphics;
 
 namespace Dear_ImGui_Sample
 {
@@ -11,7 +11,8 @@ namespace Dear_ImGui_Sample
     {
         static void Main(string[] args)
         {
-            Window wnd = new Window();
+            GraphicsMode mode = new GraphicsMode(new ColorFormat(24), 16, 8, 4, new ColorFormat(32), 2, false);
+            Window wnd = new Window(mode);
             wnd.Run();
         }
     }

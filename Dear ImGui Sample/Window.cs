@@ -1,14 +1,13 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ImGuiNET;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
-using OpenToolkit.Graphics.OpenGL4;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
 
 namespace Dear_ImGui_Sample
 {
@@ -16,27 +15,31 @@ namespace Dear_ImGui_Sample
     {
         ImGuiController _controller;
 
-        public Window() : base(GameWindowSettings.Default, NativeWindowSettings.Default)
+        public Window(GraphicsMode gMode) : base(1600, 900, gMode,
+                                    "ImGui Sample!",
+                                    GameWindowFlags.Default,
+                                    DisplayDevice.Default,
+                                    3, 3, GraphicsContextFlags.ForwardCompatible)
         {
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
         }
 
-        protected override void OnLoad()
+        protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad();
-            
-            _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
+            base.OnLoad(e);
+
+            _controller = new ImGuiController(Width, Height);
         }
-        
-        protected override void OnResize(ResizeEventArgs e)
+
+        protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
 
             // Update the opengl viewport
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+            GL.Viewport(0, 0, Width, Height);
 
             // Tell ImGui of the new size
-            _controller.WindowResized(ClientSize.X, ClientSize.Y);
+            _controller.WindowResized(Width, Height);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -57,19 +60,16 @@ namespace Dear_ImGui_Sample
             SwapBuffers();
         }
 
-        protected override void OnTextInput(TextInputEventArgs e)
+        protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            base.OnTextInput(e);
-            
-            
-            _controller.PressChar((char)e.Unicode);
+            base.OnKeyPress(e);
+
+            _controller.PressChar(e.KeyChar);
         }
 
-        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        public override void Exit()
         {
-            base.OnMouseWheel(e);
-            
-            _controller.MouseScroll(e.Offset);
+            base.Exit();
         }
     }
 }
