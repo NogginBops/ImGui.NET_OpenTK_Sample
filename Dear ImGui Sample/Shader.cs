@@ -1,6 +1,4 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
-using OpenTK.Graphics;
 using System.Threading;
+using OpenToolkit.Graphics.OpenGL4;
 
 namespace Dear_ImGui_Sample
 {
