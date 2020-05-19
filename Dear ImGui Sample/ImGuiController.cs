@@ -1,10 +1,11 @@
 ﻿using ImGuiNET;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using OpenToolkit.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common.Input;
+using OpenToolkit.Windowing.Desktop;
 
 namespace Dear_ImGui_Sample
 {
@@ -202,22 +203,23 @@ void main()
         {
             ImGuiIOPtr io = ImGui.GetIO();
 
-            MouseState MouseState = Mouse.GetCursorState();
-            KeyboardState KeyboardState = Keyboard.GetState();
+            MouseState MouseState = wnd.MouseState;
+            KeyboardState KeyboardState = wnd.KeyboardState;
 
-            io.MouseDown[0] = MouseState.LeftButton == ButtonState.Pressed;
-            io.MouseDown[1] = MouseState.RightButton == ButtonState.Pressed;
-            io.MouseDown[2] = MouseState.MiddleButton == ButtonState.Pressed;
+            io.MouseDown[0] = MouseState[MouseButton.Left];
+            io.MouseDown[1] = MouseState[MouseButton.Right];
+            io.MouseDown[2] = MouseState[MouseButton.Middle];
 
-            var screenPoint = new System.Drawing.Point(MouseState.X, MouseState.Y);
-            var point = wnd.PointToClient(screenPoint);
+            var screenPoint = new Vector2i((int)MouseState.X, (int)MouseState.Y);
+            var point = screenPoint;//wnd.PointToClient(screenPoint);
             io.MousePos = new System.Numerics.Vector2(point.X, point.Y);
-
-            io.MouseWheel = MouseState.Scroll.Y - PrevMouseState.Scroll.Y;
-            io.MouseWheelH = MouseState.Scroll.X - PrevMouseState.Scroll.X;
             
             foreach (Key key in Enum.GetValues(typeof(Key)))
             {
+                if (key == Key.Unknown)
+                {
+                    continue;
+                }
                 io.KeysDown[(int)key] = KeyboardState.IsKeyDown(key);
             }
 
@@ -240,6 +242,14 @@ void main()
         internal void PressChar(char keyChar)
         {
             PressedChars.Add(keyChar);
+        }
+
+        internal void MouseScroll(Vector2 offset)
+        {
+            ImGuiIOPtr io = ImGui.GetIO();
+            
+            io.MouseWheel = offset.Y;
+            io.MouseWheelH = offset.X;
         }
 
         private static void SetKeyMappings()
