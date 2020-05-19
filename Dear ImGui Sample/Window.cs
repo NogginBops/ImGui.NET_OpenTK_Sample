@@ -16,7 +16,7 @@ namespace Dear_ImGui_Sample
     {
         ImGuiController _controller;
 
-        public Window() : base(GameWindowSettings.Default, NativeWindowSettings.Default)
+        public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(3, 3)})
         {
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
         }
