@@ -332,8 +332,8 @@ void main()
                 1.0f);
 
             _shader.UseShader();
-            GL.ProgramUniformMatrix4(_shader.Program, _shader.GetUniformLocation("projection_matrix"), false, ref mvp);
-            GL.ProgramUniform1(_shader.Program, _shader.GetUniformLocation("in_fontTexture"), 0);
+            GL.UniformMatrix4(_shader.GetUniformLocation("projection_matrix"), false, ref mvp);
+            GL.Uniform1(_shader.GetUniformLocation("in_fontTexture"), 0);
             Util.CheckGLError("Projection");
 
             GL.BindVertexArray(_vertexArray);
