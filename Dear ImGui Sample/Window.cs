@@ -19,7 +19,7 @@ namespace Dear_ImGui_Sample
                                     "ImGui Sample!",
                                     GameWindowFlags.Default,
                                     DisplayDevice.Default,
-                                    3, 3, GraphicsContextFlags.ForwardCompatible)
+                                    4, 5, GraphicsContextFlags.ForwardCompatible)
         {
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
         }

@@ -110,6 +110,7 @@ void main()
 {
     outputColor = color * texture(in_fontTexture, texCoord);
 }";
+
             _shader = new Shader("ImGui", VertexSource, FragmentSource);
 
             GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, Unsafe.SizeOf<ImDrawVert>());
@@ -236,7 +237,6 @@ void main()
             PrevKeyboardState = KeyboardState;
         }
 
-
         internal void PressChar(char keyChar)
         {
             PressedChars.Add(keyChar);
@@ -296,7 +296,6 @@ void main()
                 Console.WriteLine($"Resized index buffer to new size {_indexBufferSize}");
             }
 
-
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
@@ -322,8 +321,8 @@ void main()
                 1.0f);
 
             _shader.UseShader();
-            GL.ProgramUniformMatrix4(_shader.Program, _shader.GetUniformLocation("projection_matrix"), false, ref mvp);
-            GL.ProgramUniform1(_shader.Program, _shader.GetUniformLocation("in_fontTexture"), 0);
+            GL.UniformMatrix4(_shader.GetUniformLocation("projection_matrix"), false, ref mvp);
+            GL.Uniform1(_shader.GetUniformLocation("in_fontTexture"), 0);
             Util.CheckGLError("Projection");
 
             GL.BindVertexArray(_vertexArray);
@@ -371,8 +370,13 @@ void main()
                 vtx_offset += cmd_list.VtxBuffer.Size;
             }
 
+            GL.ActiveTexture(TextureUnit.Texture0);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.ScissorTest);
+
+            GL.BindVertexArray(0);
         }
 
         /// <summary>
