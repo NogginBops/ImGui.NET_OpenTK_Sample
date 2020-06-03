@@ -85,9 +85,9 @@ namespace Dear_ImGui_Sample
 
 uniform mat4 projection_matrix;
 
-in vec2 in_position;
-in vec2 in_texCoord;
-in vec4 in_color;
+layout(location = 0) in vec2 in_position;
+layout(location = 1) in vec2 in_texCoord;
+layout(location = 2) in vec4 in_color;
 
 out vec4 color;
 out vec2 texCoord;
