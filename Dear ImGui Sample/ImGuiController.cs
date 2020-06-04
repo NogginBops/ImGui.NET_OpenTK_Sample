@@ -278,53 +278,40 @@ void main()
 
         private void RenderImDrawData(ImDrawDataPtr draw_data)
         {
-            uint vertexOffsetInVertices = 0;
-            uint indexOffsetInElements = 0;
-
             if (draw_data.CmdListsCount == 0)
             {
                 return;
             }
 
-            uint totalVBSize = (uint)(draw_data.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
-            if (totalVBSize > _vertexBufferSize)
-            {
-                int newSize = (int)Math.Max(_vertexBufferSize * 1.5f, totalVBSize);
-                GL.NamedBufferData(_vertexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-                _vertexBufferSize = newSize;
-
-                Console.WriteLine($"Resized vertex buffer to new size {_vertexBufferSize}");
-            }
-
-            uint totalIBSize = (uint)(draw_data.TotalIdxCount * sizeof(ushort));
-            if (totalIBSize > _indexBufferSize)
-            {
-                int newSize = (int)Math.Max(_indexBufferSize * 1.5f, totalIBSize);
-                GL.NamedBufferData(_indexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-                _indexBufferSize = newSize;
-
-                Console.WriteLine($"Resized index buffer to new size {_indexBufferSize}");
-            }
-
-
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
 
-                GL.NamedBufferSubData(_vertexBuffer, (IntPtr)(vertexOffsetInVertices * Unsafe.SizeOf<ImDrawVert>()), cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
-                Util.CheckGLError($"Data Vert {i}");
-                GL.NamedBufferSubData(_indexBuffer, (IntPtr)(indexOffsetInElements * sizeof(ushort)), cmd_list.IdxBuffer.Size * sizeof(ushort), cmd_list.IdxBuffer.Data);
+                int vertexSize = cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
+                if (vertexSize > _vertexBufferSize)
+                {
+                    int newSize = (int)Math.Max(_vertexBufferSize * 1.5f, vertexSize);
+                    GL.NamedBufferData(_vertexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                    _vertexBufferSize = newSize;
 
-                Util.CheckGLError($"Data Idx {i}");
+                    Console.WriteLine($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
+                }
 
-                vertexOffsetInVertices += (uint)cmd_list.VtxBuffer.Size;
-                indexOffsetInElements += (uint)cmd_list.IdxBuffer.Size;
+                int indexSize = cmd_list.IdxBuffer.Size * sizeof(ushort);
+                if (indexSize > _indexBufferSize)
+                {
+                    int newSize = (int)Math.Max(_indexBufferSize * 1.5f, indexSize);
+                    GL.NamedBufferData(_indexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                    _indexBufferSize = newSize;
+
+                    Console.WriteLine($"Resized dear imgui index buffer to new size {_indexBufferSize}");
+                }
             }
 
             // Setup orthographic projection matrix into our constant buffer
             ImGuiIOPtr io = ImGui.GetIO();
             Matrix4 mvp = Matrix4.CreateOrthographicOffCenter(
-                -1.0f,
+                0.0f,
                 io.DisplaySize.X,
                 io.DisplaySize.Y,
                 0.0f,
@@ -349,11 +336,19 @@ void main()
             GL.Disable(EnableCap.DepthTest);
 
             // Render command lists
-            int vtx_offset = 0;
-            int idx_offset = 0;
             for (int n = 0; n < draw_data.CmdListsCount; n++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];
+
+                GL.NamedBufferSubData(_vertexBuffer, IntPtr.Zero, cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
+                Util.CheckGLError($"Data Vert {n}");
+
+                GL.NamedBufferSubData(_indexBuffer, IntPtr.Zero, cmd_list.IdxBuffer.Size * sizeof(ushort), cmd_list.IdxBuffer.Data);
+                Util.CheckGLError($"Data Idx {n}");
+
+                int vtx_offset = 0;
+                int idx_offset = 0;
+
                 for (int cmd_i = 0; cmd_i < cmd_list.CmdBuffer.Size; cmd_i++)
                 {
                     ImDrawCmdPtr pcmd = cmd_list.CmdBuffer[cmd_i];
@@ -372,7 +367,14 @@ void main()
                         GL.Scissor((int)clip.X, _windowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));
                         Util.CheckGLError("Scissor");
 
-                        GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(idx_offset * sizeof(ushort)), vtx_offset);
+                        if ((io.BackendFlags & ImGuiBackendFlags.RendererHasVtxOffset) != 0)
+                        {
+                            GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(idx_offset * sizeof(ushort)), vtx_offset);
+                        }
+                        else
+                        {
+                            GL.DrawElements(BeginMode.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (int)pcmd.IdxOffset * sizeof(ushort));
+                        }
                         Util.CheckGLError("Draw");
                     }
 
