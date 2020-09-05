@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ImGuiNET;
 using System.Drawing;
-using OpenToolkit.Graphics.OpenGL4;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using System.Diagnostics;
 
 namespace Dear_ImGui_Sample
 {
@@ -17,14 +18,17 @@ namespace Dear_ImGui_Sample
         ImGuiController _controller;
 
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(4, 5)})
-        {
-            Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
-        }
+        { }
 
         protected override void OnLoad()
         {
             base.OnLoad();
-            
+
+            // OpenTK-pre9.4 doesn't make the context current when loading so we do that here.
+            MakeCurrent();
+
+            Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
+
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
         }
         

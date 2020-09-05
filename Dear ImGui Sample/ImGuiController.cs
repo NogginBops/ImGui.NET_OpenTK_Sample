@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using OpenToolkit.Graphics.OpenGL4;
-using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common.Input;
-using OpenToolkit.Windowing.Desktop;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common.Input;
+using OpenTK.Windowing.Desktop;
 
 namespace Dear_ImGui_Sample
 {
