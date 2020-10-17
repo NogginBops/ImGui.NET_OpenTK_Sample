@@ -17,15 +17,12 @@ namespace Dear_ImGui_Sample
     {
         ImGuiController _controller;
 
-        public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(4, 5)})
+        public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(4, 5) })
         { }
 
         protected override void OnLoad()
         {
             base.OnLoad();
-
-            // OpenTK-pre9.4 doesn't make the context current when loading so we do that here.
-            MakeCurrent();
 
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
 
