@@ -196,7 +196,6 @@ void main()
         }
 
         MouseState PrevMouseState;
-        KeyboardState PrevKeyboardState;
         readonly List<char> PressedChars = new List<char>();
 
         private void UpdateImGuiInput(GameWindow wnd)
@@ -234,7 +233,6 @@ void main()
             io.KeySuper = KeyboardState.IsKeyDown(Key.WinLeft) || KeyboardState.IsKeyDown(Key.WinRight);
 
             PrevMouseState = MouseState;
-            PrevKeyboardState = KeyboardState;
         }
 
         internal void PressChar(char keyChar)
@@ -268,9 +266,6 @@ void main()
 
         private void RenderImDrawData(ImDrawDataPtr draw_data)
         {
-            uint vertexOffsetInVertices = 0;
-            uint indexOffsetInElements = 0;
-
             if (draw_data.CmdListsCount == 0)
             {
                 return;
