@@ -1,5 +1,9 @@
 # Dear Imgui Sample using OpenTK
 
+## OpenTK 4
+
+This branch of the repository uses OpenTK 3, if you are looking for a OpenTK 4 sample switch to the `opentk4.0` branch.
+
 ## OpenGL 4.5
 
 This version of the repository uses a lot of opengl 4.5 features for convenience (not having to bind buffers and stuff).
