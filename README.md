@@ -10,7 +10,7 @@ This version of the repository uses a lot of opengl 4.5 features for convenience
 
 For a opengl 3.3 version of the repo using opentk 3.2 checkout the `opengl3.3` branch.
 
-There is no version of this sample that uses opentk 4.0 and opentk 3.3.
+There is no version of this sample that uses opentk 4.0 and opengl 3.3.
 
 ## BadImageFormatexception
 
