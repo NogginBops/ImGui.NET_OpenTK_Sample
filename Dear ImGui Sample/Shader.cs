@@ -26,7 +26,7 @@ namespace Dear_ImGui_Sample
         private readonly Dictionary<string, int> UniformToLocation = new Dictionary<string, int>();
         private bool Initialized = false;
 
-        private (ShaderType Type, string Path)[] Files;
+        private readonly (ShaderType Type, string Path)[] Files;
 
         public Shader(string name, string vertexShader, string fragmentShader)
         {
