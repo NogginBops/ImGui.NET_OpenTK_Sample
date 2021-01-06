@@ -1,16 +1,13 @@
 # Dear Imgui Sample using OpenTK
 
-## OpenTK 4.0
-
-This sample uses the preview packages of opentk 4.0 to show how you can use opentk 4.0 instead of 3.2 which the master branch is using.
-
 ## OpenGL 4.5
 
 This version of the repository uses a lot of opengl 4.5 features for convenience (not having to bind buffers and stuff).
 
 For a opengl 3.3 version of the repo using opentk 3.2 checkout the `opengl3.3` branch.
 
-There is no version of this sample that uses opentk 4.0 and opengl 3.3.
+The `opengl3.3` branch is written for OpenTK 3 so some changes will have to be made.
+There is no version of this sample that uses opentk 4 and opengl 3.3.
 
 ## BadImageFormatexception
 
