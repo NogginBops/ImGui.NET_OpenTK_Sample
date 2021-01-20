@@ -16,7 +16,6 @@ namespace Dear_ImGui_Sample
     {
         private bool _frameBegun;
 
-        // Veldrid objects
         private int _vertexArray;
         private int _vertexBuffer;
         private int _vertexBufferSize;
