@@ -24,6 +24,8 @@ namespace Dear_ImGui_Sample
         {
             base.OnLoad();
 
+            VSync = VSyncMode.On;
+
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
 
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
@@ -51,6 +53,13 @@ namespace Dear_ImGui_Sample
 
             ImGui.ShowDemoWindow();
 
+            if (ImGui.Begin("Test"))
+            {
+                // FIXME: Tests with custom texture!!
+                //ImGui.Image((IntPtr)1, ImGui.GetContentRegionAvail());
+            }
+            ImGui.End();
+
             _controller.Render();
 
             Util.CheckGLError("End of frame");
@@ -70,7 +79,8 @@ namespace Dear_ImGui_Sample
         {
             base.OnMouseWheel(e);
             
-            _controller.MouseScroll(e.Offset);
+            // FIXME: There is a bug in opentk 4.4.0 where e.Offset isn't an actual offset
+            _controller.MouseScroll(MouseState.ScrollDelta);
         }
     }
 }

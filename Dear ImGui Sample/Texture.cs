@@ -33,6 +33,7 @@ namespace Dear_ImGui_Sample
         }
 
         public readonly string Name;
+        public long BindlessHandle;
         public readonly int GLTexture;
         public readonly int Width, Height;
         public readonly int MipmapLevels;
@@ -118,24 +119,36 @@ namespace Dear_ImGui_Sample
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMaxLevel, MipmapLevels - 1);
         }
 
+        private void CheckCanModify()
+        {
+            if (BindlessHandle != default)
+            {
+                throw new Exception("Cannot change texture parameters after a bindless texture handle has been created!");
+            }
+        }
+
         public void SetMinFilter(TextureMinFilter filter)
         {
+            CheckCanModify();
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMinFilter, (int)filter);
         }
 
         public void SetMagFilter(TextureMagFilter filter)
         {
+            CheckCanModify();
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMagFilter, (int)filter);
         }
 
         public void SetAnisotropy(float level)
         {
+            CheckCanModify();
             const TextureParameterName TEXTURE_MAX_ANISOTROPY = (TextureParameterName)0x84FE;
             GL.TextureParameter(GLTexture, TEXTURE_MAX_ANISOTROPY, Util.Clamp(level, 1, MaxAniso));
         }
 
         public void SetLod(int @base, int min, int max)
         {
+            CheckCanModify();
             GL.TextureParameter(GLTexture, TextureParameterName.TextureLodBias, @base);
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMinLod, min);
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMaxLod, max);
@@ -143,7 +156,14 @@ namespace Dear_ImGui_Sample
         
         public void SetWrap(TextureCoordinate coord, TextureWrapMode mode)
         {
+            CheckCanModify();
             GL.TextureParameter(GLTexture, (TextureParameterName)coord, (int)mode);
+        }
+
+        public long CreateBindlessHandle()
+        {
+            BindlessHandle = GL.Arb.GetTextureHandle(GLTexture);
+            return BindlessHandle;
         }
 
         public void Dispose()

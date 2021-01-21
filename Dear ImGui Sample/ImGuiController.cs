@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System.Runtime.InteropServices;
 
 namespace Dear_ImGui_Sample
 {
@@ -16,16 +17,67 @@ namespace Dear_ImGui_Sample
     /// </summary>
     public class ImGuiController : IDisposable
     {
+        [StructLayout(LayoutKind.Sequential, Pack = 4, Size = 25)]
+        struct DrawElementsIndirectCommand
+        {
+            public uint Count;
+            public uint InstanceCount;
+            public uint FirstIndex;
+            public uint BaseVertex;
+            public uint BaseInstance;
+        }
+
+        class Buffer<T> where T : unmanaged
+        {
+            public readonly string Name;
+            public int Handle;
+            public int SizeInElements;
+
+            public Buffer(string name, int handle, int sizeInElements)
+            {
+                Name = name;
+                Handle = handle;
+                SizeInElements = sizeInElements;
+            }
+
+            public static unsafe Buffer<T> Create(string name, int elements)
+            {
+                Util.CreateBuffer(name, out int handle);
+                GL.NamedBufferStorage(handle, elements * sizeof(T), IntPtr.Zero, BufferStorageFlags.DynamicStorageBit);
+                return new Buffer<T>(name, handle, elements);
+            }
+        }
+
         private bool _frameBegun;
 
-        // Veldrid objects
-        private int _vertexArray;
-        private int _vertexBuffer;
-        private int _vertexBufferSize;
-        private int _indexBuffer;
-        private int _indexBufferSize;
+        private Buffer<ImDrawVert> VertexBuffer2;
+        private Buffer<ushort>     IndexBuffer2;
 
-        private Texture _fontTexture;
+        private int VertexArray;
+        private int VertexBuffer;
+        private int VertexBufferSize;
+        private int IndexBuffer;
+        private int IndexBufferSize;
+
+        private Buffer<long> TextureBuffer;
+        //private int TextureBuffer;
+        //private int TextureBufferSize;
+        private RefList<long> TexturesList = new RefList<long>();
+
+        private Buffer<int> DrawCallToTextureBuffer;
+        //private int DrawCallToTextureBuffer;
+        //private int DrawCallToTextureBufferSize;
+        private RefList<int> CommandToTexture = new RefList<int>();
+
+        // FXIME!!!!!
+        private Buffer<Vector4> ScissorRectBuffer;
+
+        private Buffer<DrawElementsIndirectCommand> DrawCommandBuffer;
+        //private int DrawCommandBuffer;
+        //private int DrawCommandBufferSize;
+        private RefList<DrawElementsIndirectCommand> DrawCommands = new RefList<DrawElementsIndirectCommand>();
+
+        private Texture FontTexture;
         private Shader _shader;
         
         private int _windowWidth;
@@ -70,64 +122,85 @@ namespace Dear_ImGui_Sample
 
         public void CreateDeviceResources()
         {
-            Util.CreateVertexArray("ImGui", out _vertexArray);
+            VertexBuffer2 = Buffer<ImDrawVert>.Create("ImGui Vertex Buffer", 10_000);
+            IndexBuffer2 =  Buffer<ushort>.Create("ImGui Index Buffer", 2_000);
 
-            _vertexBufferSize = 10000;
-            _indexBufferSize = 2000;
+            VertexBufferSize = 10000;
+            IndexBufferSize = 2000;
+            Util.CreateVertexBuffer("ImGui", out VertexBuffer);
+            Util.CreateElementBuffer("ImGui", out IndexBuffer);
+            GL.NamedBufferData(VertexBuffer, VertexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            GL.NamedBufferData(IndexBuffer, IndexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
-            Util.CreateVertexBuffer("ImGui", out _vertexBuffer);
-            Util.CreateElementBuffer("ImGui", out _indexBuffer);
-            GL.NamedBufferData(_vertexBuffer, _vertexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-            GL.NamedBufferData(_indexBuffer, _indexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            Util.CreateVertexArray("ImGui", out VertexArray);
+            //GL.VertexArrayElementBuffer(VertexArray, IndexBuffer);
+            GL.VertexArrayElementBuffer(VertexArray, IndexBuffer2.Handle);
+
+            // FIXME: Should we start mapping our buffer like mapped ring buffers?
+            TextureBuffer =           Buffer<long>.Create("ImGui Textures", 1);
+            DrawCallToTextureBuffer = Buffer<int>.Create("ImGui Command to Texture", 10);
+
+            DrawCommandBuffer = Buffer<DrawElementsIndirectCommand>.Create("ImGui Draw Commands", 10);
 
             RecreateFontDeviceTexture();
+            
+            string VertexSource = @"#version 460 core
 
-            string VertexSource = @"#version 330 core
+struct Vertex 
+{
+    float position_x, position_y;
+    float texCoord_u, texCoord_v;
+    uint color;
+};
 
-uniform mat4 projection_matrix;
-
-layout(location = 0) in vec2 in_position;
-layout(location = 1) in vec2 in_texCoord;
-layout(location = 2) in vec4 in_color;
+// This is instead of VAOs and attributes
+layout(binding = 0, std430) buffer VertexData
+{
+    Vertex vertices[];
+};
 
 out vec4 color;
 out vec2 texCoord;
 
+uniform mat4 projection_matrix;
+
 void main()
 {
-    gl_Position = projection_matrix * vec4(in_position, 0, 1);
-    color = in_color;
-    texCoord = in_texCoord;
+    Vertex v = vertices[gl_VertexID];
+    
+    gl_Position = projection_matrix * vec4(v.position_x, v.position_y, 0, 1);
+    texCoord = vec2(v.texCoord_u, v.texCoord_v);
+    color = unpackUnorm4x8(v.color);
 }";
-            string FragmentSource = @"#version 330 core
+            string FragmentSource = @"#version 460 core
 
-uniform sampler2D in_fontTexture;
+#extension GL_ARB_bindless_texture : require
 
 in vec4 color;
 in vec2 texCoord;
 
 out vec4 outputColor;
 
+uniform sampler2D in_fontTexture;
+
+uniform int drawcall;
+
+layout(binding = 1, std430) buffer Textures
+{
+    layout(bindless_sampler) sampler2D textures[];
+};
+
+layout(binding = 2, std430) buffer DrawTextures
+{
+    int draw_id_texture[];
+};
+
 void main()
 {
-    outputColor = color * texture(in_fontTexture, texCoord);
+    int id = draw_id_texture[drawcall]; // gl_DrawID
+    outputColor = color * texture(textures[id], texCoord);
 }";
             _shader = new Shader("ImGui", VertexSource, FragmentSource);
-
-            GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, Unsafe.SizeOf<ImDrawVert>());
-            GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
-
-            GL.EnableVertexArrayAttrib(_vertexArray, 0);
-            GL.VertexArrayAttribBinding(_vertexArray, 0, 0);
-            GL.VertexArrayAttribFormat(_vertexArray, 0, 2, VertexAttribType.Float, false, 0);
-
-            GL.EnableVertexArrayAttrib(_vertexArray, 1);
-            GL.VertexArrayAttribBinding(_vertexArray, 1, 0);
-            GL.VertexArrayAttribFormat(_vertexArray, 1, 2, VertexAttribType.Float, false, 8);
-
-            GL.EnableVertexArrayAttrib(_vertexArray, 2);
-            GL.VertexArrayAttribBinding(_vertexArray, 2, 0);
-            GL.VertexArrayAttribFormat(_vertexArray, 2, 4, VertexAttribType.UnsignedByte, true, 16);
 
             Util.CheckGLError("End of ImGui setup");
         }
@@ -140,11 +213,11 @@ void main()
             ImGuiIOPtr io = ImGui.GetIO();
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bytesPerPixel);
 
-            _fontTexture = new Texture("ImGui Text Atlas", width, height, pixels);
-            _fontTexture.SetMagFilter(TextureMagFilter.Linear);
-            _fontTexture.SetMinFilter(TextureMinFilter.Linear);
+            FontTexture = new Texture("ImGui Text Atlas", width, height, pixels);
+            FontTexture.SetMagFilter(TextureMagFilter.Linear);
+            FontTexture.SetMinFilter(TextureMinFilter.Linear);
             
-            io.Fonts.SetTexID((IntPtr)_fontTexture.GLTexture);
+            io.Fonts.SetTexID((IntPtr)FontTexture.CreateBindlessHandle());
 
             io.Fonts.ClearTexData();
         }
@@ -271,6 +344,26 @@ void main()
             io.KeyMap[(int)ImGuiKey.Z] = (int)Keys.Z;
         }
 
+        private static unsafe void UpdateBuffer<T>(Buffer<T> buffer, RefList<T> data) where T : unmanaged
+        {
+            // If we need to, create a new buffer
+            if (buffer.SizeInElements < data.Count)
+            {
+                int newSize = (int)Math.Max(buffer.SizeInElements * 1.5f, data.Count);
+                ReallocBuffer(buffer, newSize);
+            }
+
+            GL.NamedBufferSubData(buffer.Handle, IntPtr.Zero, data.Count * sizeof(T), ref data[0]);
+        }
+
+        private static unsafe void ReallocBuffer<T>(Buffer<T> buffer, int newSize) where T : unmanaged
+        {
+            GL.DeleteBuffer(buffer.Handle);
+            Util.CreateBuffer(buffer.Name, out buffer.Handle);
+            GL.NamedBufferStorage(buffer.Handle, newSize * sizeof(T), IntPtr.Zero, BufferStorageFlags.DynamicStorageBit);
+            buffer.SizeInElements = newSize;
+        }
+
         private void RenderImDrawData(ImDrawDataPtr draw_data)
         {
             if (draw_data.CmdListsCount == 0)
@@ -278,30 +371,119 @@ void main()
                 return;
             }
 
+            TexturesList.Clear();
+            CommandToTexture.Clear();
+            int vertexCount = 0;
+            int indexCount = 0;
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
 
-                int vertexSize = cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
-                if (vertexSize > _vertexBufferSize)
-                {
-                    int newSize = (int)Math.Max(_vertexBufferSize * 1.5f, vertexSize);
-                    GL.NamedBufferData(_vertexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-                    _vertexBufferSize = newSize;
+                vertexCount += cmd_list.VtxBuffer.Size;
+                indexCount += cmd_list.IdxBuffer.Size;
 
-                    Console.WriteLine($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
+                int vertexSize = cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
+                if (vertexSize > VertexBufferSize)
+                {
+                    int newSize = (int)Math.Max(VertexBufferSize * 1.5f, vertexSize);
+                    GL.NamedBufferData(VertexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                    VertexBufferSize = newSize;
+
+                    Console.WriteLine($"Resized dear imgui vertex buffer to new size {VertexBufferSize}");
                 }
 
                 int indexSize = cmd_list.IdxBuffer.Size * sizeof(ushort);
-                if (indexSize > _indexBufferSize)
+                if (indexSize > IndexBufferSize)
                 {
-                    int newSize = (int)Math.Max(_indexBufferSize * 1.5f, indexSize);
-                    GL.NamedBufferData(_indexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-                    _indexBufferSize = newSize;
+                    int newSize = (int)Math.Max(IndexBufferSize * 1.5f, indexSize);
+                    GL.NamedBufferData(IndexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                    IndexBufferSize = newSize;
 
-                    Console.WriteLine($"Resized dear imgui index buffer to new size {_indexBufferSize}");
+                    Console.WriteLine($"Resized dear imgui index buffer to new size {IndexBufferSize}");
+                }
+
+                // Build a list of unique textures and create a mapping from command to texture
+                for (int commandIdx = 0; commandIdx < cmd_list.CmdBuffer.Size; commandIdx++)
+                {
+                    var command = cmd_list.CmdBuffer[commandIdx];
+                    long textureHandle = command.TextureId.ToInt64();
+                    if (TexturesList.TryGetIndexOf(textureHandle, out var index) == false)
+                    {
+                        TexturesList.Add(textureHandle);
+                        index = TexturesList.Count - 1;
+
+                        // Mark the texture as resident. We are going to need it.
+                        GL.Arb.MakeTextureHandleResident(textureHandle);
+                    }
+
+                    CommandToTexture.Add(index);
                 }
             }
+
+            /**
+            Console.WriteLine("Textures: ");
+            for (int j = 0; j < TexturesList.Count; j++)
+            {
+                Console.Write(TexturesList[j]);
+                if (j != TexturesList.Count - 1) Console.Write(", ");
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Command to texture: ");
+            for (int j = 0; j < CommandToTexture.Count; j++)
+            {
+                Console.Write(CommandToTexture[j]);
+                if (j != CommandToTexture.Count - 1) Console.Write(", ");
+            }
+            Console.WriteLine();
+            */
+
+            if (VertexBuffer2.SizeInElements < vertexCount)
+            {
+                int newSize = (int)Math.Max(VertexBuffer2.SizeInElements * 1.5f, vertexCount);
+                ReallocBuffer(VertexBuffer2, newSize);
+                Console.WriteLine($"Resized vertex buffer! {newSize}");
+            }
+
+            if (IndexBuffer2.SizeInElements < indexCount)
+            {
+                int newSize = (int)Math.Max(IndexBuffer2.SizeInElements * 1.5f, indexCount);
+                ReallocBuffer(IndexBuffer2, newSize);
+                Console.WriteLine($"Resized index buffer! {newSize}");
+            }
+
+            UpdateBuffer(TextureBuffer, TexturesList);
+            UpdateBuffer(DrawCallToTextureBuffer, CommandToTexture);
+
+            DrawCommands.Clear();
+            uint vtx_offset = 0;
+            uint idx_offset = 0;
+            for (int i = 0; i < draw_data.CmdListsCount; i++)
+            {
+                ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
+
+                for (int j = 0; j < cmd_list.CmdBuffer.Size; j++)
+                {
+                    var cmd = cmd_list.CmdBuffer[j];
+
+                    ref var command = ref DrawCommands.Add();
+
+                    command.Count = cmd.ElemCount;
+                    command.InstanceCount = 1;
+                    command.FirstIndex = cmd.IdxOffset + idx_offset;
+                    command.BaseVertex = cmd.VtxOffset + vtx_offset;
+                    command.BaseInstance = 0;
+                }
+
+                // Upload this cmd list's vertices and indices, we have already resized them so we don't have to worry about running out of space.
+                GL.NamedBufferSubData(VertexBuffer2.Handle, (IntPtr)vtx_offset, cmd_list.VtxBuffer.Size, cmd_list.VtxBuffer.Data);
+                GL.NamedBufferSubData(IndexBuffer2.Handle, (IntPtr)idx_offset, cmd_list.IdxBuffer.Size, cmd_list.IdxBuffer.Data);
+
+                vtx_offset += (uint)cmd_list.VtxBuffer.Size;
+                idx_offset += (uint)cmd_list.IdxBuffer.Size;
+            }
+
+            UpdateBuffer(DrawCommandBuffer, DrawCommands);
 
             // Setup orthographic projection matrix into our constant buffer
             ImGuiIOPtr io = ImGui.GetIO();
@@ -318,7 +500,14 @@ void main()
             GL.Uniform1(_shader.GetUniformLocation("in_fontTexture"), 0);
             Util.CheckGLError("Projection");
 
-            GL.BindVertexArray(_vertexArray);
+            // This is instead of using a VAO with buffer attributes
+            GL.BindBufferBase(BufferRangeTarget.ShaderStorageBuffer, 0, VertexBuffer);
+
+            GL.BindBufferBase(BufferRangeTarget.ShaderStorageBuffer, 1, TextureBuffer.Handle);
+            GL.BindBufferBase(BufferRangeTarget.ShaderStorageBuffer, 2, DrawCallToTextureBuffer.Handle);
+
+            // We only bind the VAO to be able to use the EBO
+            GL.BindVertexArray(VertexArray);
             Util.CheckGLError("VAO");
 
             draw_data.ScaleClipRects(io.DisplayFramebufferScale);
@@ -335,15 +524,13 @@ void main()
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];
 
-                GL.NamedBufferSubData(_vertexBuffer, IntPtr.Zero, cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
+                GL.NamedBufferSubData(VertexBuffer, IntPtr.Zero, cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
                 Util.CheckGLError($"Data Vert {n}");
 
-                GL.NamedBufferSubData(_indexBuffer, IntPtr.Zero, cmd_list.IdxBuffer.Size * sizeof(ushort), cmd_list.IdxBuffer.Data);
+                GL.NamedBufferSubData(IndexBuffer, IntPtr.Zero, cmd_list.IdxBuffer.Size * sizeof(ushort), cmd_list.IdxBuffer.Data);
                 Util.CheckGLError($"Data Idx {n}");
 
-                int vtx_offset = 0;
-                int idx_offset = 0;
-
+                int d = 0;
                 for (int cmd_i = 0; cmd_i < cmd_list.CmdBuffer.Size; cmd_i++)
                 {
                     ImDrawCmdPtr pcmd = cmd_list.CmdBuffer[cmd_i];
@@ -353,18 +540,18 @@ void main()
                     }
                     else
                     {
-                        GL.ActiveTexture(TextureUnit.Texture0);
-                        GL.BindTexture(TextureTarget.Texture2D, (int)pcmd.TextureId);
-                        Util.CheckGLError("Texture");
+                        // FXIME!!!!! We want to put the scissor rectangles in a buffer and put that in the vertex thing.
 
                         // We do _windowHeight - (int)clip.W instead of (int)clip.Y because gl has flipped Y when it comes to these coordinates
                         var clip = pcmd.ClipRect;
                         GL.Scissor((int)clip.X, _windowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));
                         Util.CheckGLError("Scissor");
 
+                        GL.Uniform1(_shader.GetUniformLocation("drawcall"), d++);
+
                         if ((io.BackendFlags & ImGuiBackendFlags.RendererHasVtxOffset) != 0)
                         {
-                            GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(idx_offset * sizeof(ushort)), vtx_offset);
+                            GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(pcmd.IdxOffset * sizeof(ushort)), (int)pcmd.VtxOffset);
                         }
                         else
                         {
@@ -372,10 +559,13 @@ void main()
                         }
                         Util.CheckGLError("Draw");
                     }
-
-                    idx_offset += (int)pcmd.ElemCount;
                 }
-                vtx_offset += cmd_list.VtxBuffer.Size;
+            }
+
+            // Mark all used textures not resident. We are done with them.
+            for (int i = 0; i < TexturesList.Count; i++)
+            {
+                GL.Arb.MakeTextureHandleNonResident(TexturesList[i]);
             }
 
             GL.Disable(EnableCap.Blend);
@@ -387,7 +577,7 @@ void main()
         /// </summary>
         public void Dispose()
         {
-            _fontTexture.Dispose();
+            FontTexture.Dispose();
             _shader.Dispose();
         }
     }
