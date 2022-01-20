@@ -25,7 +25,12 @@ namespace Dear_ImGui_Sample
         private int _indexBufferSize;
 
         private Texture _fontTexture;
-        private Shader _shader;
+
+        //private int _fontTexture;
+
+        private int _shader;
+        private int _shaderFontTextureLocation;
+        private int _shaderProjectionMatrixLocation;
         
         private int _windowWidth;
         private int _windowHeight;
@@ -111,7 +116,10 @@ void main()
 {
     outputColor = color * texture(in_fontTexture, texCoord);
 }";
-            _shader = new Shader("ImGui", VertexSource, FragmentSource);
+
+            _shader = Shader.CreateProgram("ImGui", VertexSource, FragmentSource);
+            _shaderFontTextureLocation = GL.GetUniformLocation(_shader, "projection_matrix");
+            _shaderFontTextureLocation = GL.GetUniformLocation(_shader, "in_fontTexture");
 
             GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, Unsafe.SizeOf<ImDrawVert>());
             GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
@@ -312,9 +320,9 @@ void main()
                 -1.0f,
                 1.0f);
 
-            _shader.UseShader();
-            GL.UniformMatrix4(_shader.GetUniformLocation("projection_matrix"), false, ref mvp);
-            GL.Uniform1(_shader.GetUniformLocation("in_fontTexture"), 0);
+            GL.UseProgram(_shader);
+            GL.UniformMatrix4(_shaderProjectionMatrixLocation, false, ref mvp);
+            GL.Uniform1(_shaderFontTextureLocation, 0);
             Util.CheckGLError("Projection");
 
             GL.BindVertexArray(_vertexArray);
@@ -360,7 +368,12 @@ void main()
 
                         if ((io.BackendFlags & ImGuiBackendFlags.RendererHasVtxOffset) != 0)
                         {
-                            GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(pcmd.IdxOffset * sizeof(ushort)), pcmd.VtxOffset);
+                            int vertexOffset;
+                            unchecked
+                            {
+                                vertexOffset = (int)pcmd.VtxOffset;
+                            }
+                            GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (IntPtr)(pcmd.IdxOffset * sizeof(ushort)), vertexOffset);
                         }
                         else
                         {
@@ -381,7 +394,8 @@ void main()
         public void Dispose()
         {
             _fontTexture.Dispose();
-            _shader.Dispose();
+
+            GL.DeleteProgram(_shader);
         }
     }
 }
