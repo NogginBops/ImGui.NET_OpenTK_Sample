@@ -7,6 +7,8 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System.Diagnostics;
+using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
 
 namespace Dear_ImGui_Sample
 {
@@ -24,9 +26,9 @@ namespace Dear_ImGui_Sample
         private int _indexBuffer;
         private int _indexBufferSize;
 
-        private Texture _fontTexture;
+        //private Texture _fontTexture;
 
-        //private int _fontTexture;
+        private int _fontTexture;
 
         private int _shader;
         private int _shaderFontTextureLocation;
@@ -37,6 +39,8 @@ namespace Dear_ImGui_Sample
 
         private System.Numerics.Vector2 _scaleFactor = System.Numerics.Vector2.One;
 
+        private static bool KHRDebugAvailable = false;
+
         /// <summary>
         /// Constructs a new ImGuiController.
         /// </summary>
@@ -44,6 +48,11 @@ namespace Dear_ImGui_Sample
         {
             _windowWidth = width;
             _windowHeight = height;
+
+            int major = GL.GetInteger(GetPName.MajorVersion);
+            int minor = GL.GetInteger(GetPName.MinorVersion);
+
+            KHRDebugAvailable = (major == 4 && minor >= 3) || IsExtensionSupported("KHR_debug");
 
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
@@ -74,15 +83,22 @@ namespace Dear_ImGui_Sample
 
         public void CreateDeviceResources()
         {
-            Util.CreateVertexArray("ImGui", out _vertexArray);
-
             _vertexBufferSize = 10000;
             _indexBufferSize = 2000;
 
-            Util.CreateVertexBuffer("ImGui", out _vertexBuffer);
-            Util.CreateElementBuffer("ImGui", out _indexBuffer);
-            GL.NamedBufferData(_vertexBuffer, _vertexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-            GL.NamedBufferData(_indexBuffer, _indexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+            _vertexArray = GL.GenVertexArray();
+            GL.BindVertexArray(_vertexArray);
+            LabelObject(ObjectLabelIdentifier.VertexArray, _vertexArray, "ImGui");
+
+            _vertexBuffer = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
+            LabelObject(ObjectLabelIdentifier.Buffer, _vertexBuffer, "VBO: ImGui");
+            GL.BufferData(BufferTarget.ArrayBuffer, _vertexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+
+            _indexBuffer = GL.GenBuffer();
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBuffer);
+            LabelObject(ObjectLabelIdentifier.Buffer, _indexBuffer, "EBO: ImGui");
+            GL.BufferData(BufferTarget.ElementArrayBuffer, _indexBufferSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
 
             RecreateFontDeviceTexture();
 
@@ -117,26 +133,20 @@ void main()
     outputColor = color * texture(in_fontTexture, texCoord);
 }";
 
-            _shader = Shader.CreateProgram("ImGui", VertexSource, FragmentSource);
-            _shaderFontTextureLocation = GL.GetUniformLocation(_shader, "projection_matrix");
+            _shader = CreateProgram("ImGui", VertexSource, FragmentSource);
+            _shaderProjectionMatrixLocation = GL.GetUniformLocation(_shader, "projection_matrix");
             _shaderFontTextureLocation = GL.GetUniformLocation(_shader, "in_fontTexture");
 
-            GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, Unsafe.SizeOf<ImDrawVert>());
-            GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
+            int stride = Unsafe.SizeOf<ImDrawVert>();
+            GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, stride, 0);
+            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, stride, 8);
+            GL.VertexAttribPointer(2, 4, VertexAttribPointerType.UnsignedByte, true, stride, 16);
 
-            GL.EnableVertexArrayAttrib(_vertexArray, 0);
-            GL.VertexArrayAttribBinding(_vertexArray, 0, 0);
-            GL.VertexArrayAttribFormat(_vertexArray, 0, 2, VertexAttribType.Float, false, 0);
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
+            GL.EnableVertexAttribArray(2);
 
-            GL.EnableVertexArrayAttrib(_vertexArray, 1);
-            GL.VertexArrayAttribBinding(_vertexArray, 1, 0);
-            GL.VertexArrayAttribFormat(_vertexArray, 1, 2, VertexAttribType.Float, false, 8);
-
-            GL.EnableVertexArrayAttrib(_vertexArray, 2);
-            GL.VertexArrayAttribBinding(_vertexArray, 2, 0);
-            GL.VertexArrayAttribFormat(_vertexArray, 2, 4, VertexAttribType.UnsignedByte, true, 16);
-
-            Util.CheckGLError("End of ImGui setup");
+            CheckGLError("End of ImGui setup");
         }
 
         /// <summary>
@@ -147,11 +157,27 @@ void main()
             ImGuiIOPtr io = ImGui.GetIO();
             io.Fonts.GetTexDataAsRGBA32(out IntPtr pixels, out int width, out int height, out int bytesPerPixel);
 
-            _fontTexture = new Texture("ImGui Text Atlas", width, height, pixels);
-            _fontTexture.SetMagFilter(TextureMagFilter.Linear);
-            _fontTexture.SetMinFilter(TextureMinFilter.Linear);
-            
-            io.Fonts.SetTexID((IntPtr)_fontTexture.GLTexture);
+            int mips = (int)Math.Floor(Math.Log(Math.Max(width, height), 2));
+
+            _fontTexture = GL.GenTexture();
+            GL.ActiveTexture(0);
+            GL.BindTexture(TextureTarget.Texture2D, _fontTexture);
+            GL.TexStorage2D(TextureTarget2d.Texture2D, mips, SizedInternalFormat.Rgba8, width, height);
+            LabelObject(ObjectLabelIdentifier.Texture, _fontTexture, "ImGui Text Atlas");
+
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, width, height, PixelFormat.Bgra, PixelType.UnsignedByte, pixels);
+
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, mips - 1);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+
+            io.Fonts.SetTexID((IntPtr)_fontTexture);
 
             io.Fonts.ClearTexData();
         }
@@ -285,6 +311,10 @@ void main()
                 return;
             }
 
+            // Bind the element buffer (thru the VAO) so that we can resize it.
+            GL.BindVertexArray(_vertexArray);
+            // Bind the vertex buffer so that we can resize it.
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
@@ -293,7 +323,8 @@ void main()
                 if (vertexSize > _vertexBufferSize)
                 {
                     int newSize = (int)Math.Max(_vertexBufferSize * 1.5f, vertexSize);
-                    GL.NamedBufferData(_vertexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                    
+                    GL.BufferData(BufferTarget.ArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _vertexBufferSize = newSize;
 
                     Console.WriteLine($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
@@ -303,7 +334,7 @@ void main()
                 if (indexSize > _indexBufferSize)
                 {
                     int newSize = (int)Math.Max(_indexBufferSize * 1.5f, indexSize);
-                    GL.NamedBufferData(_indexBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
+                    GL.BufferData(BufferTarget.ElementArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _indexBufferSize = newSize;
 
                     Console.WriteLine($"Resized dear imgui index buffer to new size {_indexBufferSize}");
@@ -323,10 +354,10 @@ void main()
             GL.UseProgram(_shader);
             GL.UniformMatrix4(_shaderProjectionMatrixLocation, false, ref mvp);
             GL.Uniform1(_shaderFontTextureLocation, 0);
-            Util.CheckGLError("Projection");
+            CheckGLError("Projection");
 
             GL.BindVertexArray(_vertexArray);
-            Util.CheckGLError("VAO");
+            CheckGLError("VAO");
 
             draw_data.ScaleClipRects(io.DisplayFramebufferScale);
 
@@ -342,11 +373,11 @@ void main()
             {
                 ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];
 
-                GL.NamedBufferSubData(_vertexBuffer, IntPtr.Zero, cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
-                Util.CheckGLError($"Data Vert {n}");
+                GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
+                CheckGLError($"Data Vert {n}");
 
-                GL.NamedBufferSubData(_indexBuffer, IntPtr.Zero, cmd_list.IdxBuffer.Size * sizeof(ushort), cmd_list.IdxBuffer.Data);
-                Util.CheckGLError($"Data Idx {n}");
+                GL.BufferSubData(BufferTarget.ElementArrayBuffer, IntPtr.Zero, cmd_list.IdxBuffer.Size * sizeof(ushort), cmd_list.IdxBuffer.Data);
+                CheckGLError($"Data Idx {n}");
 
                 for (int cmd_i = 0; cmd_i < cmd_list.CmdBuffer.Size; cmd_i++)
                 {
@@ -359,12 +390,12 @@ void main()
                     {
                         GL.ActiveTexture(TextureUnit.Texture0);
                         GL.BindTexture(TextureTarget.Texture2D, (int)pcmd.TextureId);
-                        Util.CheckGLError("Texture");
+                        CheckGLError("Texture");
 
                         // We do _windowHeight - (int)clip.W instead of (int)clip.Y because gl has flipped Y when it comes to these coordinates
                         var clip = pcmd.ClipRect;
                         GL.Scissor((int)clip.X, _windowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));
-                        Util.CheckGLError("Scissor");
+                        CheckGLError("Scissor");
 
                         if ((io.BackendFlags & ImGuiBackendFlags.RendererHasVtxOffset) != 0)
                         {
@@ -379,7 +410,7 @@ void main()
                         {
                             GL.DrawElements(BeginMode.Triangles, (int)pcmd.ElemCount, DrawElementsType.UnsignedShort, (int)pcmd.IdxOffset * sizeof(ushort));
                         }
-                        Util.CheckGLError("Draw");
+                        CheckGLError("Draw");
                     }
                 }
             }
@@ -393,9 +424,85 @@ void main()
         /// </summary>
         public void Dispose()
         {
-            _fontTexture.Dispose();
-
+            GL.DeleteTexture(_fontTexture);
             GL.DeleteProgram(_shader);
+        }
+
+        public static void LabelObject(ObjectLabelIdentifier objLabelIdent, int glObject, string name)
+        {
+            if (KHRDebugAvailable)
+                GL.ObjectLabel(objLabelIdent, glObject, name.Length, name);
+        }
+
+        static bool IsExtensionSupported(string name)
+        {
+            int n = GL.GetInteger(GetPName.NumExtensions);
+            for (int i = 0; i < n; i++)
+            {
+                string extension = GL.GetString(StringNameIndexed.Extensions, i);
+                if (extension == name) return true;
+            }
+
+            return false;
+        }
+
+
+
+        public static int CreateProgram(string name, string vertexSource, string fragmentSoruce)
+        {
+            int program = GL.CreateProgram();
+            LabelObject(ObjectLabelIdentifier.Program, program, $"Program: {name}");
+
+            int vertex = CompileShader(name, ShaderType.VertexShader, vertexSource);
+            int fragment = CompileShader(name, ShaderType.FragmentShader, fragmentSoruce);
+
+            GL.AttachShader(program, vertex);
+            GL.AttachShader(program, fragment);
+
+            GL.LinkProgram(program);
+
+            GL.GetProgram(program, GetProgramParameterName.LinkStatus, out int success);
+            if (success == 0)
+            {
+                string info = GL.GetProgramInfoLog(program);
+                Debug.WriteLine($"GL.LinkProgram had info log [{name}]:\n{info}");
+            }
+
+            GL.DetachShader(program, vertex);
+            GL.DetachShader(program, fragment);
+
+            GL.DeleteShader(vertex);
+            GL.DeleteShader(fragment);
+
+            return program;
+        }
+
+        private static int CompileShader(string name, ShaderType type, string source)
+        {
+            int shader = GL.CreateShader(type);
+            LabelObject(ObjectLabelIdentifier.Shader, shader, $"Shader: {name}");
+
+            GL.ShaderSource(shader, source);
+            GL.CompileShader(shader);
+
+            GL.GetShader(shader, ShaderParameter.CompileStatus, out int success);
+            if (success == 0)
+            {
+                string info = GL.GetShaderInfoLog(shader);
+                Debug.WriteLine($"GL.CompileShader for shader '{name}' [{type}] had info log:\n{info}");
+            }
+
+            return shader;
+        }
+
+        public static void CheckGLError(string title)
+        {
+            ErrorCode error;
+            int i = 1;
+            while ((error = GL.GetError()) != ErrorCode.NoError)
+            {
+                Debug.Print($"{title} ({i++}): {error}");
+            }
         }
     }
 }
