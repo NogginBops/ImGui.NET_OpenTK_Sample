@@ -12,10 +12,6 @@ using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
 
 namespace Dear_ImGui_Sample
 {
-    /// <summary>
-    /// A modified version of Veldrid.ImGui's ImGuiRenderer.
-    /// Manages input for ImGui and handles rendering ImGui's DrawLists with Veldrid.
-    /// </summary>
     public class ImGuiController : IDisposable
     {
         private bool _frameBegun;
@@ -184,9 +180,6 @@ void main()
 
         /// <summary>
         /// Renders the ImGui draw list data.
-        /// This method requires a <see cref="GraphicsDevice"/> because it may create new DeviceBuffers if the size of vertex
-        /// or index data has increased beyond the capacity of the existing buffers.
-        /// A <see cref="CommandList"/> is needed to submit drawing and resource update commands.
         /// </summary>
         public void Render()
         {
