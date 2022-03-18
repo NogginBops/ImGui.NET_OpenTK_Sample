@@ -424,6 +424,10 @@ void main()
         /// </summary>
         public void Dispose()
         {
+            GL.DeleteVertexArray(_vertexArray);
+            GL.DeleteBuffer(_vertexBuffer);
+            GL.DeleteBuffer(_indexBuffer);
+
             GL.DeleteTexture(_fontTexture);
             GL.DeleteProgram(_shader);
         }
@@ -445,8 +449,6 @@ void main()
 
             return false;
         }
-
-
 
         public static int CreateProgram(string name, string vertexSource, string fragmentSoruce)
         {
