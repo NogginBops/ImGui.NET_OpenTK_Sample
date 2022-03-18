@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Dear ImGui Sample": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

@@ -26,7 +26,7 @@ namespace Dear_ImGui_Sample
 
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
 
-            _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
+            _controller = new ImGuiController(this);
         }
         
         protected override void OnResize(ResizeEventArgs e)
@@ -51,7 +51,15 @@ namespace Dear_ImGui_Sample
 
             ImGui.ShowDemoWindow();
 
+            ImGui.EndFrame();
+
             _controller.Render();
+
+            if (ImGui.GetIO().ConfigFlags.HasFlag(ImGuiConfigFlags.ViewportsEnable))
+            {
+                ImGui.UpdatePlatformWindows();
+                ImGui.RenderPlatformWindowsDefault();
+            }
 
             ImGuiController.CheckGLError("End of frame");
 

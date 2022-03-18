@@ -9,6 +9,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Diagnostics;
 using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
+using System.Runtime.InteropServices;
 
 namespace Dear_ImGui_Sample
 {
@@ -22,8 +23,6 @@ namespace Dear_ImGui_Sample
         private int _indexBuffer;
         private int _indexBufferSize;
 
-        //private Texture _fontTexture;
-
         private int _fontTexture;
 
         private int _shader;
@@ -36,6 +35,8 @@ namespace Dear_ImGui_Sample
         private System.Numerics.Vector2 _scaleFactor = System.Numerics.Vector2.One;
 
         private static bool KHRDebugAvailable = false;
+
+        private GCHandle _mainWindowHandle;
 
         /// <summary>
         /// Constructs a new ImGuiController.
@@ -61,9 +62,246 @@ namespace Dear_ImGui_Sample
             SetKeyMappings();
 
             SetPerFrameImGuiData(1f / 60f);
+        }
 
-            ImGui.NewFrame();
-            _frameBegun = true;
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static unsafe extern void ImGuiPlatformIO_Set_Platform_GetWindowPos(ImGuiPlatformIO* platform_io, IntPtr funcPtr);
+        [DllImport("cimgui", CallingConvention = CallingConvention.Cdecl)]
+        public static unsafe extern void ImGuiPlatformIO_Set_Platform_GetWindowSize(ImGuiPlatformIO* platform_io, IntPtr funcPtr);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private unsafe delegate void Platform_CreateWindow(ImGuiViewportPtr vp);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private unsafe delegate void Platform_DestroyWindow(ImGuiViewportPtr vp);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Platform_ShowWindow(ImGuiViewportPtr vp);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Platform_SetWindowPos(ImGuiViewportPtr vp, Vector2 pos);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void Platform_GetWindowPos(ImGuiViewportPtr vp, out Vector2 pos);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Platform_SetWindowSize(ImGuiViewportPtr vp, Vector2 size);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public unsafe delegate void Platform_GetWindowSize(ImGuiViewportPtr vp, out Vector2 size);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Platform_SetWindowFocus(ImGuiViewportPtr vp);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate byte Platform_GetWindowFocus(ImGuiViewportPtr vp);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate byte Platform_GetWindowMinimized(ImGuiViewportPtr vp);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Platform_SetWindowTitle(ImGuiViewportPtr vp, IntPtr title);
+
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Renderer_RenderWindow(ImGuiViewportPtr vp, IntPtr render_arg);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Renderer_SwapBuffers(ImGuiViewportPtr vp, IntPtr render_arg);
+
+        private Platform_CreateWindow CreateWindowDelegate;
+        private Platform_DestroyWindow DestroyWindowDelegate;
+        private Platform_ShowWindow ShowWindowDelegate;
+        private Platform_SetWindowPos SetWindowPosDelegate;
+        private Platform_GetWindowPos GetWindowPosDelegate;
+        private Platform_SetWindowSize SetWindowSizeDelegate;
+        private Platform_GetWindowSize GetWindowSizeDelegate;
+        private Platform_SetWindowFocus SetWindowFocusDelegate;
+        private Platform_GetWindowFocus GetWindowFocusDelegate;
+        private Platform_GetWindowMinimized GetWindowMinimizedDelegate;
+        private Platform_SetWindowTitle SetWindowTitleDelegate;
+
+        private Renderer_RenderWindow RenderWindowDelegate;
+        private Renderer_SwapBuffers SwapBuffersDelegate;
+
+        private static unsafe void CreateWindow(ImGuiViewportPtr vp)
+        {
+            NativeWindowSettings settings = new NativeWindowSettings()
+            {
+                StartVisible = false,
+                StartFocused = false,
+                Location = new Vector2i((int)vp.Pos.X, (int)vp.Pos.Y),
+                Size = new Vector2i((int)vp.Size.X, (int)vp.Size.Y),
+            };
+
+            if (vp.Flags.HasFlag(ImGuiViewportFlags.NoDecoration))
+            {
+                settings.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Hidden;
+            }
+            else
+            {
+                settings.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Resizable;
+            }
+
+            // Create the window and allocate the handle.
+            GameWindow gw = new GameWindow(GameWindowSettings.Default, settings);
+            var handle = GCHandle.Alloc(gw);
+            vp.PlatformUserData = (IntPtr)handle;
+
+            gw.Resize += (e) => { vp.PlatformRequestResize = true; };
+            gw.Move += (e) => { vp.PlatformRequestMove = true; };
+            gw.Closing += (e) => { vp.PlatformRequestClose = true; };
+        }
+
+        private static unsafe void DestroyWindow(ImGuiViewportPtr vp)
+        {
+            Console.WriteLine("DestroyWindow");
+            if (vp.PlatformUserData != IntPtr.Zero)
+            {
+                var handle = GCHandle.FromIntPtr(vp.PlatformUserData);
+                GameWindow window = (GameWindow)handle.Target;
+                window.Dispose();
+
+                handle.Free();
+                vp.PlatformUserData = IntPtr.Zero;
+            }
+        }
+
+        private static unsafe void ShowWindow(ImGuiViewportPtr vp)
+        {
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            Console.WriteLine("ShowWindow: " + window.Title);
+            window.IsVisible = true;
+        }
+        private static unsafe void SetWindowPos(ImGuiViewportPtr vp, Vector2 pos)
+        {
+            Console.WriteLine("SetWindowPos: " + pos);
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            window.Location = (Vector2i)pos;
+        }
+        public static unsafe void GetWindowPos(ImGuiViewportPtr vp, out Vector2 pos)
+        {
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            pos = window.Location.ToVector2();
+        }
+        public static unsafe void SetWindowSize(ImGuiViewportPtr vp, Vector2 size)
+        {
+            Console.WriteLine("SetWindowSize: " + size);
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            window.Size = (Vector2i)size;
+        }
+        public static unsafe void GetWindowSize(ImGuiViewportPtr vp, out Vector2 size)
+        {
+            Console.WriteLine("GetWindowSize");
+            size = default;
+        }
+        public static unsafe void SetWindowFocus(ImGuiViewportPtr vp)
+        {
+            Console.WriteLine("SetWindowFocus");
+
+        }
+        public static unsafe byte GetWindowFocus(ImGuiViewportPtr vp)
+        {
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            return (byte)(window.IsFocused ? 1 : 0);
+        }
+        public static unsafe byte GetWindowMinimized(ImGuiViewportPtr vp)
+        {
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            bool minimized = window.WindowState == OpenTK.Windowing.Common.WindowState.Minimized;
+            return (byte) (minimized ? 1 : 0);
+        }
+        public static unsafe void SetWindowTitle(ImGuiViewportPtr vp, IntPtr titlePtr)
+        {
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            string title = Marshal.PtrToStringUTF8(titlePtr);
+            window.Title = title;
+            Console.WriteLine("SetWindowTitle: " + title);
+        }
+
+        public static unsafe void RenderWindow(ImGuiViewportPtr vp, IntPtr render_arg)
+        {
+            Console.WriteLine("RenderWindow");
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            window.MakeCurrent();
+
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+        }
+
+        public static unsafe void SwapBuffers(ImGuiViewportPtr vp, IntPtr render_arg)
+        {
+            Console.WriteLine("SwapBuffers");
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            window.SwapBuffers();
+        }
+
+        /// <summary>
+        /// Constructs a new ImGuiController with multi-viewport support.
+        /// </summary>
+        /// <param name="window"></param>
+        public unsafe ImGuiController(GameWindow window) : this(window.ClientSize.X, window.ClientSize.Y)
+        {
+            var platformIO = ImGui.GetPlatformIO();
+
+            var io = ImGui.GetIO();
+            io.ConfigFlags |= ImGuiConfigFlags.ViewportsEnable;
+            io.BackendFlags |= ImGuiBackendFlags.PlatformHasViewports;
+            io.BackendFlags |= ImGuiBackendFlags.RendererHasViewports;
+
+            _mainWindowHandle = GCHandle.Alloc(window);
+            platformIO.Viewports[0].PlatformUserData = (IntPtr)_mainWindowHandle;
+
+            // Setup multiple viewports
+
+            CreateWindowDelegate = CreateWindow;
+            DestroyWindowDelegate = DestroyWindow;
+            ShowWindowDelegate = ShowWindow;
+            SetWindowPosDelegate = SetWindowPos;
+            GetWindowPosDelegate = GetWindowPos;
+            SetWindowSizeDelegate = SetWindowSize;
+            GetWindowSizeDelegate = GetWindowSize;
+            SetWindowFocusDelegate = SetWindowFocus;
+            GetWindowFocusDelegate = GetWindowFocus;
+            GetWindowMinimizedDelegate = GetWindowMinimized;
+            SetWindowTitleDelegate = SetWindowTitle;
+
+            RenderWindowDelegate = RenderWindow;
+            SwapBuffersDelegate = SwapBuffers;
+
+            platformIO.Platform_CreateWindow = Marshal.GetFunctionPointerForDelegate(CreateWindowDelegate);
+            platformIO.Platform_DestroyWindow = Marshal.GetFunctionPointerForDelegate(DestroyWindowDelegate);
+            platformIO.Platform_ShowWindow = Marshal.GetFunctionPointerForDelegate(ShowWindowDelegate);
+            platformIO.Platform_SetWindowPos = Marshal.GetFunctionPointerForDelegate(SetWindowPosDelegate);
+            //platformIO.Platform_GetWindowPos = Marshal.GetFunctionPointerForDelegate(GetWindowPosDelegate);
+            platformIO.Platform_SetWindowSize = Marshal.GetFunctionPointerForDelegate(SetWindowSizeDelegate);
+            //platformIO.Platform_GetWindowSize = Marshal.GetFunctionPointerForDelegate(GetWindowSizeDelegate);
+            platformIO.Platform_SetWindowFocus = Marshal.GetFunctionPointerForDelegate(SetWindowFocusDelegate);
+            platformIO.Platform_GetWindowFocus = Marshal.GetFunctionPointerForDelegate(GetWindowFocusDelegate);
+            platformIO.Platform_GetWindowMinimized= Marshal.GetFunctionPointerForDelegate(GetWindowMinimizedDelegate);
+            platformIO.Platform_SetWindowTitle = Marshal.GetFunctionPointerForDelegate(SetWindowTitleDelegate);
+
+            //platformIO.Renderer_SwapBuffers
+
+            ImGuiPlatformIO_Set_Platform_GetWindowPos(platformIO, Marshal.GetFunctionPointerForDelegate(GetWindowPosDelegate));
+            ImGuiPlatformIO_Set_Platform_GetWindowSize(platformIO, Marshal.GetFunctionPointerForDelegate(GetWindowSizeDelegate));
+
+            var monitors = Monitors.GetMonitors();
+
+            Marshal.FreeHGlobal(platformIO.NativePtr->Monitors.Data);
+            IntPtr data = Marshal.AllocHGlobal(Unsafe.SizeOf<ImGuiPlatformMonitor>() * monitors.Count);
+            var vec = new ImVector<ImGuiPlatformMonitor>(monitors.Count, monitors.Count, data);
+            platformIO.NativePtr->Monitors = Unsafe.As<ImVector<ImGuiPlatformMonitor>, ImVector>(ref vec);
+            for (int i = 0; i < monitors.Count; i++)
+            {
+                // FIXME: Get proper dpi scaling!
+                vec[i].DpiScale = 1f;
+                var area = monitors[i].ClientArea;
+                var pos = area.Min.ToVector2();
+                var size = area.Size.ToVector2();
+
+                var workArea = monitors[i].WorkArea;
+                var workPos = workArea.Min.ToVector2();
+                var workSize = workArea.Size.ToVector2();
+
+                vec[i].MainPos = Unsafe.As<Vector2, System.Numerics.Vector2>(ref pos);
+                vec[i].MainSize = Unsafe.As<Vector2, System.Numerics.Vector2>(ref size);
+
+                // FIXME!
+                //vec[i].WorkPos = Unsafe.As<Vector2, System.Numerics.Vector2>(ref workPos);
+                //vec[i].WorkSize= Unsafe.As<Vector2, System.Numerics.Vector2>(ref workSize);
+
+                vec[i].WorkPos = vec[i].MainPos;
+                vec[i].WorkSize = vec[i].MainSize;
+            }
         }
 
         public void WindowResized(int width, int height)
@@ -258,6 +496,14 @@ void main()
             io.KeyAlt = KeyboardState.IsKeyDown(Keys.LeftAlt) || KeyboardState.IsKeyDown(Keys.RightAlt);
             io.KeyShift = KeyboardState.IsKeyDown(Keys.LeftShift) || KeyboardState.IsKeyDown(Keys.RightShift);
             io.KeySuper = KeyboardState.IsKeyDown(Keys.LeftSuper) || KeyboardState.IsKeyDown(Keys.RightSuper);
+
+            var viewports = ImGui.GetPlatformIO().Viewports;
+            for (int i = 1; i < viewports.Size; i++)
+            {
+                var v = viewports[i];
+                GameWindow window = (GameWindow)GCHandle.FromIntPtr(v.PlatformUserData).Target;
+                window.ProcessEvents();
+            }
         }
 
         internal void PressChar(char keyChar)
@@ -423,6 +669,11 @@ void main()
 
             GL.DeleteTexture(_fontTexture);
             GL.DeleteProgram(_shader);
+
+            if (_mainWindowHandle.IsAllocated)
+            {
+                _mainWindowHandle.Free();
+            }
         }
 
         public static void LabelObject(ObjectLabelIdentifier objLabelIdent, int glObject, string name)
