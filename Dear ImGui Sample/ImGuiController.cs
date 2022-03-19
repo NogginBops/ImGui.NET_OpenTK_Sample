@@ -15,6 +15,22 @@ namespace Dear_ImGui_Sample
 {
     public class ImGuiController : IDisposable
     {
+        // FIXME: Maybe we can share these using context sharing? We would need to create a new VAO though.
+        /*struct GLDrawData
+        {
+            private int _vertexArray;
+            private int _vertexBuffer;
+            private int _vertexBufferSize;
+            private int _indexBuffer;
+            private int _indexBufferSize;
+
+            private int _fontTexture;
+
+            private int _shader;
+            private int _shaderFontTextureLocation;
+            private int _shaderProjectionMatrixLocation;
+        }*/
+
         private bool _frameBegun;
 
         private int _vertexArray;
@@ -92,6 +108,8 @@ namespace Dear_ImGui_Sample
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void Platform_SetWindowTitle(ImGuiViewportPtr vp, IntPtr title);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void Platform_UpdateWindow(ImGuiViewportPtr vp);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void Renderer_RenderWindow(ImGuiViewportPtr vp, IntPtr render_arg);
@@ -110,22 +128,32 @@ namespace Dear_ImGui_Sample
         private Platform_GetWindowMinimized GetWindowMinimizedDelegate;
         private Platform_SetWindowTitle SetWindowTitleDelegate;
 
+        private Platform_UpdateWindow UpdateWindowDelegate;
+
         private Renderer_RenderWindow RenderWindowDelegate;
         private Renderer_SwapBuffers SwapBuffersDelegate;
 
-        private static unsafe void CreateWindow(ImGuiViewportPtr vp)
+        private unsafe void CreateWindow(ImGuiViewportPtr vp)
         {
+            // FIXME: Transparent window!
+
             NativeWindowSettings settings = new NativeWindowSettings()
             {
                 StartVisible = false,
                 StartFocused = false,
+                WindowState = OpenTK.Windowing.Common.WindowState.Normal,
                 Location = new Vector2i((int)vp.Pos.X, (int)vp.Pos.Y),
                 Size = new Vector2i((int)vp.Size.X, (int)vp.Size.Y),
+
+                // FIXME: Can this actually be used? We still need to setup the VAO in the new context.
+                SharedContext = ((GameWindow)_mainWindowHandle.Target).Context,
             };
 
             if (vp.Flags.HasFlag(ImGuiViewportFlags.NoDecoration))
             {
-                settings.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Hidden;
+                // FIXME: Figure out why this causes the window to now show up.
+                //settings.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Hidden;
+                //settings.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Hidden;
             }
             else
             {
@@ -134,6 +162,13 @@ namespace Dear_ImGui_Sample
 
             // Create the window and allocate the handle.
             GameWindow gw = new GameWindow(GameWindowSettings.Default, settings);
+
+            if (vp.Flags.HasFlag(ImGuiViewportFlags.NoDecoration))
+            {
+                // FIXME: Figure out why we need to do this after the window is created for it work.
+                gw.WindowBorder = OpenTK.Windowing.Common.WindowBorder.Hidden;
+            }
+
             var handle = GCHandle.Alloc(gw);
             vp.PlatformUserData = (IntPtr)handle;
 
@@ -182,12 +217,13 @@ namespace Dear_ImGui_Sample
         public static unsafe void GetWindowSize(ImGuiViewportPtr vp, out Vector2 size)
         {
             Console.WriteLine("GetWindowSize");
-            size = default;
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            size = window.Size;
         }
         public static unsafe void SetWindowFocus(ImGuiViewportPtr vp)
         {
-            Console.WriteLine("SetWindowFocus");
-
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+            window.Focus();
         }
         public static unsafe byte GetWindowFocus(ImGuiViewportPtr vp)
         {
@@ -208,18 +244,26 @@ namespace Dear_ImGui_Sample
             Console.WriteLine("SetWindowTitle: " + title);
         }
 
-        public static unsafe void RenderWindow(ImGuiViewportPtr vp, IntPtr render_arg)
+        public static unsafe void UpdateWindow(ImGuiViewportPtr vp)
         {
-            Console.WriteLine("RenderWindow");
+            GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
+
+            window.ProcessEvents();
+        }
+
+        public unsafe void RenderWindow(ImGuiViewportPtr vp, IntPtr render_arg)
+        {
             GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
             window.MakeCurrent();
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+
+            // FIXME: We need to have all of the buffers created for this context to be able to draw stuff!
+            RenderImDrawData(vp.DrawData);
         }
 
         public static unsafe void SwapBuffers(ImGuiViewportPtr vp, IntPtr render_arg)
         {
-            Console.WriteLine("SwapBuffers");
             GameWindow window = (GameWindow)GCHandle.FromIntPtr(vp.PlatformUserData).Target;
             window.SwapBuffers();
         }
@@ -254,6 +298,8 @@ namespace Dear_ImGui_Sample
             GetWindowMinimizedDelegate = GetWindowMinimized;
             SetWindowTitleDelegate = SetWindowTitle;
 
+            UpdateWindowDelegate = UpdateWindow;
+
             RenderWindowDelegate = RenderWindow;
             SwapBuffersDelegate = SwapBuffers;
 
@@ -269,7 +315,10 @@ namespace Dear_ImGui_Sample
             platformIO.Platform_GetWindowMinimized= Marshal.GetFunctionPointerForDelegate(GetWindowMinimizedDelegate);
             platformIO.Platform_SetWindowTitle = Marshal.GetFunctionPointerForDelegate(SetWindowTitleDelegate);
 
-            //platformIO.Renderer_SwapBuffers
+            platformIO.Platform_UpdateWindow = Marshal.GetFunctionPointerForDelegate(UpdateWindowDelegate);
+
+            platformIO.Renderer_RenderWindow = Marshal.GetFunctionPointerForDelegate(RenderWindowDelegate);
+            platformIO.Renderer_SwapBuffers = Marshal.GetFunctionPointerForDelegate(SwapBuffersDelegate);
 
             ImGuiPlatformIO_Set_Platform_GetWindowPos(platformIO, Marshal.GetFunctionPointerForDelegate(GetWindowPosDelegate));
             ImGuiPlatformIO_Set_Platform_GetWindowSize(platformIO, Marshal.GetFunctionPointerForDelegate(GetWindowSizeDelegate));
@@ -476,7 +525,7 @@ void main()
             var screenPoint = new Vector2i((int)MouseState.X, (int)MouseState.Y);
             var point = screenPoint;//wnd.PointToClient(screenPoint);
             io.MousePos = new System.Numerics.Vector2(point.X, point.Y);
-            
+
             foreach (Keys key in Enum.GetValues(typeof(Keys)))
             {
                 if (key == Keys.Unknown)

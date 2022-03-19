@@ -20,6 +20,8 @@ namespace Dear_ImGui_Sample
         public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(3, 3) })
         { }
 
+        public void Load() => OnLoad();
+
         protected override void OnLoad()
         {
             base.OnLoad();
@@ -39,6 +41,8 @@ namespace Dear_ImGui_Sample
             // Tell ImGui of the new size
             _controller.WindowResized(ClientSize.X, ClientSize.Y);
         }
+
+        public void Update(double elapsed) => OnRenderFrame(new FrameEventArgs(elapsed));
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
