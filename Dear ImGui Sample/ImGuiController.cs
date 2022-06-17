@@ -82,6 +82,9 @@ namespace Dear_ImGui_Sample
             _vertexBufferSize = 10000;
             _indexBufferSize = 2000;
 
+            int prevVAO = GL.GetInteger(GetPName.VertexArrayBinding);
+            int prevArrayBuffer = GL.GetInteger(GetPName.ArrayBufferBinding);
+
             _vertexArray = GL.GenVertexArray();
             GL.BindVertexArray(_vertexArray);
             LabelObject(ObjectLabelIdentifier.VertexArray, _vertexArray, "ImGui");
@@ -142,6 +145,9 @@ void main()
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
 
+            GL.BindVertexArray(prevVAO);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, prevArrayBuffer);
+
             CheckGLError("End of ImGui setup");
         }
 
@@ -155,8 +161,11 @@ void main()
 
             int mips = (int)Math.Floor(Math.Log(Math.Max(width, height), 2));
 
-            _fontTexture = GL.GenTexture();
+            int prevActiveTexture = GL.GetInteger(GetPName.ActiveTexture);
             GL.ActiveTexture(0);
+            int prevTexture2D = GL.GetInteger(GetPName.Texture2D);
+
+            _fontTexture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, _fontTexture);
             GL.TexStorage2D(TextureTarget2d.Texture2D, mips, SizedInternalFormat.Rgba8, width, height);
             LabelObject(ObjectLabelIdentifier.Texture, _fontTexture, "ImGui Text Atlas");
@@ -172,6 +181,10 @@ void main()
 
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+
+            // Restore state
+            GL.BindTexture(TextureTarget.Texture2D, prevTexture2D);
+            GL.ActiveTexture((TextureUnit)prevActiveTexture);
 
             io.Fonts.SetTexID((IntPtr)_fontTexture);
 
@@ -304,6 +317,32 @@ void main()
                 return;
             }
 
+            // Get intial state.
+            int prevVAO = GL.GetInteger(GetPName.VertexArrayBinding);
+            int prevArrayBuffer = GL.GetInteger(GetPName.ArrayBufferBinding);
+            int prevProgram = GL.GetInteger(GetPName.CurrentProgram);
+            bool prevBlendEnabled = GL.GetBoolean(GetPName.Blend);
+            bool prevScissorTestEnabled = GL.GetBoolean(GetPName.ScissorTest);
+            int prevBlendEquationRgb = GL.GetInteger(GetPName.BlendEquationRgb);
+            int prevBlendEquationAlpha = GL.GetInteger(GetPName.BlendEquationAlpha);
+            int prevBlendFuncSrcRgb = GL.GetInteger(GetPName.BlendSrcRgb);
+            int prevBlendFuncSrcAlpha = GL.GetInteger(GetPName.BlendSrcAlpha);
+            int prevBlendFuncDstRgb = GL.GetInteger(GetPName.BlendDstRgb);
+            int prevBlendFuncDstAlpha = GL.GetInteger(GetPName.BlendDstAlpha);
+            bool prevCullFaceEnabled = GL.GetBoolean(GetPName.CullFace);
+            bool prevDepthTestEnabled = GL.GetBoolean(GetPName.DepthTest);
+            int prevActiveTexture = GL.GetInteger(GetPName.ActiveTexture);
+            GL.ActiveTexture(TextureUnit.Texture0);
+            int prevTexture2D = GL.GetInteger(GetPName.Texture2D);
+            Span<int> prevScissorBox = stackalloc int[4];
+            unsafe
+            {
+                fixed (int* iptr = &prevScissorBox[0])
+                {
+                    GL.GetInteger(GetPName.ScissorBox, iptr);
+                }
+            }
+
             // Bind the element buffer (thru the VAO) so that we can resize it.
             GL.BindVertexArray(_vertexArray);
             // Bind the vertex buffer so that we can resize it.
@@ -410,6 +449,24 @@ void main()
 
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.ScissorTest);
+
+            // Reset state
+            GL.BindTexture(TextureTarget.Texture2D, prevTexture2D);
+            GL.ActiveTexture((TextureUnit)prevActiveTexture);
+            GL.UseProgram(prevProgram);
+            GL.BindVertexArray(prevVAO);
+            GL.Scissor(prevScissorBox[0], prevScissorBox[1], prevScissorBox[2], prevScissorBox[3]);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, prevArrayBuffer);
+            GL.BlendEquationSeparate((BlendEquationMode)prevBlendEquationRgb, (BlendEquationMode)prevBlendEquationAlpha);
+            GL.BlendFuncSeparate(
+                (BlendingFactorSrc)prevBlendFuncSrcRgb,
+                (BlendingFactorDest)prevBlendFuncDstRgb,
+                (BlendingFactorSrc)prevBlendFuncSrcAlpha,
+                (BlendingFactorDest)prevBlendFuncDstAlpha);
+            if (prevBlendEnabled) GL.Enable(EnableCap.Blend); else GL.Disable(EnableCap.Blend);
+            if (prevDepthTestEnabled) GL.Enable(EnableCap.DepthTest); else GL.Disable(EnableCap.DepthTest);
+            if (prevCullFaceEnabled) GL.Enable(EnableCap.CullFace); else GL.Disable(EnableCap.CullFace);
+            if (prevScissorTestEnabled) GL.Enable(EnableCap.ScissorTest); else GL.Disable(EnableCap.ScissorTest);
         }
 
         /// <summary>

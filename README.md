@@ -1,13 +1,17 @@
 # Dear Imgui Sample using OpenTK
 
-## OpenGL 4.5
+## OpenTK 4
 
-This version of the repository uses a lot of opengl 4.5 features for convenience (not having to bind buffers and stuff).
+This version of the repo is targeting OpenTK 4. 
+The minimum OpenGL version is 3.3.
 
-For a opengl 3.3 version of the repo using opentk 3.2 checkout the `opengl3.3` branch.
+## Your OpenGL state will be untouched!
 
-The `opengl3.3` branch is written for OpenTK 3 so some changes will have to be made.
-There is no version of this sample that uses opentk 4 and opengl 3.3.
+Previous versions of this repo required users to manually reset the OpenGL state that the ImGui renderer changed. 
+This is no longer needed!
+The renderer resets the OpenGL state itself.
+
+
 
 ## BadImageFormatexception
 
@@ -21,18 +25,3 @@ To do that, right click your project (all projects referencing ImGui.NET), click
 
 To see more info and a potential fix you can take a look at issue #2.
 
-## Remember to enable/disable OpenGL features after use!
-
-Note that `ImGuiController.Render()` enables and disables some OpenGL features. The following is a list of state that `ImGuiController.Render()` changes:
-
-- Disbles blending
-- Disables scissor test
-- Disables culling
-- Disables depth test
-- Changes blend function
-- Changes scissor rectangle
-- Changes the shader program in use
-- Sets texture unit `0`'s `Texture2D` to `zero`
-- Sets blend equation to `FuncAdd`
-- Sets blend func to `SrcAlpha`, `OneMinusSrcAlpha`
-- Unbinds any Vertex Array Object
