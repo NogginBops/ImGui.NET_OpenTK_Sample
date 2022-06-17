@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Dear ImGui Sample")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Simple Dear ImGui Sample for use with OpenTK")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Dear ImGui Sample")]

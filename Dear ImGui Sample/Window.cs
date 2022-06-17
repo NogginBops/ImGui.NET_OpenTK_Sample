@@ -55,7 +55,7 @@ namespace Dear_ImGui_Sample
 
             _controller.Render();
 
-            Util.CheckGLError("End of frame");
+            ImGuiController.CheckGLError("End of frame");
 
             SwapBuffers();
         }
