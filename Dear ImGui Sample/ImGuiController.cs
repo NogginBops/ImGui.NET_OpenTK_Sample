@@ -163,7 +163,7 @@ void main()
 
             int prevActiveTexture = GL.GetInteger(GetPName.ActiveTexture);
             GL.ActiveTexture(TextureUnit.Texture0);
-            int prevTexture2D = GL.GetInteger(GetPName.Texture2D);
+            int prevTexture2D = GL.GetInteger(GetPName.TextureBinding2D);
 
             _fontTexture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, _fontTexture);
