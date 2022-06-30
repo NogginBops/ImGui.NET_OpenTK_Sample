@@ -162,7 +162,7 @@ void main()
             int mips = (int)Math.Floor(Math.Log(Math.Max(width, height), 2));
 
             int prevActiveTexture = GL.GetInteger(GetPName.ActiveTexture);
-            GL.ActiveTexture(0);
+            GL.ActiveTexture(TextureUnit.Texture0);
             int prevTexture2D = GL.GetInteger(GetPName.Texture2D);
 
             _fontTexture = GL.GenTexture();
