@@ -247,6 +247,8 @@ void main()
             io.MouseDown[0] = MouseState[MouseButton.Left];
             io.MouseDown[1] = MouseState[MouseButton.Right];
             io.MouseDown[2] = MouseState[MouseButton.Middle];
+            io.MouseDown[3] = MouseState[MouseButton.Button4];
+            io.MouseDown[4] = MouseState[MouseButton.Button5];
 
             var screenPoint = new Vector2i((int)MouseState.X, (int)MouseState.Y);
             var point = screenPoint;//wnd.PointToClient(screenPoint);
