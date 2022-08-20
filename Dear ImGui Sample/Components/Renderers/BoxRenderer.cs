@@ -32,11 +32,10 @@ public class BoxRenderer : Renderer
 
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 		material.shader.SetColor("u_color", color.ToVector4());
-		material.shader.SetVector4("u_tint", (Vector4) material.shader.uniforms["u_tint"]);
+		//material.shader.SetVector4("u_tint", (Vector4) material.shader.uniforms["u_tint"]);
 		if (material.shader.uniforms.ContainsKey("time"))
 		{
 			material.shader.SetFloat("time", (float) material.shader.uniforms["time"]);
-
 		}
 		BufferCache.BindVAO(material.vao);
 
