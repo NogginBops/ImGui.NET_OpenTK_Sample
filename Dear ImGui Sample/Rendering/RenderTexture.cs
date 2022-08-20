@@ -66,6 +66,7 @@ public class RenderTexture
 			return;
 		}
 
+		return;
 		ShaderCache.UseShader(renderTextureMaterial.shader);
 		renderTextureMaterial.shader.SetVector2("u_resolution", Camera.I.size);
 		renderTextureMaterial.shader.SetMatrix4x4("u_mvp", GetModelViewProjection(sampleSize));
