@@ -9,6 +9,8 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Diagnostics;
 using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
+using Keys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
+using Vector2 = OpenTK.Mathematics.Vector2;
 
 namespace Dear_ImGui_Sample
 {
@@ -101,7 +103,7 @@ namespace Dear_ImGui_Sample
 
             RecreateFontDeviceTexture();
 
-            string VertexSource = @"#version 330 core
+            string VertexSource = @"#version 410 core
 
 uniform mat4 projection_matrix;
 
@@ -118,7 +120,7 @@ void main()
     color = in_color;
     texCoord = in_texCoord;
 }";
-            string FragmentSource = @"#version 330 core
+            string FragmentSource = @"#version 410 core
 
 uniform sampler2D in_fontTexture;
 
@@ -423,7 +425,7 @@ void main()
                         GL.ActiveTexture(TextureUnit.Texture0);
                         GL.BindTexture(TextureTarget.Texture2D, (int)pcmd.TextureId);
                         CheckGLError("Texture");
-
+                        
                         // We do _windowHeight - (int)clip.W instead of (int)clip.Y because gl has flipped Y when it comes to these coordinates
                         var clip = pcmd.ClipRect;
                         GL.Scissor((int)clip.X, _windowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));
@@ -512,7 +514,7 @@ void main()
             if (success == 0)
             {
                 string info = GL.GetProgramInfoLog(program);
-                Debug.WriteLine($"GL.LinkProgram had info log [{name}]:\n{info}");
+                Debug.Log($"GL.LinkProgram had info log [{name}]:\n{info}");
             }
 
             GL.DetachShader(program, vertex);
@@ -536,7 +538,7 @@ void main()
             if (success == 0)
             {
                 string info = GL.GetShaderInfoLog(shader);
-                Debug.WriteLine($"GL.CompileShader for shader '{name}' [{type}] had info log:\n{info}");
+                Debug.Log($"GL.CompileShader for shader '{name}' [{type}] had info log:\n{info}");
             }
 
             return shader;
@@ -548,7 +550,7 @@ void main()
             int i = 1;
             while ((error = GL.GetError()) != ErrorCode.NoError)
             {
-                Debug.Print($"{title} ({i++}): {error}");
+                Debug.Log($"{title} ({i++}): {error}");
             }
         }
     }

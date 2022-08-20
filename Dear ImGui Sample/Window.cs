@@ -1,76 +1,132 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ImGuiNET;
-using System.Drawing;
-using OpenTK.Graphics.OpenGL4;
+﻿using Dear_ImGui_Sample;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using System.Diagnostics;
 
-namespace Dear_ImGui_Sample
+namespace Engine;
+
+public class Window : GameWindow
 {
-    public class Window : GameWindow
-    {
-        ImGuiController _controller;
+	public RenderTexture bloomDownscaledRenderTexture;
+	private ImGuiController imGuiController;
+	public RenderTexture postProcessRenderTexture;
+	public RenderTexture sceneRenderTexture;
 
-        public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(3, 3), Profile = ContextProfile.Core, Flags = ContextFlags.ForwardCompatible})
-        { }
+	public Window() : base(GameWindowSettings.Default,
+	                       new NativeWindowSettings
+	                       {Size = new Vector2i(1920, 1027), APIVersion = new Version(4,1), Flags = ContextFlags.ForwardCompatible, Profile = ContextProfile.Core})
+	{
+		I = this;
 
-        protected override void OnLoad()
-        {
-            base.OnLoad();
+		WindowState = WindowState.Maximized;
+		//WindowState = WindowState.Fullscreen;
+	}
 
-            Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
+	public static Window I { get; private set; }
 
-            _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
-        }
-        
-        protected override void OnResize(ResizeEventArgs e)
-        {
-            base.OnResize(e);
+	protected override void OnLoad()
+	{
+		Title = $"NoiceEngine | {GL.GetString(StringName.Version)}";
 
-            // Update the opengl viewport
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+		//MaterialCache.CacheAllMaterialsInProject();
 
-            // Tell ImGui of the new size
-            _controller.WindowResized(ClientSize.X, ClientSize.Y);
-        }
+		Vector2 size = new(300, 300); // temporaly 10x10 textures because we cant access Camera.I.size before Scene started-camera is a gameobject
+		sceneRenderTexture = new RenderTexture(size);
+		postProcessRenderTexture = new RenderTexture(size);
 
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            base.OnRenderFrame(e);
+		imGuiController = new ImGuiController(ClientSize.X, ClientSize.Y);
 
-            _controller.Update(this, (float)e.Time);
+		Editor.I.Init();
+		Scene.I.Start();
+		sceneRenderTexture = new RenderTexture(Camera.I.size);
+		postProcessRenderTexture = new RenderTexture(Camera.I.size);
 
-            GL.ClearColor(new Color4(0, 32, 48, 255));
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+		//bloomDownscaledRenderTexture = new RenderTexture(Camera.I.size);
+	}
 
-            ImGui.ShowDemoWindow();
+	protected override void OnResize(ResizeEventArgs e)
+	{
+		base.OnResize(e);
 
-            _controller.Render();
+		// Update the opengl viewport
+		//GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
 
-            ImGuiController.CheckGLError("End of frame");
+		// Tell ImGui of the new size
+		imGuiController?.WindowResized(ClientSize.X, ClientSize.Y);
+	}
 
-            SwapBuffers();
-        }
+	protected override void OnUpdateFrame(FrameEventArgs args)
+	{
+		Debug.StartTimer("Scene Update");
+		Scene.I.Update();
+		Debug.EndTimer("Scene Update");
 
-        protected override void OnTextInput(TextInputEventArgs e)
-        {
-            base.OnTextInput(e);
-            
-            
-            _controller.PressChar((char)e.Unicode);
-        }
+		if (Global.EditorAttached)
+		{
+			Editor.I.Update();
+		}
 
-        protected override void OnMouseWheel(MouseWheelEventArgs e)
-        {
-            base.OnMouseWheel(e);
-            
-            _controller.MouseScroll(e.Offset);
-        }
-    }
+		base.OnUpdateFrame(args);
+	}
+
+	protected override void OnRenderFrame(FrameEventArgs e)
+	{
+		Debug.CountStat("Draw Calls", 0);
+		Debug.StartTimer("Scene Render");
+
+		GL.ClearColor(0, 33, 0, 33);
+		GL.Clear(ClearBufferMask.ColorBufferBit);
+
+		sceneRenderTexture.Bind(); // start rendering to sceneRenderTexture
+		GL.Viewport(0, 0, (int) Camera.I.size.X, (int) Camera.I.size.Y);
+
+		GL.Enable(EnableCap.Blend);
+		Scene.I.Render();
+		GL.Disable(EnableCap.Blend);
+
+		sceneRenderTexture.Unbind(); // end rendering to sceneRenderTexture
+
+		
+		postProcessRenderTexture.Bind();
+		GL.ClearColor(0, 0, 0, 0);
+
+		GL.Clear(ClearBufferMask.ColorBufferBit);
+
+		// draw sceneRenderTexture.colorAttachment with post process- into postProcessRenderTexture target
+		postProcessRenderTexture.Render(sceneRenderTexture.colorAttachment);
+		//postProcessRenderTexture.RenderWithPostProcess(sceneRenderTexture.colorAttachment);
+		//postProcessRenderTexture.RenderSnow(sceneRenderTexture.colorAttachment);
+
+		postProcessRenderTexture.Unbind(); 
+		
+		imGuiController.Update(this, (float) e.Time);
+		GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+
+		imGuiController.WindowResized(ClientSize.X, ClientSize.Y);
+
+		Editor.I.Draw();
+		imGuiController.Render();
+		// ------------- IMGUI -------------
+
+
+		SwapBuffers();
+		base.OnRenderFrame(e);
+
+		Debug.ClearTimers();
+		Debug.ClearStats();
+	}
+
+	protected override void OnTextInput(TextInputEventArgs e)
+	{
+		base.OnTextInput(e);
+
+		imGuiController.PressChar((char) e.Unicode);
+	}
+
+	protected override void OnMouseWheel(MouseWheelEventArgs e)
+	{
+		base.OnMouseWheel(e);
+
+		imGuiController.MouseScroll(new OpenTK.Mathematics.Vector2(e.OffsetX, e.OffsetY));
+	}
 }

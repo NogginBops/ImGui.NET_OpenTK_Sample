@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Windowing.Desktop;
+﻿using OpenTK.Windowing.Common;
 
-namespace Dear_ImGui_Sample
+
+namespace  Dear_ImGui_Sample;
+
+
+
+public static class Program
 {
-    class Program
-    {
-        static void Main()
-        {
-            Window wnd = new Window();
-            wnd.Run();
-        }
-    }
+	private static void Main()
+	{
+		_ = new Serializer();
+		_ = new Scene();
+		
+		_ = new Editor();
+
+		using (Window window = new Window())
+		{
+
+			window.VSync = VSyncMode.Off;
+			window.Run();
+		}
+	}
 }
