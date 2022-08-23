@@ -1,0 +1,103 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/Dear ImGui Sample.csproj": {}
+  },
+  "projects": {
+    "/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/Dear ImGui Sample.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/Dear ImGui Sample.csproj",
+        "projectName": "Dear ImGui Sample",
+        "projectPath": "/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/Dear ImGui Sample.csproj",
+        "packagesPath": "/Users/hexiy/.nuget/packages/",
+        "outputPath": "/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/hexiy/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Genbox.VelcroPhysics": {
+              "target": "Package",
+              "version": "[0.1.0-alpha.2, )"
+            },
+            "ImGui.NET": {
+              "target": "Package",
+              "version": "[1.87.3, )"
+            },
+            "Microsoft.CodeAnalysis.Workspaces.Common": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Microsoft.CodeDom.Providers.DotNetCompilerPlatform": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OpenTK": {
+              "target": "Package",
+              "version": "[4.7.4, )"
+            },
+            "OpenTK.redist.glfw": {
+              "target": "Package",
+              "version": "[3.3.7.27, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[1.0.4, )"
+            },
+            "System.CodeDom": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

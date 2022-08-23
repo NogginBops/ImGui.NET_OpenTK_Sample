@@ -1,0 +1,41 @@
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample.dll.config
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample.deps.json
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample.runtimeconfig.json
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample.runtimeconfig.dev.json
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Dear ImGui Sample.pdb
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/ImGui.NET.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/Microsoft.Win32.SystemEvents.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Compute.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Core.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Graphics.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Input.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Mathematics.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.OpenAL.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Windowing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Windowing.Desktop.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/OpenTK.Windowing.GraphicsLibraryFramework.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/System.Drawing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/linux-x64/native/libcimgui.so
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/osx-x64/native/libcimgui.dylib
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/win-x64/native/cimgui.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/win-x86/native/cimgui.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/linux-x64/native/libglfw.so.3.3
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/osx-x64/native/libglfw.3.dylib
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/win-x64/native/glfw3.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/win-x86/native/glfw3.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net5.0/runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.csproj.AssemblyReference.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.GeneratedMSBuildEditorConfig.editorconfig
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.AssemblyInfoInputs.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.AssemblyInfo.cs
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.csproj.CoreCompileInputs.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.csproj.CopyComplete
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/refint/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.pdb
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/Dear ImGui Sample.genruntimeconfig.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net5.0/ref/Dear ImGui Sample.dll

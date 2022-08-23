@@ -1,0 +1,136 @@
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Dear ImGui Sample
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Dear ImGui Sample.dll.config
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Dear ImGui Sample.deps.json
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Dear ImGui Sample.runtimeconfig.json
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Dear ImGui Sample.pdb
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ImGui.NET.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Microsoft.Win32.SystemEvents.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Compute.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Core.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Graphics.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Input.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Mathematics.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.OpenAL.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Windowing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Windowing.Desktop.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/OpenTK.Windowing.GraphicsLibraryFramework.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.Drawing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/linux-x64/native/libcimgui.so
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/win-x64/native/cimgui.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/win-x86/native/cimgui.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/linux-x64/native/libglfw.so.3.3
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/osx-x64/native/libglfw.3.dylib
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/win-x64/native/glfw3.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/win-x86/native/glfw3.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.csproj.AssemblyReference.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.GeneratedMSBuildEditorConfig.editorconfig
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.AssemblyInfoInputs.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.AssemblyInfo.cs
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.csproj.CoreCompileInputs.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.csproj.CopyComplete
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/refint/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.pdb
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/Dear ImGui Sample.genruntimeconfig.cache
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/obj/Debug/net6.0/ref/Dear ImGui Sample.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/osx-arm64/native/libglfw.3.dylib
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/runtimes/osx-universal/native/libcimgui.dylib
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/csc.exe
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/csc.exe.config
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/csc.rsp
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/csi.exe
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/csi.exe.config
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/csi.rsp
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.CodeAnalysis.CSharp.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.CodeAnalysis.CSharp.Scripting.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.CodeAnalysis.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.CodeAnalysis.Scripting.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.CSharp.Core.targets
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.DiaSymReader.Native.amd64.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.DiaSymReader.Native.x86.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.Managed.Core.targets
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.VisualBasic.Core.targets
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/Microsoft.Win32.Primitives.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.AppContext.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Collections.Immutable.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Console.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Diagnostics.DiagnosticSource.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Diagnostics.FileVersionInfo.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Diagnostics.StackTrace.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Globalization.Calendars.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.IO.Compression.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.IO.Compression.ZipFile.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.IO.FileSystem.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.IO.FileSystem.Primitives.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Net.Http.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Net.Sockets.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Reflection.Metadata.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Runtime.InteropServices.RuntimeInformation.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Security.Cryptography.Algorithms.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Security.Cryptography.Encoding.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Security.Cryptography.Primitives.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Security.Cryptography.X509Certificates.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Text.Encoding.CodePages.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Threading.Tasks.Extensions.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.ValueTuple.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Xml.ReaderWriter.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Xml.XmlDocument.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Xml.XPath.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/System.Xml.XPath.XDocument.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/vbc.exe
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/vbc.exe.config
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/vbc.rsp
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/VBCSCompiler.exe
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/roslyn/VBCSCompiler.exe.config
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Genbox.VelcroPhysics.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Humanizer.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Microsoft.Bcl.AsyncInterfaces.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Microsoft.CodeAnalysis.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Microsoft.CodeAnalysis.Workspaces.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/NAudio.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/NAudio.Asio.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/NAudio.Core.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/NAudio.Midi.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/NAudio.Wasapi.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/NAudio.WinMM.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/SixLabors.ImageSharp.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.CodeDom.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.Composition.AttributedModel.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.Composition.Convention.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.Composition.Hosting.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.Composition.Runtime.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.Composition.TypedParts.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/System.IO.Pipelines.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/cs/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/de/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/es/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/fr/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/it/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ja/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ko/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/pl/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/pt-BR/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ru/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/tr/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/zh-Hans/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/zh-Hant/Microsoft.CodeAnalysis.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/de/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/es/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/it/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/Dear ImGui Sample/bin/Debug/net6.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll
