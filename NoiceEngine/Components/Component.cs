@@ -8,9 +8,12 @@ public class Component : IDestroyable
 {
 	public bool allowMultiple = true;
 
-	[XmlIgnore] [DefaultValue(false)] public bool awoken;
+	[XmlIgnore]
+	[DefaultValue(false)]
+	public bool awoken;
 	public bool enabled = true;
-	[XmlIgnore] public GameObject gameObject;
+	[XmlIgnore]
+	public GameObject gameObject;
 
 	public int gameObjectID;
 	public bool started;
@@ -59,6 +62,7 @@ public class Component : IDestroyable
 	public virtual void EditorUpdate()
 	{
 	}
+
 	public virtual void Update()
 	{
 	}

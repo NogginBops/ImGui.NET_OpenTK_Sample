@@ -109,8 +109,9 @@ public class EditorWindow_Hierarchy : EditorWindow
 		}
 
 		ResetID();
-		ImGui.SetNextWindowSize(new Vector2(300, Editor.sceneViewSize.Y), ImGuiCond.Always);
-		ImGui.SetNextWindowPos(new Vector2(Window.I.ClientSize.X - 400, 0), ImGuiCond.Always, new Vector2(1, 0)); // +1 for double border uglyness
+		windowWidth = 700;
+		ImGui.SetNextWindowSize(new Vector2(windowWidth, Editor.sceneViewSize.Y), ImGuiCond.Always);
+		ImGui.SetNextWindowPos(new Vector2(Window.I.ClientSize.X - EditorWindow_Inspector.I.windowWidth, 0), ImGuiCond.Always, new Vector2(1, 0)); // +1 for double border uglyness
 		//ImGui.SetNextWindowBgAlpha (0);
 		ImGui.Begin("Hierarchy", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize);
 		if (ImGui.Button("+"))

@@ -20,6 +20,8 @@ public class EditorWindow_Browser : EditorWindow
 	private Texture[] textures = new Texture[0];
 	public static EditorWindow_Browser I { get; private set; }
 
+	private Vector2 iconSize = new Vector2(100, 90) * Global.EditorScale;
+
 	public override void Init()
 	{
 		I = this;
@@ -155,7 +157,7 @@ public class EditorWindow_Browser : EditorWindow
 		//}
 		for (int assetIndex = 0; assetIndex < assets.Length; assetIndex++)
 		{
-			if (assetIndex != 0 && assetIndex % 8 != 0)
+			if (assetIndex != 0 && assetIndex % 6 != 0)
 			{
 				ImGui.SameLine();
 			}
@@ -171,20 +173,20 @@ public class EditorWindow_Browser : EditorWindow
 			if (isDirectory)
 			{
 				ImGui.PushStyleColor(ImGuiCol.Button, new Color(13, 27, 30).ToVector4());
-				//ImGui.ImageButton((IntPtr) directoryIcon.id, new Vector2(100, 90));
-				ImGui.ImageButton((IntPtr) 0, new Vector2(100, 90));
+				ImGui.ImageButton((IntPtr) directoryIcon.id, iconSize);
+				//ImGui.ImageButton((IntPtr) 0, new Vector2(100, 90));
 				ImGui.PopStyleColor();
 			}
 			else
 			{
 				if (textures[assetIndex] != null && textures[assetIndex].loaded)
 				{
-					ImGui.ImageButton((IntPtr) textures[assetIndex].id, new Vector2(100, 90));
+					ImGui.ImageButton((IntPtr) textures[assetIndex].id, iconSize);
 				}
 				else
 				{
 					//ImGui.ImageButton((IntPtr) fileIcon.id, new Vector2(100, 90));
-					ImGui.ImageButton((IntPtr) 0, new Vector2(100, 90));
+					ImGui.ImageButton((IntPtr) fileIcon.id, iconSize);
 				}
 			}
 
@@ -199,7 +201,7 @@ public class EditorWindow_Browser : EditorWindow
 
 					string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
 
-					ImGui.Image((IntPtr) textures[assetIndex].id, new Vector2(100, 90));
+					ImGui.Image((IntPtr) textures[assetIndex].id, iconSize);
 
 					//ImGui.Text(Path.GetFileNameWithoutExtension(itemPath));
 
@@ -220,7 +222,7 @@ public class EditorWindow_Browser : EditorWindow
 
 					string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
 
-					ImGui.Image((IntPtr) fileIcon.id, new Vector2(100, 90));
+					ImGui.Image((IntPtr) fileIcon.id, iconSize);
 
 
 					Marshal.FreeHGlobal(stringPointer);
@@ -273,7 +275,7 @@ public class EditorWindow_Browser : EditorWindow
 					
 					//string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
 
-					ImGui.Image((IntPtr) fileIcon.id, new Vector2(100, 90));
+					ImGui.Image((IntPtr) fileIcon.id, iconSize);
 
 					Marshal.FreeHGlobal(stringPointer);
 
@@ -352,6 +354,11 @@ public class EditorWindow_Browser : EditorWindow
 
 	public void GoToFile(string directory)
 	{
+		if (File.Exists(directory) == false)
+		{
+			return;
+		}
+
 		currentDirectory = Directory.GetParent(directory);
 	}
 }

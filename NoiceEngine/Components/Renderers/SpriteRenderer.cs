@@ -6,7 +6,7 @@ public class SpriteRenderer : Renderer
 {
 	public Texture texture;
 
-	[Hide] public virtual bool Batched { get; set; } = true;
+	[Hide] public virtual bool Batched { get; set; } = false;
 
 	public override void Awake()
 	{
@@ -23,12 +23,12 @@ public class SpriteRenderer : Renderer
 		base.Awake();
 	}
 
-	public override void CreateMaterial()
+	/*public override void CreateMaterial()
 	{
 		material = new Material();
 		Shader shader = new(Path.Combine(Folders.Shaders, "SpriteRenderer.glsl"));
 		material.SetShader(shader);
-	}
+	}*/
 
 	public virtual void LoadTexture(string _texturePath)
 	{
@@ -47,7 +47,7 @@ public class SpriteRenderer : Renderer
 		UpdateBoxShapeSize();
 		if (Batched)
 		{
-			BatchingManager.AddObjectToBatcher(texture.id, this);
+			//BatchingManager.AddObjectToBatcher(texture.id, this);
 		}
 	}
 
@@ -75,7 +75,7 @@ public class SpriteRenderer : Renderer
 
 	public override void OnDestroyed()
 	{
-		BatchingManager.RemoveAttribs(texture.id, gameObjectID);
+		//BatchingManager.RemoveAttribs(texture.id, gameObjectID);
 		base.OnDestroyed();
 	}
 
@@ -96,14 +96,13 @@ public class SpriteRenderer : Renderer
 			return;
 		}
 
-		Batched = true;
-		if (Batched)
+		if (Batched && false)
 		{
-			BatchingManager.UpdateAttribs(texture.id, gameObjectID, transform.position, new Vector2(GetComponent<BoxShape>().size.X * transform.scale.X, GetComponent<BoxShape>().size.Y * transform.scale.Y),
+			/*BatchingManager.UpdateAttribs(texture.id, gameObjectID, transform.position, new Vector2(GetComponent<BoxShape>().size.X * transform.scale.X, GetComponent<BoxShape>().size.Y * transform.scale.Y),
 			                              color);
-			return;
+			return;*/
 		}
-
+		
 		ShaderCache.UseShader(material.shader);
 		material.shader.SetVector2("u_resolution", texture.size);
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);

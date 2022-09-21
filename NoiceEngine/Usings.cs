@@ -4,3 +4,5 @@ global using Scripts;
 global using Debug = Engine.Debug;
 global using Engine;
 global using System;
+global using System.Collections.Generic;
+global using System.Xml.Serialization;

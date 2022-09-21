@@ -30,7 +30,7 @@ public class Shader : IDisposable
 		path = filePath;
 	}
 
-	public int ProgramID { get; set; }
+	[XmlIgnore] public int ProgramID { get; set; }
 
 	public void Dispose()
 	{

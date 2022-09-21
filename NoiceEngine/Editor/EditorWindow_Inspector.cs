@@ -14,7 +14,6 @@ public class EditorWindow_Inspector : EditorWindow
 
 	private GameObject selectedGameObject;
 	private Material selectedMaterial;
-	private int windowWidth;
 	private int contentMaxWidth;
 	public static EditorWindow_Inspector I { get; private set; }
 
@@ -55,9 +54,9 @@ public class EditorWindow_Inspector : EditorWindow
 			return;
 		}
 
-		windowWidth = 400;
+		windowWidth = 800;
 		contentMaxWidth = windowWidth - (int) ImGui.GetStyle().WindowPadding.X * 1;
-		ImGui.SetNextWindowSize(new Vector2(windowWidth, Editor.sceneViewSize.Y), ImGuiCond.Always);
+		ImGui.SetNextItemWidth(windowWidth);
 		ImGui.SetNextWindowPos(new Vector2(Window.I.ClientSize.X, 0), ImGuiCond.Always, new Vector2(1, 0));
 		//ImGui.SetNextWindowBgAlpha (0);
 		ImGui.Begin("Inspector", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar);
@@ -65,7 +64,9 @@ public class EditorWindow_Inspector : EditorWindow
 
 		if (selectedGameObject != null)
 		{
+			ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2);
 			DrawGameObjectInspector();
+			ImGui.PopStyleVar(1);
 		}
 
 		if (selectedMaterial != null)
@@ -188,6 +189,8 @@ public class EditorWindow_Inspector : EditorWindow
 		}
 
 		PushNextID();
+		ImGui.SetScrollX(0);
+
 		string gameObjectName = selectedGameObject.name;
 		ImGui.Checkbox("", ref selectedGameObject.activeSelf);
 		ImGui.SameLine();
@@ -215,6 +218,7 @@ public class EditorWindow_Inspector : EditorWindow
 
 			ImGui.SameLine();
 			PushNextID();
+
 			if (ImGui.CollapsingHeader(currentComponent.GetType().Name, ImGuiTreeNodeFlags.DefaultOpen))
 			{
 				FieldOrPropertyInfo[] infos;
@@ -273,14 +277,23 @@ public class EditorWindow_Inspector : EditorWindow
 
 					PushNextID();
 
+					bool hovering = false;
+					if (ImGui.IsMouseHoveringRect(ImGui.GetCursorScreenPos(), ImGui.GetCursorScreenPos() + new System.Numerics.Vector2(1500, ImGui.GetFrameHeightWithSpacing())))
+					{
+						ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 30);
+						hovering = true;
+					}
+
+					ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
+
 					ImGui.Text(info.Name);
+
+					float itemWidth1 = 400;
+					ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth1);
+					ImGui.SetNextItemWidth(itemWidth1);
 
 					if (fieldOrPropertyType == typeof(Vector3))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						System.Numerics.Vector3 systemv3 = (Vector3) info.GetValue(currentComponent);
 						if (ImGui.DragFloat3("", ref systemv3, 0.01f))
 						{
@@ -289,10 +302,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(Vector2))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						System.Numerics.Vector2 systemv2 = (Vector2) info.GetValue(currentComponent);
 						if (ImGui.DragFloat2("", ref systemv2, 0.01f))
 						{
@@ -301,10 +310,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(AudioClip))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						AudioClip audioClip = (AudioClip) info.GetValue(currentComponent);
 						if (audioClip == null)
 						{
@@ -334,10 +339,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(List<GameObject>))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						List<GameObject> listOfGameObjects = (List<GameObject>) info.GetValue(currentComponent);
 						if (ImGui.CollapsingHeader("List<GameObject>", ImGuiTreeNodeFlags.DefaultOpen))
 						{
@@ -385,10 +386,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(Action))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						Action action = (Action) info.GetValue(currentComponent);
 						if (ImGui.Button(fieldOrPropertyType.Name))
 						{
@@ -397,10 +394,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(Texture) && currentComponent is SpriteRenderer)
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						string textureName = Path.GetFileName((currentComponent as SpriteRenderer).texture.path);
 
 						bool clicked = ImGui.Button(textureName, new Vector2(ImGui.GetContentRegionAvail().X, 20));
@@ -428,14 +421,10 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(Material))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						string materialPath = Path.GetFileName((currentComponent as Renderer).material.path);
 
 						materialPath = materialPath ?? "";
-						bool clicked = ImGui.Button(materialPath, new Vector2(ImGui.GetContentRegionAvail().X, 20));
+						bool clicked = ImGui.Button(materialPath, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
 						if (clicked)
 						{
 							EditorWindow_Browser.I.GoToFile(materialPath);
@@ -466,10 +455,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(GameObject))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						GameObject goObject = info.GetValue(currentComponent) as GameObject;
 						string fieldGoName = goObject?.name ?? "";
 						bool clicked = ImGui.Button(fieldGoName, new Vector2(ImGui.GetContentRegionAvail().X, 20));
@@ -483,7 +468,7 @@ public class EditorWindow_Inspector : EditorWindow
 						{
 							ImGui.AcceptDragDropPayload("PREFAB_PATH", ImGuiDragDropFlags.None);
 							string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
-							string dataType =ImGui.GetDragDropPayload().DataType.GetStringASCII().Replace("\0", string.Empty);
+							string dataType = ImGui.GetDragDropPayload().DataType.GetStringASCII().Replace("\0", string.Empty);
 							if (dataType == "PREFAB_PATH")
 							{
 								if (ImGui.IsMouseReleased(ImGuiMouseButton.Left) && payload.Length > 0)
@@ -500,8 +485,8 @@ public class EditorWindow_Inspector : EditorWindow
 						{
 							ImGui.AcceptDragDropPayload("GAMEOBJECT", ImGuiDragDropFlags.None);
 							string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
-							string dataType =ImGui.GetDragDropPayload().DataType.GetStringASCII().Replace("\0", string.Empty);
-							
+							string dataType = ImGui.GetDragDropPayload().DataType.GetStringASCII().Replace("\0", string.Empty);
+
 							if (dataType == "GAMEOBJECT")
 							{
 								//	string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
@@ -517,10 +502,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(Color))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth - 5);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						System.Numerics.Vector4 fieldValue = ((Color) info.GetValue(currentComponent)).ToVector4();
 
 						if (ImGui.ColorEdit4("", ref fieldValue))
@@ -530,7 +511,7 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(bool))
 					{
-						ImGui.SameLine(ImGui.GetWindowWidth() - 25);
+						ImGui.SameLine(ImGui.GetWindowWidth() - ImGui.GetContentRegionAvail().X / 2);
 
 						bool fieldValue = (bool) info.GetValue(currentComponent);
 
@@ -541,10 +522,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(float))
 					{
-						float itemWidth = 200;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						float fieldValue = (float) info.GetValue(currentComponent);
 
 						SliderF sliderAttrib = null;
@@ -575,10 +552,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(int))
 					{
-						float itemWidth = 100;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						int fieldValue = (int) info.GetValue(currentComponent);
 
 
@@ -589,10 +562,6 @@ public class EditorWindow_Inspector : EditorWindow
 					}
 					else if (fieldOrPropertyType == typeof(string))
 					{
-						float itemWidth = 150;
-						ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth);
-						ImGui.SetNextItemWidth(itemWidth);
-
 						string fieldValue = info.GetValue(currentComponent).ToString();
 
 						if (ImGui.InputText("", ref fieldValue, 100))

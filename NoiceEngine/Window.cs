@@ -14,10 +14,9 @@ public class Window : GameWindow
 
 	public Window() : base(GameWindowSettings.Default,
 	                       new NativeWindowSettings
-	                       {Size = new Vector2i(1920, 1027), APIVersion = new Version(4, 1), Flags = ContextFlags.ForwardCompatible, Profile = ContextProfile.Core})
+	                       {Size = new Vector2i(2560, 1600), APIVersion = new Version(4, 1), Flags = ContextFlags.ForwardCompatible, Profile = ContextProfile.Core})
 	{
 		I = this;
-
 		WindowState = WindowState.Maximized;
 		//WindowState = WindowState.Fullscreen;
 	}
@@ -29,12 +28,11 @@ public class Window : GameWindow
 		Title = $"NoiceEngine | {GL.GetString(StringName.Version)}";
 
 		//MaterialCache.CacheAllMaterialsInProject();
+		imGuiController = new ImGuiController(ClientSize.X, ClientSize.Y);
 
-		Vector2 size = new Vector2(1, 1); // temporaly 10x10 textures because we cant access Camera.I.size before Scene started-camera is a gameobject
+		Vector2 size = new Vector2(100, 100); // temporaly 10x10 textures because we cant access Camera.I.size before Scene started-camera is a gameobject
 		sceneRenderTexture = new RenderTexture(size);
 		postProcessRenderTexture = new RenderTexture(size);
-
-		imGuiController = new ImGuiController(ClientSize.X, ClientSize.Y);
 
 		Editor.I.Init();
 		Scene.I.Start();
@@ -78,11 +76,11 @@ public class Window : GameWindow
 		GL.Clear(ClearBufferMask.ColorBufferBit);
 
 		sceneRenderTexture.Bind(); // start rendering to sceneRenderTexture
-		GL.Viewport(0, 0, (int) Camera.I.size.X, (int) Camera.I.size.Y);
-
-		GL.Enable(EnableCap.Blend);
-		Scene.I.Render();
-		GL.Disable(EnableCap.Blend);
+		 GL.Viewport(0, 0, (int) Camera.I.size.X, (int) Camera.I.size.Y);
+		
+		 GL.Enable(EnableCap.Blend);
+		 Scene.I.Render();
+		 GL.Disable(EnableCap.Blend);
 
 		sceneRenderTexture.Unbind(); // end rendering to sceneRenderTexture
 
@@ -98,13 +96,17 @@ public class Window : GameWindow
 		//postProcessRenderTexture.RenderSnow(sceneRenderTexture.colorAttachment);
 
 		postProcessRenderTexture.Unbind();
+		
 
+		
 		imGuiController.Update(this, (float) e.Time);
 		GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
 
 		imGuiController.WindowResized(ClientSize.X, ClientSize.Y);
 
+
 		Editor.I.Draw();
+
 		imGuiController.Render();
 		// ------------- IMGUI -------------
 
@@ -127,6 +129,6 @@ public class Window : GameWindow
 	{
 		base.OnMouseWheel(e);
 
-		imGuiController.MouseScroll(new OpenTK.Mathematics.Vector2(e.OffsetX, e.OffsetY));
+		imGuiController.MouseScroll(new Vector2(e.OffsetX, e.OffsetY));
 	}
 }

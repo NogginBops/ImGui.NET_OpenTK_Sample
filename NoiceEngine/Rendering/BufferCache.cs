@@ -23,10 +23,10 @@ public static class BufferCache
 
 		if (material.shader.bufferType == BufferType.SPRITE)
 		{
-			CreateRenderTextureBuffers(ref material.vao, ref material.vbo);
+			CreateSpriteRendererBuffers(ref material.vao, ref material.vbo);
 			//CreateSpriteRendererBuffersz(ref material.vao, ref material.vbo);
 		}
-		
+
 		/*if (material.shader.bufferType == BufferType.GRADIENT)
 		{
 			CreateBoxRendererBuffers(ref material.vao, ref material.vbo);
@@ -36,75 +36,115 @@ public static class BufferCache
 	private static void CreateRenderTextureBuffers(ref int vao, ref int vbo)
 	{
 		vbo = GL.GenBuffer();
-		
+
 		GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
 
-		float[] vertices = {
-			                   -0.5f, -0.5f, 0, 0,
-			                   0.5f, -0.5f, 1, 0,
-			                   -0.5f, 0.5f, 0, 1, 
-			                   -0.5f, 0.5f, 0, 1,
-			                   0.5f, -0.5f, 1, 0,
-			                   0.5f, 0.5f, 1, 1};
+		float[] vertices =
+		{
+			-0.5f, -0.5f, 0, 0,
+			0.5f, -0.5f, 1, 0,
+			-0.5f, 0.5f, 0, 1,
+			-0.5f, 0.5f, 0, 1,
+			0.5f, -0.5f, 1, 0,
+			0.5f, 0.5f, 1, 1
+		};
 
-		GL.BufferData(BufferTarget.ArrayBuffer,vertices.Length*sizeof(float),vertices, BufferUsageHint.DynamicDraw);
-		
+		GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw);
+
 		// now we define layout in vao
 		vao = GL.GenVertexArray();
 
 		GL.BindVertexArray(vao);
-		
+
 		GL.EnableVertexAttribArray(0);
 		GL.EnableVertexAttribArray(1);
-		GL.VertexAttribPointer(index:0, size:2, type:VertexAttribPointerType.Float,normalized: false, 
-		                       stride: sizeof(float)*4, // 1 row (2 floats for position, 2 uv floats)
-		                       pointer:(IntPtr)0);
-		
-		GL.VertexAttribPointer(index:1, size:2, type:VertexAttribPointerType.Float,normalized: false, 
-		                       stride: sizeof(float)*4, // 1 row (2 floats for position, 2 uv floats)
-		                       pointer:(IntPtr)0);
-		
-		
-		GL.BindBuffer(BufferTarget.ArrayBuffer,0);
+		GL.VertexAttribPointer(index: 0, size: 2, type: VertexAttribPointerType.Float, normalized: false,
+		                       stride: sizeof(float) * 4, // 1 row (2 floats for position, 2 uv floats)
+		                       pointer: (IntPtr) 0);
+
+		GL.VertexAttribPointer(index: 1, size: 2, type: VertexAttribPointerType.Float, normalized: false,
+		                       stride: sizeof(float) * 4, // 1 row (2 floats for position, 2 uv floats)
+		                       pointer: (IntPtr) 0);
+
+
+		GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 	}
 
 	private static void CreateBoxRendererBuffers(ref int vao, ref int vbo)
 	{
-	
-		float[] vertices = new float[]{
-			0.5f,  0.5f, 0.0f, 0, // top right
-			0.5f, -0.5f, 0.0f,0,  // bottom right
-			-0.5f, -0.5f, 0.0f, 0, // bottom left
-			-0.5f,  0.5f, 0.0f ,0 // top left
-		};
-		int[] indices = new int[]{  // note that we start from 0!
-			0, 1, 3,  // first Triangle
-			1, 2, 3   // second Triangle
-		};
+		float[] vertices = new float[]
+		                   {
+			                   0.5f, 0.5f, 0.0f, 0, // top right
+			                   0.5f, -0.5f, 0.0f, 0, // bottom right
+			                   -0.5f, -0.5f, 0.0f, 0, // bottom left
+			                   -0.5f, 0.5f, 0.0f, 0 // top left
+		                   };
+		int[] indices = new int[]
+		                {
+			                // note that we start from 0!
+			                0, 1, 3, // first Triangle
+			                1, 2, 3 // second Triangle
+		                };
 		int ebo;
 		// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 		GL.GenVertexArrays(1, out vao);
 		GL.BindVertexArray(vao);
-    
+
 		GL.GenBuffers(1, out vbo);
-		GL.BindBuffer(BufferTarget.ArrayBuffer,vbo);
-		GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float)*vertices.Length, vertices, BufferUsageHint.StaticDraw);
-    
+		GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+		GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
+
 		GL.GenBuffers(1, out ebo);
 		GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
 		GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * indices.Length, indices, BufferUsageHint.StaticDraw);
-    
-		GL.VertexAttribPointer(0,3,VertexAttribPointerType.Float,false, 4* sizeof(float), (IntPtr)0);
+
+		GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 4 * sizeof(float), (IntPtr) 0);
 		GL.EnableVertexAttribArray(0);
-    
+
 		// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-		GL.BindBuffer(BufferTarget.ArrayBuffer,0);
-    
+		GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
 		// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-	
-	private static void CreateSpriteRendererBuffers(ref int vao, ref int vbo)
+
+	public static void CreateSpriteRendererBuffers(ref int vao, ref int vbo)
+	{
+		vbo = GL.GenBuffer();
+
+		GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+
+		float[] vertices =
+		{
+			-0.5f, -0.5f, 0, 0,
+			0.5f, -0.5f, 1, 0,
+			-0.5f, 0.5f, 0, 1,
+			-0.5f, 0.5f, 0, 1,
+			0.5f, -0.5f, 1, 0,
+			0.5f, 0.5f, 1, 1
+		};
+
+		GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw);
+
+		// now we define layout in vao
+		vao = GL.GenVertexArray();
+
+		GL.BindVertexArray(vao);
+
+		GL.EnableVertexAttribArray(0);
+		GL.EnableVertexAttribArray(1);
+		GL.VertexAttribPointer(index: 0, size: 2, type: VertexAttribPointerType.Float, normalized: false,
+		                       stride: sizeof(float) * 4, // 1 row (2 floats for position, 2 uv floats)
+		                       pointer: (IntPtr) 0);
+
+		GL.VertexAttribPointer(index: 1, size: 2, type: VertexAttribPointerType.Float, normalized: false,
+		                       stride: sizeof(float) * 4, // 1 row (2 floats for position, 2 uv floats)
+		                       pointer: (IntPtr) 0);
+
+
+		GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+	}
+	/*private static void CreateSpriteRendererBuffers(ref int vao, ref int vbo)
 	{
 		vao = GL.GenVertexArray();
 		vbo = GL.GenBuffer();
@@ -242,9 +282,8 @@ public static class BufferCache
 
 			GL.VertexArrayVertexBuffer(vao, 1, vbo_positions, IntPtr.Zero, sizeof(float) * 4 + sizeof(byte));
 		}
-	}
+	}*/
 
-	
 	/*private static void CreateGradientRendererBuffers(ref int vao, ref int vbo)
 	{
 		vao = GL.GenVertexArray();

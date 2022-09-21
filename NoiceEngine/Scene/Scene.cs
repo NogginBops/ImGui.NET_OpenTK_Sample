@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Engine.Tweening;
 
 namespace Engine;
 
@@ -95,6 +96,7 @@ public class Scene
 	{
 		Time.Update();
 		MouseInput.Update();
+		TweenManager.I.Update();
 
 		for (int i = 0; i < gameObjects.Count; i++)
 		{
@@ -138,7 +140,7 @@ public class Scene
 		GL.ClearColor(camera.color.ToOtherColor());
 		GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
-		BatchingManager.RenderAllBatchers();
+		//BatchingManager.RenderAllBatchers();
 
 		for (int i = 0; i < renderQueue.Count; i++)
 			if (renderQueue[i].enabled && renderQueue[i].awoken && renderQueue[i].gameObject.activeInHierarchy)

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using System.Numerics;
 
 namespace Engine;
@@ -10,7 +10,7 @@ public class SpriteSheetBatcher : Batcher
 		vertexAttribSize = 10;
 	}
 
-	public override void CreateBuffers()
+	/*public override void CreateBuffers()
 	{
 		vao = GL.GenVertexArray();
 		vbo = GL.GenBuffer();
@@ -64,7 +64,7 @@ public class SpriteSheetBatcher : Batcher
 		                           8); // relative offset, first item
 
 		GL.VertexArrayVertexBuffer(vao, 0, vbo, new IntPtr(0), sizeof(float) * 4);
-	}
+	}#1#
 
 	public override void Render()
 	{
@@ -80,7 +80,7 @@ public class SpriteSheetBatcher : Batcher
 
 		if (vao == -1)
 		{
-			CreateBuffers();
+			//CreateBuffers();
 		}
 
 		bool createdBufferThisFrame = false;
@@ -102,7 +102,6 @@ public class SpriteSheetBatcher : Batcher
 		                   sizeof(float) * attribsArray.Length,
 		                   attribsArray,
 		                   BufferUsageHint.StreamCopy);
-		currentBufferUploadedSize = attribsArray.Length;
 
 
 		// ATTRIB: vertex position -   2 floats
@@ -182,4 +181,4 @@ public class SpriteSheetBatcher : Batcher
 
 		Debug.CountStat("Draw Calls", 1);
 	}
-}
+}*/

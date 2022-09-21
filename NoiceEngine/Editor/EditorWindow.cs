@@ -5,6 +5,7 @@ namespace Engine;
 public class EditorWindow
 {
 	internal bool active = true;
+	public int windowWidth;
 
 	private int currentID;
 

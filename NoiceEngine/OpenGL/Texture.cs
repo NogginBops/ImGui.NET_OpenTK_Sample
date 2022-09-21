@@ -23,9 +23,4 @@ public class Texture
 	{
 		TextureCache.DeleteTexture(path);
 	}
-
-	public void Use()
-	{
-		TextureCache.BindTexture(id);
-	}
 }

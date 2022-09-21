@@ -85,6 +85,6 @@ public static class TextureCache
 		}
 
 		textureInUse = id;
-		GL.BindTexture(TextureTarget.TextureBuffer, id);
+		GL.BindTexture(TextureTarget.Texture2D, id);
 	}
 }

@@ -12,7 +12,7 @@ public class RenderTexture
 
 	public RenderTexture(Vector2 size)
 	{
-		GL.DeleteFramebuffers(1, ref id);
+		//GL.DeleteFramebuffers(1, ref id);
 		CreateMaterial();
 		Invalidate(size);
 	}

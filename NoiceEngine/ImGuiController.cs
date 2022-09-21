@@ -10,7 +10,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Diagnostics;
 using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
 using Keys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
-using Vector2 = OpenTK.Mathematics.Vector2;
+using Vector2 = Engine.Vector2;
 
 namespace Dear_ImGui_Sample
 {
@@ -55,7 +55,9 @@ namespace Dear_ImGui_Sample
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
             var io = ImGui.GetIO();
-            io.Fonts.AddFontDefault();
+
+            io.Fonts.AddFontFromFileTTF("inconsolata.ttf", 28);
+            //io.Fonts.AddFontDefault();
 
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
 
@@ -67,7 +69,6 @@ namespace Dear_ImGui_Sample
             ImGui.NewFrame();
             _frameBegun = true;
         }
-
         public void WindowResized(int width, int height)
         {
             _windowWidth = width;
@@ -104,16 +105,12 @@ namespace Dear_ImGui_Sample
             RecreateFontDeviceTexture();
 
             string VertexSource = @"#version 410 core
-
 uniform mat4 projection_matrix;
-
 layout(location = 0) in vec2 in_position;
 layout(location = 1) in vec2 in_texCoord;
 layout(location = 2) in vec4 in_color;
-
 out vec4 color;
 out vec2 texCoord;
-
 void main()
 {
     gl_Position = projection_matrix * vec4(in_position, 0, 1);
@@ -121,14 +118,10 @@ void main()
     texCoord = in_texCoord;
 }";
             string FragmentSource = @"#version 410 core
-
 uniform sampler2D in_fontTexture;
-
 in vec4 color;
 in vec2 texCoord;
-
 out vec4 outputColor;
-
 void main()
 {
     outputColor = color * texture(in_fontTexture, texCoord);
@@ -250,7 +243,7 @@ void main()
             io.MouseDown[1] = MouseState[MouseButton.Right];
             io.MouseDown[2] = MouseState[MouseButton.Middle];
 
-            var screenPoint = new Vector2i((int)MouseState.X, (int)MouseState.Y);
+            var screenPoint = new Vector2i((int)MouseState.X, (int)MouseState.Y)*2;
             var point = screenPoint;//wnd.PointToClient(screenPoint);
             io.MousePos = new System.Numerics.Vector2(point.X, point.Y);
             
@@ -348,7 +341,7 @@ void main()
             // Bind the element buffer (thru the VAO) so that we can resize it.
             GL.BindVertexArray(_vertexArray);
             // Bind the vertex buffer so that we can resize it.
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);           
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
 
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
@@ -362,7 +355,7 @@ void main()
                     GL.BufferData(BufferTarget.ArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _vertexBufferSize = newSize;
 
-                    Console.WriteLine($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
+                    Debug.Log($"Resized dear imgui vertex buffer to new size {_vertexBufferSize}");
                 }
 
                 int indexSize = cmd_list.IdxBuffer.Size * sizeof(ushort);
@@ -372,7 +365,7 @@ void main()
                     GL.BufferData(BufferTarget.ElementArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _indexBufferSize = newSize;
 
-                    Console.WriteLine($"Resized dear imgui index buffer to new size {_indexBufferSize}");
+                    Debug.Log($"Resized dear imgui index buffer to new size {_indexBufferSize}");
                 }
             }
 
@@ -387,15 +380,15 @@ void main()
                 1.0f);
 
             GL.UseProgram(_shader);
-
             GL.UniformMatrix4(_shaderProjectionMatrixLocation, false, ref mvp);
             GL.Uniform1(_shaderFontTextureLocation, 0);
-            CheckGLError("ImGUI Projection");
+            CheckGLError("Projection");
 
             GL.BindVertexArray(_vertexArray);
             CheckGLError("VAO");
 
-            draw_data.ScaleClipRects(io.DisplayFramebufferScale);
+            Vector2 scl = io.DisplayFramebufferScale;
+            draw_data.ScaleClipRects(scl);
 
             GL.Enable(EnableCap.Blend);
             GL.Enable(EnableCap.ScissorTest);
@@ -427,7 +420,7 @@ void main()
                         GL.ActiveTexture(TextureUnit.Texture0);
                         GL.BindTexture(TextureTarget.Texture2D, (int)pcmd.TextureId);
                         CheckGLError("Texture");
-                        
+
                         // We do _windowHeight - (int)clip.W instead of (int)clip.Y because gl has flipped Y when it comes to these coordinates
                         var clip = pcmd.ClipRect;
                         GL.Scissor((int)clip.X, _windowHeight - (int)clip.W, (int)(clip.Z - clip.X), (int)(clip.W - clip.Y));

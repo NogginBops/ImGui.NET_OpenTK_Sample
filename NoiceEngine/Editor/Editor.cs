@@ -195,8 +195,8 @@ public class Editor
 		{
 			for (int i = 0; i < editorWindows.Length; i++)
 				editorWindows[i].Draw();
-			//EditorWindow_Console.I.Draw();
 
+			//EditorWindow_Console.I.Draw();
 		}
 		else
 		{

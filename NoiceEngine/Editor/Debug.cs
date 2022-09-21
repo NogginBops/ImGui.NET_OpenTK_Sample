@@ -14,13 +14,13 @@ public static class Debug
 
 	public static void Log(string message)
 	{
-		Window.I.Title = message;
 		if (Global.EditorAttached == false)
 		{
 			return;
 		}
 
-		logs.Add($"[{DateTime.Now.ToString("HH:mm:ss")}]   " + message);
+		logs.Add($"[{DateTime.Now.ToString("HH:mm:ss")}]" + message);
+
 		if (logs.Count > LOG_LIMIT + 1)
 		{
 			logs.RemoveAt(0);
@@ -28,16 +28,7 @@ public static class Debug
 	}
 	public static void Log(object message)
 	{
-		if (Global.EditorAttached == false)
-		{
-			return;
-		}
-
-		logs.Add($"[{DateTime.Now.ToString("HH:mm:ss")}]   " + message);
-		if (logs.Count > LOG_LIMIT + 1)
-		{
-			logs.RemoveAt(0);
-		}
+		Log(message.ToString());
 	}
 
 	public static void StartTimer(string timerName)

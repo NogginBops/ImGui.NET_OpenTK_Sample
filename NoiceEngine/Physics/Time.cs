@@ -6,6 +6,7 @@ public static class Time
 	public static float editorDeltaTime = 0.01666666f;
 	public static float fixedDeltaTime = 0.02f;
 	public static float elapsedTime;
+	public static float editorElapsedTime;
 	public static float elapsedSeconds;
 	public static ulong elapsedTicks;
 	public static ulong timeScale = 0;
@@ -14,10 +15,7 @@ public static class Time
 	{
 
 		editorDeltaTime = (float) Window.I.UpdateTime;
-		if (Global.GameRunning == false)
-		{
-			return;
-		}
+
 
 		deltaTime = (float) Window.I.UpdateTime;
 		if (elapsedTicks % 5 == 0)
@@ -30,6 +28,8 @@ public static class Time
 		elapsedTime += deltaTime;
 		elapsedSeconds = elapsedTime;
 		elapsedTicks++;
+
+		editorElapsedTime += editorDeltaTime;
 		//}
 	}
 }

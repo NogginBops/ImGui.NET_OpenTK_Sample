@@ -84,7 +84,7 @@ public class TransformHandle : Component
 
 	public override void Update()
 	{
-		transform.scale = Vector3.One * Camera.I.ortographicSize;
+		transform.scale = Vector3.One * Global.EditorScale * Camera.I.ortographicSize;
 
 		if (MouseInput.ButtonReleased())
 		{

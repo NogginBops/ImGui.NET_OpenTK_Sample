@@ -12,7 +12,7 @@ public class ParticleSystemRenderer : SpriteRenderer
 	public override void Awake()
 	{
 		material.additive = true;
-		BatchingManager.AddObjectToBatcher(texture.id, this);
+		//BatchingManager.AddObjectToBatcher(texture.id, this);
 
 		base.Awake();
 	}
@@ -42,13 +42,13 @@ public class ParticleSystemRenderer : SpriteRenderer
 
 		while (particlesInBatcher < particleSystem.particles.Count)
 		{
-			BatchingManager.AddObjectToBatcher(texture.id, this, particlesInBatcher);
+			//BatchingManager.AddObjectToBatcher(texture.id, this, particlesInBatcher);
 			particlesInBatcher++;
 		}
 
 		for (int i = 0; i < particleSystem.particles.Count; i++)
-			BatchingManager.UpdateAttribs(texture.id, gameObjectID, particleSystem.particles[i].worldPosition, new Vector2(particleSystem.particles[i].radius),
-			                              particleSystem.particles[i].color, i);
+			//BatchingManager.UpdateAttribs(texture.id, gameObjectID, particleSystem.particles[i].worldPosition, new Vector2(particleSystem.particles[i].radius),
+			//                              particleSystem.particles[i].color, i);
 
 		Debug.Stat("Particles", particleSystem.particles.Count);
 	}

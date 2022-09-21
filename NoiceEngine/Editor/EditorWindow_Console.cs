@@ -29,7 +29,22 @@ public class EditorWindow_Console : EditorWindow
 		}
 
 		int logsCount = Debug.GetLogs().Count;
-		for (int i = 0; i < Mathf.Min(logsCount, Debug.LOG_LIMIT - 1); i++) ImGui.Text(Debug.GetLogs()[logsCount - i - 1]);
+		for (int i = 0; i < Mathf.Min(logsCount, Debug.LOG_LIMIT - 1); i++)
+		{
+			ImGui.Separator();
+
+			string log = Debug.GetLogs()[logsCount - i - 1];
+			ImGui.TextColored(Color.Coral.ToVector4(),log.Substring(0,log.IndexOf("]")+1));
+			ImGui.SameLine();
+
+			ImGui.TextWrapped(log.Substring(log.IndexOf("]")+1));
+			
+		}
+		if(logsCount>0)
+		{
+			ImGui.Separator();
+
+		}
 		//ResetID();
 
 		ImGui.End();
