@@ -280,13 +280,19 @@ public class EditorWindow_Inspector : EditorWindow
 					bool hovering = false;
 					if (ImGui.IsMouseHoveringRect(ImGui.GetCursorScreenPos(), ImGui.GetCursorScreenPos() + new System.Numerics.Vector2(1500, ImGui.GetFrameHeightWithSpacing())))
 					{
-						ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 30);
 						hovering = true;
 					}
 
 					ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 10);
 
-					ImGui.Text(info.Name);
+					if (hovering)
+					{
+						ImGui.TextColored(Color.Plum.ToVector4(), info.Name);
+					}
+					else
+					{
+						ImGui.Text(info.Name);
+					}
 
 					float itemWidth1 = 400;
 					ImGui.SameLine(ImGui.GetWindowWidth() - itemWidth1);
@@ -387,16 +393,18 @@ public class EditorWindow_Inspector : EditorWindow
 					else if (fieldOrPropertyType == typeof(Action))
 					{
 						Action action = (Action) info.GetValue(currentComponent);
-						if (ImGui.Button(fieldOrPropertyType.Name))
+						ImGui.PushStyleColor(ImGuiCol.Text, Color.Linen.ToVector4());
+						if (ImGui.Button($"> {info.Name} <", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight())))
 						{
 							action?.Invoke();
 						}
+						ImGui.PopStyleColor(1);
 					}
 					else if (fieldOrPropertyType == typeof(Texture) && currentComponent is SpriteRenderer)
 					{
 						string textureName = Path.GetFileName((currentComponent as SpriteRenderer).texture.path);
 
-						bool clicked = ImGui.Button(textureName, new Vector2(ImGui.GetContentRegionAvail().X, 20));
+						bool clicked = ImGui.Button(textureName, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
 						//ImiGui.Text(textureName);
 						if (clicked)
 						{

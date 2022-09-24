@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Engine.Components.Renderers;
 
 namespace Engine;
 
@@ -7,9 +8,11 @@ public class SpriteRenderer : Renderer
 	public Texture texture;
 
 	[Hide] public virtual bool Batched { get; set; } = false;
+	[XmlIgnore] public Action SetNativeSize;
 
 	public override void Awake()
 	{
+		SetNativeSize += () => { UpdateBoxShapeSize();};
 		CreateMaterial();
 		if (texture == null)
 		{
@@ -44,7 +47,6 @@ public class SpriteRenderer : Renderer
 
 		texture.Load(_texturePath);
 
-		UpdateBoxShapeSize();
 		if (Batched)
 		{
 			//BatchingManager.AddObjectToBatcher(texture.id, this);
@@ -59,7 +61,7 @@ public class SpriteRenderer : Renderer
 		}
 	}
 
-	public override void OnNewComponentAdded(Component comp)
+	/*public override void OnNewComponentAdded(Component comp)
 	{
 		if (comp is BoxShape && texture != null)
 		{
@@ -67,10 +69,16 @@ public class SpriteRenderer : Renderer
 		}
 
 		base.OnNewComponentAdded(comp);
-	}
-
-	public void SetMaterial(Shader shader, int vao)
+	}*/
+	
+	public override void CreateMaterial()
 	{
+		if (material == null)
+		{
+			material = MaterialCache.GetMaterial("SpriteRenderer");
+		}
+		
+		base.CreateMaterial();
 	}
 
 	public override void OnDestroyed()
@@ -124,6 +132,7 @@ public class SpriteRenderer : Renderer
 		GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
 		Debug.CountStat("Draw Calls", 1);
+
 	}
 }
 

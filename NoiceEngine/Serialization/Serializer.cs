@@ -50,6 +50,10 @@ public class Serializer
 
 	public void SaveClipboardGameObject(GameObject go)
 	{
+		if (Directory.Exists("Temp") == false)
+		{
+			Directory.CreateDirectory("Temp");
+		}
 		SceneFile prefabSceneFile = SceneFile.CreateForOneGameObject(go);
 
 		SaveGameObjects(prefabSceneFile, Path.Combine("Temp", "clipboardGameObject"));

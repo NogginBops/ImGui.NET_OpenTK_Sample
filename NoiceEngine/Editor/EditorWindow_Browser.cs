@@ -68,8 +68,20 @@ public class EditorWindow_Browser : EditorWindow
 			return;
 		}
 
-		assets = Directory.GetDirectories(currentDirectory.FullName);
-		assets = assets.Concat(Directory.GetFiles(currentDirectory.FullName, "", SearchOption.TopDirectoryOnly)).ToArray();
+		string[] tmp_assets = Directory.GetDirectories(currentDirectory.FullName);
+		List<string> allAssets = tmp_assets.Concat(Directory.GetFiles(currentDirectory.FullName, "", SearchOption.TopDirectoryOnly)).ToList();
+
+		for (int i = 0; i < allAssets.Count; i++)
+		{
+			if (Path.GetFileName(allAssets[i]).StartsWith('.'))
+			{
+				allAssets.RemoveAt(i);
+				i--;
+				continue;
+			}
+		}
+
+		assets = allAssets.ToArray();
 
 		for (int i = 0; i < textures.Length; i++)
 			if (textures[i] != null && textures[i].loaded)
@@ -270,9 +282,9 @@ public class EditorWindow_Browser : EditorWindow
 				{
 					string itemPath = assets[assetIndex];
 					IntPtr stringPointer = Marshal.StringToHGlobalAnsi(itemPath);
-					
+
 					ImGui.SetDragDropPayload("PREFAB_PATH", stringPointer, (uint) (sizeof(char) * itemPath.Length));
-					
+
 					//string payload = Marshal.PtrToStringAnsi(ImGui.GetDragDropPayload().Data);
 
 					ImGui.Image((IntPtr) fileIcon.id, iconSize);
