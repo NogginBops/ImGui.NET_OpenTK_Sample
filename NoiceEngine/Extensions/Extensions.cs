@@ -22,7 +22,10 @@ public static class Extensions
 	{
 		return Mathf.Lerp(a, b, t);
 	}
-
+	public static Color SetA(ref this Color col, float a)
+	{
+		return new Color(col.R, col.G, col.B, a);
+	}
 	public static Vector2 Set(ref this Vector2 vec, Vector2 vec2)
 	{
 		return vec.Set(vec2.X, vec2.Y);

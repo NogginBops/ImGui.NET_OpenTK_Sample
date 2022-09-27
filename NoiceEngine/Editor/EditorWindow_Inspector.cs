@@ -325,7 +325,7 @@ public class EditorWindow_Inspector : EditorWindow
 
 						string clipName = Path.GetFileName(audioClip?.path);
 
-						bool clicked = ImGui.Button(clipName, new Vector2(ImGui.GetContentRegionAvail().X, 20));
+						bool clicked = ImGui.Button(clipName, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
 
 
 						if (ImGui.BeginDragDropTarget())
@@ -465,7 +465,7 @@ public class EditorWindow_Inspector : EditorWindow
 					{
 						GameObject goObject = info.GetValue(currentComponent) as GameObject;
 						string fieldGoName = goObject?.name ?? "";
-						bool clicked = ImGui.Button(fieldGoName, new Vector2(ImGui.GetContentRegionAvail().X, 20));
+						bool clicked = ImGui.Button(fieldGoName, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
 						if (clicked && goObject != null)
 						{
 							EditorWindow_Hierarchy.I.SelectGameObject(goObject.id);

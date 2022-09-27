@@ -13,23 +13,22 @@ public static class Time
 
 	public static void Update()
 	{
-
 		editorDeltaTime = (float) Window.I.UpdateTime;
-
-
-		deltaTime = (float) Window.I.UpdateTime;
-		if (elapsedTicks % 5 == 0)
-		{
-			//Debug.Log("fps:  " + (int)(1f / deltaTime));
-		}
-
-		//if (Global.GameRunning)
-		//{
-		elapsedTime += deltaTime;
-		elapsedSeconds = elapsedTime;
-		elapsedTicks++;
-
 		editorElapsedTime += editorDeltaTime;
-		//}
+
+
+		if (Global.GameRunning)
+		{
+			deltaTime = (float) Window.I.UpdateTime;
+
+			elapsedTime += deltaTime;
+			elapsedSeconds = elapsedTime;
+			elapsedTicks++;
+		}
+		else
+		{
+
+			deltaTime = 0;
+		}
 	}
 }

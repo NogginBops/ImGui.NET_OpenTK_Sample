@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿/*using System.IO;
 
 namespace Scripts;
 
@@ -52,4 +52,4 @@ public class ParticleSystemRenderer : SpriteRenderer
 
 		Debug.Stat("Particles", particleSystem.particles.Count);
 	}
-}
+}*/

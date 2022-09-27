@@ -17,6 +17,7 @@ public class TransformHandle : Component
 	public BoxRenderer boxRendererX;
 	public BoxRenderer boxRendererXY;
 	public BoxRenderer boxRendererY;
+	
 	public bool clicked;
 	public Axis? CurrentAxisSelected;
 	private Transform selectedTransform;
@@ -187,7 +188,10 @@ public class TransformHandle : Component
 			{
 				Rigidbody rigidbody = selectedTransform.GetComponent<Rigidbody>();
 				rigidbody.Velocity = Vector2.Zero;
-				rigidbody.body.Position = selectedTransform.position;
+				if (rigidbody.body != null)
+				{
+					rigidbody.body.Position = selectedTransform.position;
+				}
 			}
 		}
 

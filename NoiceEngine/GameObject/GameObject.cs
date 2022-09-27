@@ -368,6 +368,7 @@ public class GameObject
 		}
 	}
 
+	/*
 	public virtual void EditorUpdate()
 	{
 		if (activeInHierarchy == false && updateWhenDisabled == false)
@@ -383,6 +384,7 @@ public class GameObject
 
 		EditorUpdateComponents();
 	}
+	*/
 
 	public virtual void Update()
 	{
@@ -617,6 +619,19 @@ public class GameObject
 		}
 	}
 
+	private void UpdateRenderers()
+	{
+		lock (ComponentsLock)
+		{
+			for (int i = 0; i < components.Count; i++)
+				if (components[i].enabled && components[i].awoken && components[i] is Renderer)
+				{
+					components[i].Update();
+				}
+		}
+	}
+
+	
 	private void FixedUpdateComponents()
 	{
 		for (int i = 0; i < components.Count; i++)

@@ -8,12 +8,12 @@ layout(location = 1) in vec4 aTexCoord;
 out vec4 texCoord;
 out vec4 frag_color;
 uniform mat4 u_mvp = mat4(1.0);
-uniform float zoomAmount = 1;
+uniform vec2 zoomAmount = vec2(1);
 uniform mat4 u_unitScaleMatrix = mat4(1.0);
 
 void main(void)
 {
-    texCoord = aTexCoord/zoomAmount;
+    texCoord = aTexCoord/vec4(zoomAmount.x,zoomAmount.y,1,1);
     gl_Position =  (u_mvp * (position));
 }
 
@@ -25,7 +25,6 @@ uniform sampler2D textureObject;
 uniform vec4 u_color=vec4(1.0);
 uniform vec2 u_resolution=vec2(100.0);
 uniform vec2 offset =vec2(0,0);
-uniform float zoomAmount = 1;
 layout(location = 0) out vec4 color;
 
 void main(void)

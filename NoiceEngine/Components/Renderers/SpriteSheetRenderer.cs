@@ -5,14 +5,12 @@ namespace Scripts;
 
 public class SpriteSheetRenderer : SpriteRenderer
 {
+	[Hide]
 	public int currentSpriteIndex;
-	[Show]
-	public Vector2 drawOffset = Vector2.Zero;
 
 	private Vector2 spritesCount = new(1, 1);
+	[Hide]
 	public Vector2 spriteSize;
-	[Show]
-	public float _zoomAmount;
 	[Hide] public override bool Batched { get; set; } = true;
 	public Vector2 SpritesCount
 	{
@@ -27,25 +25,6 @@ public class SpriteSheetRenderer : SpriteRenderer
 		}
 	}
 
-	public override void Awake()
-	{
-		// CreateMaterial();
-		//
-		// //drawOffset = new Vector2(0, spriteSize.Y * spritesCount.Y - spriteSize.Y);
-		//
-		// //material = new Material(ShaderCache.spriteSheetRendererShader, BufferCache.spriteSheetRendererVAO);
-		// if (texture == null)
-		// {
-		// 	texture = new Texture();
-		// }
-		// else
-		// {
-		// 	LoadTexture(texture.path);
-		// }
-
-		base.Awake();
-	}
-
 	public override void CreateMaterial()
 	{
 		if (material == null)
@@ -58,6 +37,10 @@ public class SpriteSheetRenderer : SpriteRenderer
 
 	internal override void UpdateBoxShapeSize()
 	{
+		if (boxShape != null)
+		{
+			boxShape.size = spriteSize;
+		}
 	}
 
 	public override void OnNewComponentAdded(Component comp)
@@ -107,7 +90,7 @@ public class SpriteSheetRenderer : SpriteRenderer
 			var x = currentSpriteIndex % spritesCount.X;
 			var y = (float) Math.Floor(currentSpriteIndex / spritesCount.X);
 
-			drawOffset = new Vector2(x, y) * spriteSize * spritesCount;
+			var drawOffset = new Vector2(x, y) * spriteSize * spritesCount;
 
 			//BatchingManager.UpdateAttribsSpriteSheet(texture.id, gameObjectID, transform.position, new Vector2(GetComponent<BoxShape>().size.X * transform.scale.X, GetComponent<BoxShape>().size.Y * transform.scale.Y),
 			//                                         color, drawOffset);
@@ -124,12 +107,12 @@ public class SpriteSheetRenderer : SpriteRenderer
 			var columnIndex = currentSpriteIndex % spritesCount.X;
 			var rowIndex = (float) Math.Floor(currentSpriteIndex / spritesCount.X);
 
-			drawOffset = new Vector2(columnIndex * spriteSize.X + spriteSize.X / 2, -rowIndex * spriteSize.Y - spriteSize.Y / 2);
+			Vector2 drawOffset = new Vector2(columnIndex * spriteSize.X + spriteSize.X / 2, -rowIndex * spriteSize.Y - spriteSize.Y / 2);
 
 			material.shader.SetVector2("offset", drawOffset);
 
 			//_zoomAmount = texture.size.X/spriteSize.X*2;
-			material.shader.SetFloat("zoomAmount", _zoomAmount);
+			material.shader.SetVector2("zoomAmount", spritesCount);
 
 			BufferCache.BindVAO(material.vao);
 

@@ -22,7 +22,7 @@ public class AnimationController : Component
 
 	public override void Start()
 	{
-		SetAnimation(animRange_Idle);
+		//SetAnimation(animRange_Idle);
 
 		base.Start();
 	}

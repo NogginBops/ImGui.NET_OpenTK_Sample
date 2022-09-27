@@ -2,23 +2,29 @@
 using System.Xml.Serialization;
 using Genbox.VelcroPhysics.Definitions;
 using Genbox.VelcroPhysics.Dynamics;
+using Genbox.VelcroPhysics.Shared;
 
 namespace Scripts;
 
 public class Rigidbody : Component
 {
+	[Hide]
 	public new bool allowMultiple = false;
 
 	public float angularDrag = 1f;
-	[XmlIgnore] public Body body;
+	[XmlIgnore]
+	public Body body;
 
 	public float friction = 1;
 	public bool isButton = false;
 	public bool isStatic = false;
 	public bool isTrigger = false;
 
-	[XmlIgnore] [LinkableComponent] public Shape shape;
-	[XmlIgnore] public List<Rigidbody> touchingRigidbodies = new();
+	[XmlIgnore]
+	[LinkableComponent]
+	public Shape shape;
+	[XmlIgnore]
+	public List<Rigidbody> touchingRigidbodies = new();
 	public bool useGravity = false;
 	[XmlIgnore]
 	public Vector2 Velocity
@@ -88,8 +94,8 @@ public class Rigidbody : Component
 		bodyDef.Position = transform.position;
 		bodyDef.Type = isStatic ? BodyType.Static : BodyType.Dynamic;
 		bodyDef.AllowSleep = true;
-
 		//body.SleepingAllowed = false;
+		// sleep somehow blocks velocities < 0.2
 
 		if (GetComponent<CircleShape>() != null)
 		{
@@ -101,7 +107,7 @@ public class Rigidbody : Component
 			lock (Physics.World)
 			{
 				body = Physics.World.CreateBody(bodyDef);
-				body.SleepingAllowed = true;
+				//body.SleepingAllowed = true;
 				body.CreateFixture(fixtureDef);
 				body.LinearDamping = 0;
 				body.AngularDamping = 0;
@@ -116,6 +122,32 @@ public class Rigidbody : Component
 			//pfixture.Friction = 0.1f;
 			//body.LinearDamping = 0;
 			////body.LinearDamping = 3;
+
+			BoxShape boxShape = GetComponent<BoxShape>();
+
+			FixtureDef fixtureDef = new FixtureDef();
+			Vertices polygonVertices = new Vertices();
+
+			float boxHalfWidth = boxShape.size.X * transform.scale.X / 2;
+			float boxHalfHeight = boxShape.size.Y * transform.scale.Y / 2;
+			polygonVertices.Add(new Vector2(-boxHalfWidth, -boxHalfHeight));
+			polygonVertices.Add(new Vector2(-boxHalfWidth, boxHalfHeight));
+			polygonVertices.Add(new Vector2(boxHalfWidth, -boxHalfHeight));
+			polygonVertices.Add(new Vector2(boxHalfWidth, boxHalfHeight));
+			fixtureDef.Shape = new Genbox.VelcroPhysics.Collision.Shapes.PolygonShape(polygonVertices, 100);
+			fixtureDef.Friction = friction;
+
+			lock (Physics.World)
+			{
+				body = Physics.World.CreateBody(bodyDef);
+				body.SleepingAllowed = true;
+				body.CreateFixture(fixtureDef);
+				body.LinearDamping = 0;
+				body.AngularDamping = 0;
+				body.Mass = Mass;
+				body.
+				//body.GravityScale = useGravity?1:0;
+			}
 		}
 	}
 

@@ -223,7 +223,7 @@ public class EditorWindow_Browser : EditorWindow
 				}
 			}
 
-			if (assetExtension.ToLower().Contains(".mp3"))
+			if (assetExtension.ToLower().Contains(".mp3") || assetExtension.ToLower().Contains(".wav"))
 			{
 				if (ImGui.BeginDragDropSource(ImGuiDragDropFlags.None)) // DRAG N DROP
 				{

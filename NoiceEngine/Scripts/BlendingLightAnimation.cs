@@ -1,4 +1,4 @@
-﻿namespace Scripts;
+﻿/*namespace Scripts;
 
 public class BlendingLightAnimation : Component
 {
@@ -11,4 +11,4 @@ public class BlendingLightAnimation : Component
 
 		base.Update();
 	}
-}
+}*/

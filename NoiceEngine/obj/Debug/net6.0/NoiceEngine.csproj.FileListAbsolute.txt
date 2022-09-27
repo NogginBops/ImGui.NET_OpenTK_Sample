@@ -61,12 +61,6 @@
 /Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/Microsoft.CodeAnalysis.Workspaces.dll
 /Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 /Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/Microsoft.Win32.SystemEvents.dll
-/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/NAudio.dll
-/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/NAudio.Asio.dll
-/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/NAudio.Core.dll
-/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/NAudio.Midi.dll
-/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/NAudio.Wasapi.dll
-/Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/NAudio.WinMM.dll
 /Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/OpenTK.Compute.dll
 /Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/OpenTK.Core.dll
 /Users/hexiy/Desktop/dev/ImGui.NET_OpenTK_Sample/NoiceEngine/bin/Debug/net6.0/OpenTK.Graphics.dll

@@ -76,11 +76,11 @@ public class Window : GameWindow
 		GL.Clear(ClearBufferMask.ColorBufferBit);
 
 		sceneRenderTexture.Bind(); // start rendering to sceneRenderTexture
-		 GL.Viewport(0, 0, (int) Camera.I.size.X, (int) Camera.I.size.Y);
-		
-		 GL.Enable(EnableCap.Blend);
-		 Scene.I.Render();
-		 GL.Disable(EnableCap.Blend);
+		GL.Viewport(0, 0, (int) Camera.I.size.X, (int) Camera.I.size.Y);
+
+		GL.Enable(EnableCap.Blend);
+		Scene.I.Render();
+		GL.Disable(EnableCap.Blend);
 
 		sceneRenderTexture.Unbind(); // end rendering to sceneRenderTexture
 
@@ -96,9 +96,8 @@ public class Window : GameWindow
 		//postProcessRenderTexture.RenderSnow(sceneRenderTexture.colorAttachment);
 
 		postProcessRenderTexture.Unbind();
-		
 
-		
+
 		imGuiController.Update(this, (float) e.Time);
 		GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
 

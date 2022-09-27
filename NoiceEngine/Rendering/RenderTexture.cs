@@ -35,7 +35,7 @@ public class RenderTexture
 		GL.BindTexture(TextureTarget.Texture2D, colorAttachment);
 		//TextureCache.BindTexture(colorAttachment);
 
-		GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, (int) size.X, (int) size.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte,  (IntPtr) null);
+		GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, (int) size.X, (int) size.Y, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr) null);
 		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear);
 		GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMinFilter.Linear);
 
@@ -69,11 +69,10 @@ public class RenderTexture
 		//return;
 		ShaderCache.UseShader(renderTextureMaterial.shader);
 		// renderTextureMaterial.shader.SetVector2("u_resolution", Camera.I.size);
-			//	renderTextureMaterial.shader.SetMatrix4x4("u_mvp", GetModelViewProjection(sampleSize));
+		//	renderTextureMaterial.shader.SetMatrix4x4("u_mvp", GetModelViewProjection(sampleSize));
 
 		BufferCache.BindVAO(renderTextureMaterial.vao);
 		GL.Enable(EnableCap.Blend);
-
 
 
 		TextureCache.BindTexture(targetTexture);

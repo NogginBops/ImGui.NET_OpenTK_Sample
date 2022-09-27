@@ -1,4 +1,4 @@
-namespace Scripts;
+/*namespace Scripts;
 
 public class PartyBoi : Component
 {
@@ -29,9 +29,9 @@ public class PartyBoi : Component
 			{
 				text.Value = "uwu";
 			}
-		}*/
+		}#1#
 		boxRenderer.color = Extensions.ColorFromHSVToXna(hue, 0.6f, 0.4f);
 		transform.rotation.Z += Time.deltaTime * 3;
 		base.Update();
 	}
-}
+}*/

@@ -22,8 +22,6 @@ public class Scene
 	{
 		get { return Camera.I; }
 	}
-	//public event EventHandler SceneLoad;
-	public event EventHandler<SceneData> SceneUpdated;
 
 	private void CreateDefaultObjects()
 	{
@@ -84,12 +82,10 @@ public class Scene
 		{
 			LoadScene(Serializer.lastScene);
 		}
-		//SpawnTestSpriteRenderers();
 		else
 		{
 			CreateDefaultObjects();
 		}
-		//SpawnTestSpriteSheetRenderer();
 	}
 
 	public void Update()
@@ -108,12 +104,10 @@ public class Scene
 			}
 			else if (Global.GameRunning == false)
 			{
-				gameObjects[i].EditorUpdate();
+				//gameObjects[i].EditorUpdate();
+				gameObjects[i].Update();
 			}
 		}
-
-		SceneUpdated?.Invoke(this, new SceneData
-		                           {gameObjects = gameObjects});
 	}
 
 	public void OnComponentAdded(GameObject gameObject, Component component)
@@ -143,14 +137,12 @@ public class Scene
 		//BatchingManager.RenderAllBatchers();
 
 		for (int i = 0; i < renderQueue.Count; i++)
+		{
 			if (renderQueue[i].enabled && renderQueue[i].awoken && renderQueue[i].gameObject.activeInHierarchy)
 			{
-				if (Global.GameRunning == false)
-				{
-					renderQueue[i].Update(); // update matrix when game is no playing
-				}
 				renderQueue[i].Render();
 			}
+		}
 	}
 
 	public SceneFile GetSceneFile()

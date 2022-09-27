@@ -12,7 +12,7 @@ public class Camera : Component
 
 	[XmlIgnore] public Matrix4x4 projectionMatrix;
 
-	public Vector2 size = new(1220, 500);
+	public Vector2 size = new(1380, 900);
 	[XmlIgnore] public Matrix4x4 viewMatrix;
 	//[XmlIgnore] public RenderTarget2D renderTarget;
 

@@ -1,4 +1,4 @@
-﻿namespace Engine;
+﻿/*namespace Engine;
 
 public class Brush : Component
 {
@@ -56,4 +56,4 @@ public class Brush : Component
 			go.transform.pivot = new Vector2(0.5f, 0.5f);
 		}
 	}
-}
+}*/

@@ -29,7 +29,6 @@
     <PackageReference Include="Genbox.VelcroPhysics" Version="0.1.0-alpha.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.4.0-1.final" />
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="4.1.0-preview1" />
-    <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
     <PackageReference Include="System.CodeDom" Version="7.0.0-preview.7.22375.6" />
     <PackageReference Include="System.Security.Permissions" Version="7.0.0-preview.7.22375.6" />

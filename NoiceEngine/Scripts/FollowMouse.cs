@@ -1,4 +1,4 @@
-namespace Scripts;
+/*namespace Scripts;
 
 public class FollowMouse : Component
 {
@@ -6,4 +6,4 @@ public class FollowMouse : Component
 	{
 		transform.position = MouseInput.ScreenPosition;
 	}
-}
+}*/
