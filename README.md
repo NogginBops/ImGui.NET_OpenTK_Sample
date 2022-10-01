@@ -1,4 +1,4 @@
-# NoiceEngine
+# TenebrisCapulusEngine
 Simple 2D C# OpenTK game engine with component based architecture.
 
 Features editor with
