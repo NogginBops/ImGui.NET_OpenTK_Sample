@@ -75,10 +75,10 @@ public class PolygonShape : Shape
 
 	public override void Update()
 	{
-		if (transform.rotation.Z != lastRotation)
+		if (transform.Rotation.Z != lastRotation)
 		{
-			SetRotation(transform.rotation.Z);
-			lastRotation = transform.rotation.Z;
+			SetRotation(transform.Rotation.Z);
+			lastRotation = transform.Rotation.Z;
 		}
 
 		base.Update();

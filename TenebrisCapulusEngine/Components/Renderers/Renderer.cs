@@ -75,9 +75,9 @@ public class Renderer : Component, IComparable<Renderer>
 		Matrix4x4 _pivot = Matrix4x4.CreateTranslation(-pivotOffset.X, -pivotOffset.Y, 0);
 		Matrix4x4 _translation = Matrix4x4.CreateTranslation(transform.position + boxShape.offset * transform.scale);
 
-		Matrix4x4 _rotation = Matrix4x4.CreateFromYawPitchRoll(transform.rotation.Y / 180 * Mathf.Pi,
-		                                                       transform.rotation.X / 180 * Mathf.Pi,
-		                                                       -transform.rotation.Z / 180 * Mathf.Pi);
+		Matrix4x4 _rotation = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
+		                                                       -transform.Rotation.X / 180 * Mathf.Pi,
+		                                                       -transform.Rotation.Z / 180 * Mathf.Pi);
 		Matrix4x4 _scale = Matrix4x4.CreateScale(boxShape.size.X * transform.scale.X, boxShape.size.Y * transform.scale.Y, transform.scale.Z * boxShape.size.Z);
 
 		return (_scale * Matrix4x4.Identity * _pivot * _rotation * _translation) * Camera.I.viewMatrix * Camera.I.projectionMatrix;

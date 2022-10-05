@@ -16,7 +16,7 @@ public class LineShape : Shape
 			return transform.position + new Vector2((float) Math.Cos((float) staticAngle), (float) Math.Sin((float) staticAngle));
 		}
 
-		return transform.position + new Vector2((float) Math.Cos(transform.rotation.Z), (float) Math.Sin(transform.rotation.Z));
+		return transform.position + new Vector2((float) Math.Cos(transform.Rotation.Z), (float) Math.Sin(transform.Rotation.Z));
 	}
 
 	public Vector2 GetLineEnd()
@@ -26,6 +26,6 @@ public class LineShape : Shape
 			return transform.position + new Vector2(-(float) Math.Cos((float) staticAngle), (float) Math.Sin((float) staticAngle)) * length;
 		}
 
-		return transform.position + new Vector2(-(float) Math.Cos(transform.rotation.Z), (float) Math.Sin(transform.rotation.Z)) * length;
+		return transform.position + new Vector2(-(float) Math.Cos(transform.Rotation.Z), (float) Math.Sin(transform.Rotation.Z)) * length;
 	}
 }

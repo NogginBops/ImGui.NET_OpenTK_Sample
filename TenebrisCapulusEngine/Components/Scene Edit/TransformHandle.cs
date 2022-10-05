@@ -2,6 +2,8 @@
 
 public class TransformHandle : Component
 {
+	public static TransformHandle I { get; private set; }
+
 	public enum Axis
 	{
 		X,
@@ -17,13 +19,14 @@ public class TransformHandle : Component
 	public BoxRenderer boxRendererX;
 	public BoxRenderer boxRendererXY;
 	public BoxRenderer boxRendererY;
-	
+
 	public bool clicked;
 	public Axis? CurrentAxisSelected;
 	private Transform selectedTransform;
 
 	public override void Awake()
 	{
+		I = this;
 		objectSelected = false;
 		gameObject.updateWhenDisabled = true;
 

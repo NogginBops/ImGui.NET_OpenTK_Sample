@@ -27,7 +27,6 @@ public class Scene
 	{
 		GameObject camGO = GameObject.Create(name: "Camera");
 		camGO.AddComponent<Camera>();
-		camGO.AddComponent<CameraController>();
 		camGO.Awake();
 
 		for (int i = 0; i < 1; i++)
@@ -94,6 +93,8 @@ public class Scene
 		MouseInput.Update();
 		TweenManager.I.Update();
 
+		SceneNavigation.I.Update();
+		
 		for (int i = 0; i < gameObjects.Count; i++)
 		{
 			gameObjects[i].indexInHierarchy = i;

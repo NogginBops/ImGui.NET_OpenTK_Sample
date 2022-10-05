@@ -82,9 +82,9 @@ public class Player : Component
 	{
 		GameObject flame = Serializer.I.LoadPrefab(flamePrefab.prefabPath);
 		flame.transform.position = transform.position + new Vector2(0, -20);
-		flame.transform.rotation = transform.rotation;
+		flame.transform.Rotation = transform.Rotation;
 
-		float velX = flame.transform.rotation.Y == 0 ? 1 : -1;
+		float velX = flame.transform.Rotation.Y == 0 ? 1 : -1;
 		flame.GetComponent<Flame>().rb.Velocity = new Vector2(velX * 15, 0);
 		flame.GetComponent<Flame>().rb.BodyPos = flame.transform.position;
 

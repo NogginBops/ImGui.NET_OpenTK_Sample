@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Numerics;
 using System.Xml.Serialization;
+using Vector3 = Engine.Vector3;
 
 namespace Scripts;
 
 public class Transform : Component
 {
-	[XmlIgnore] public List<Transform> children = new();
+	[XmlIgnore]
+	public List<Transform> children = new();
 	public List<int> childrenIDs = new();
 	//[Hide] public Vector3 localPosition { get { return position - GetParentPosition(); } set { position = GetParentPosition() + value; } }
 	//[Hide] public Vector3 initialAngleDifferenceFromParent = Vector3.Zero;
@@ -21,12 +24,19 @@ public class Transform : Component
 			localPosition = value;
 		}
 	}*/
-	[XmlIgnore] public Transform parent;
-	[Hide] public int parentID = -1;
+	[XmlIgnore]
+	public Transform parent;
+	[Hide]
+	public int parentID = -1;
 
 	public Vector3 pivot = new(0, 0, 0);
 	public Vector3 position = Vector3.Zero;
 	public Vector3 rotation = Vector3.Zero;
+	public Vector3 Rotation
+	{
+		get { return rotation; }
+		set { rotation = new Vector3(value.X % 360, value.Y % 360, value.Z % 360); }
+	}
 
 	private Vector3? lastFramePosition = null;
 
@@ -89,7 +99,7 @@ public class Transform : Component
 
 		if (updateTransform)
 		{
-			rotation -= par.transform.rotation;
+			Rotation -= par.transform.Rotation;
 			position = par.transform.position + (par.transform.position - transform.position);
 			//initialAngleDifferenceFromParent = rotation - par.transform.rotation;
 		}
@@ -111,20 +121,20 @@ public class Transform : Component
 		return Vector3.Zero;
 	}
 
-	public Vector3 TransformVector(Vector3 vec)
+	public Vector3 TransformDirection(Vector3 vec)
 	{
-		//float sin = (float)Math.Sin(transform.Rotation.X);
-		//float cos = (float)Math.Cos(transform.Rotation.X);
-		//var zRotation = new Vector3(direction.Y * sin - direction.X * cos, direction.X * sin + direction.Y * cos, transform.Rotation);
-		//return zRotation;
-		Quaternion a = Quaternion.CreateFromRotationMatrix(
-		                                                   Matrix.CreateRotationX(90 * (float) Math.PI / 180) * Matrix.CreateRotationY(0) * Matrix.CreateRotationZ(0));
-		Matrix b = Matrix.CreateFromQuaternion(a);
+		Matrix4x4 transformPositionMatrix = Matrix4x4.CreateTranslation(transform.position);
 
-		Quaternion q = Quaternion.CreateFromRotationMatrix(
-		                                                   Matrix.CreateRotationX(transform.rotation.X) * Matrix.CreateRotationY(transform.rotation.Y) * Matrix.CreateRotationZ(transform.rotation.Z));
-		// Matrix rotation = Matrix.CreateFromYawPitchRoll(transform.rotation.Y, transform.Rotation, transform.rotation.X);
-		//Vector3 translation = Vector3.Transform(vec, rotation);
-		return transform.position + Matrix.CreateFromQuaternion(q).Backward;
+		Matrix4x4 transformRotationMatrix = Matrix4x4.CreateTranslation(new Vector3(1, 1, 1))
+		                                  * Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
+		                                                                     -transform.Rotation.X / 180 * Mathf.Pi,
+		                                                                     -transform.Rotation.Z / 180 * Mathf.Pi)
+		                                  * Matrix4x4.CreateTranslation(-new Vector3(1, 1, 1));
+
+
+		Vector3 forwardOne = transformRotationMatrix.Translation;
+
+
+		return forwardOne;
 	}
 }

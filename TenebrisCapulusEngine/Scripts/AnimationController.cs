@@ -8,7 +8,7 @@ public class AnimationController : Component
 	public Vector2 animRange_Jump = new(0, 0);
 	public Vector2 animRange_Run = new(0, 0);
 	public Vector2 animRange_MeeleeAttack = new(0, 0);
-	private Vector2? forcedAnimation =null;
+	private Vector2? forcedAnimation = null;
 	public Vector2 currentAnimRange = new(0, 0);
 
 	private Action OnAnimationFinished = () => { };
@@ -63,11 +63,11 @@ public class AnimationController : Component
 	{
 		if (direction == Vector2.Right)
 		{
-			transform.rotation.Y = 0;
+			transform.Rotation = new Vector3(transform.Rotation.X, 0, transform.Rotation.Z);
 		}
 		else
 		{
-			transform.rotation.Y = 180;
+			transform.Rotation = new Vector3(transform.Rotation.X, 180, transform.Rotation.Z);
 		}
 	}
 

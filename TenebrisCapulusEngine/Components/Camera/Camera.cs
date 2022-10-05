@@ -92,9 +92,9 @@ public class Camera : Component
 	public Matrix4x4 GetTranslationMatrix()
 	{
 		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(-transform.position.X, -transform.position.Y, transform.position.Z);
-		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(transform.rotation.Y / 180 * Mathf.Pi,
-		                                                            transform.rotation.X / 180 * Mathf.Pi,
-		                                                            -transform.rotation.Z / 180 * Mathf.Pi);
+		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
+		                                                            -transform.Rotation.X / 180 * Mathf.Pi,
+		                                                            -transform.Rotation.Z / 180 * Mathf.Pi);
 		return translationMatrix*rotationMatrix;
 	}
 

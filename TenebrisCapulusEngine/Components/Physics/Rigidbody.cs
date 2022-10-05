@@ -57,7 +57,7 @@ public class Rigidbody : Component
 				return Vector2.Zero;
 			}
 
-			return body.Position*Physics.WORLD_SCALE;
+			return body.Position * Physics.WORLD_SCALE;
 		}
 		set
 		{
@@ -66,7 +66,7 @@ public class Rigidbody : Component
 				return;
 			}
 
-			body.Position = value/ Physics.WORLD_SCALE;
+			body.Position = value / Physics.WORLD_SCALE;
 		}
 	}
 	public float Mass { get; set; } = 100;
@@ -172,7 +172,7 @@ public class Rigidbody : Component
 				body.GravityScale = useGravity ? 1 : 0;
 				body.IsSensor = isTrigger;
 
-				body.Rotation = transform.rotation.Z / (Mathf.TwoPi * 2);
+				body.Rotation = transform.Rotation.Z / (Mathf.TwoPi * 2);
 			}
 		}
 	}
@@ -200,7 +200,7 @@ public class Rigidbody : Component
 		}
 
 		transform.position = new Vector2(body.Position.X, body.Position.Y) * Physics.WORLD_SCALE;
-		transform.rotation.Z = body.Rotation * Mathf.TwoPi * 2;
+		transform.Rotation = new Vector3(transform.Rotation.X, transform.Rotation.Y, body.Rotation * Mathf.TwoPi * 2);
 	}
 
 	public override void OnDestroyed()
