@@ -9,73 +9,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45350cb8-f615-4383-82a1-8c8540cb3618" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Attributes/ShowIf.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Attributes/ShowIfNot.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/Model.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/ModelCache.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/ModelRenderer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/TextRenderer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/ModelAssetManager.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/Scripts/Flame.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/2D/11_fire_spritesheet.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/2D/sdf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Materials/ModelRenderer.mat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Materials/TextRenderer.mat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Prefabs/Flame.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Prefabs/Prefab 3+.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Prefabs/box#1.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/AudioTest.scene" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Shaders/ModelRenderer.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Shaders/TextRenderer.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/libvlc/osx-x64/lib/libvlc.dylib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Attributes/Show.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Attributes/Show.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Camera/CameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Camera/CameraController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Physics/Rigidbody.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Physics/Rigidbody.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/BoxRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/BoxRenderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/GradientRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/GradientRenderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/Material.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/Material.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/Renderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/Renderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/SpriteRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/SpriteRenderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/SpriteSheetRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Renderers/SpriteSheetRenderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Components/Text.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Components/Text.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Editor/AudioSource.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Editor/AudioSource.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Editor/EditorWindow_Inspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Editor/EditorWindow_Inspector.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Editor/EditorWindow_Profiler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Editor/EditorWindow_Profiler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Editor/FieldOrPropertyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Editor/FieldOrPropertyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/GameObject/GameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/GameObject/GameObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Input/KeyboardInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Input/KeyboardInput.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/NoiceEngine.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/NoiceEngine.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/OpenGL/Shader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/OpenGL/Shader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/OpenGL/Texture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/OpenGL/Texture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Physics/Physics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Physics/Physics.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Physics/Time.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Physics/Time.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Rendering/BufferCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/BuffersGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Rendering/BufferType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/BufferType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Rendering/Folders.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/Folders.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Rendering/RenderTexture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/RenderTexture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Rendering/ShaderCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/ShaderCache.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Rendering/TextureCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Rendering/TextureCache.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Scripts/AnimationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Scripts/AnimationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Scripts/Player.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Scripts/Player.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Tweening/Tween.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Tweening/Tween.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Tweening/TweenManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Tweening/TweenManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/Window.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_00.scene" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_00.scene" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_01.scene" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_01.scene" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_02.scene" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_02.scene" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_03.scene" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Assets/Scenes/scene_03.scene" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/NoiceEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/NoiceEngine.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/NoiceEngine.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/NoiceEngine.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Temp/clipboardGameObject" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/Temp/clipboardGameObject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/persistentData" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/bin/Debug/net6.0/persistentData" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/NoiceEngine.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/ref/NoiceEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/ref/NoiceEngine.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/refint/NoiceEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/Debug/net6.0/refint/NoiceEngine.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NoiceEngine/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/NoiceEngine/obj/rider.project.restore.info" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/Assets/Scenes/3d.scene" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.NoiceEngine/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.NoiceEngine/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/Components/Renderers/ModelRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/Components/Renderers/ModelRenderer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/Components/Renderers/Renderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/Components/Renderers/Renderer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/Editor/Debug.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/Editor/Debug.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/ImGuiController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/ImGuiController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/Rendering/BuffersGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/Rendering/BuffersGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/Window.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/Assets/Shaders/ModelRenderer.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/Assets/Shaders/ModelRenderer.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/persistentData" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/bin/Debug/net6.0/persistentData" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/ref/TenebrisCapulusEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/ref/TenebrisCapulusEngine.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/refint/TenebrisCapulusEngine.dll" beforeDir="false" afterPath="$PROJECT_DIR$/TenebrisCapulusEngine/obj/Debug/net6.0/refint/TenebrisCapulusEngine.dll" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +41,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../Bearded.Audio/src/Bearded.Audio/Core/SoundBufferData.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/NoiceEngine/Editor/formatting.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TenebrisCapulusEngine/Editor/formatting.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TenebrisCapulusEngine/ImGuiController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TenebrisCapulusEngine/Physics/Physics.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0dac6653eb9746bba81af920bb5ceb2b20a00/d7/f330f1d7/Core.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/11c850cd4f574c35b574cf1336668fa85d000/27/5f8ae4ba/World.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/185814b447274cd2bb9f11ca8747554d2f400/ae/bca3a4e5/ImGui.cs" root0="SKIP_HIGHLIGHTING" />
@@ -250,6 +201,7 @@
       <workItem from="1664580005804" duration="60000" />
       <workItem from="1664580852780" duration="4296000" />
       <workItem from="1664656379777" duration="600000" />
+      <workItem from="1664658958691" duration="2764000" />
     </task>
     <servers />
   </component>
@@ -288,7 +240,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/NoiceEngine/ImGui/ImGuiTexture.cs</url>
+          <url>file://$PROJECT_DIR$/TenebrisCapulusEngine/ImGui/ImGuiTexture.cs</url>
           <line>121</line>
           <properties documentPath="$PROJECT_DIR$/NoiceEngine/ImGui/ImGuiTexture.cs" initialLine="121" containingFunctionPresentation="method 'Dispose'">
             <startOffsets>

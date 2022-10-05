@@ -1,4 +1,5 @@
 using System.IO;
+using Dear_ImGui_Sample;
 using Engine.Components.Renderers;
 
 public class ModelRenderer : Renderer
@@ -50,18 +51,16 @@ public class ModelRenderer : Renderer
 			return;
 		}
 
-		GL.Enable(EnableCap.DepthTest);
-
 		ShaderCache.UseShader(material.shader);
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 
 		ShaderCache.BindVAO(material.vao);
 
-		GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		
+		GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedInt, (IntPtr) null);
 
-
-		//GL.DrawElements(PrimitiveType.Triangles, 6 * 2, DrawElementsType.UnsignedShort, 0);
-		GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedShort, 0);
+		//GL.DrawArrays(PrimitiveType.Triangles, 0, 6 * 2 * 3);
 
 		Debug.CountStat("Draw Calls", 1);
 	}

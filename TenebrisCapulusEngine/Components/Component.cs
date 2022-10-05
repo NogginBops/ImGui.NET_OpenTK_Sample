@@ -44,7 +44,7 @@ public class Component : IDestroyable
 		return gameObject.GetComponents<T>();
 	}
 
-	public Vector2 TransformToWorld(Vector2 localPoint)
+	public Vector3 TransformToWorld(Vector3 localPoint)
 	{
 		return localPoint + transform.position;
 	}

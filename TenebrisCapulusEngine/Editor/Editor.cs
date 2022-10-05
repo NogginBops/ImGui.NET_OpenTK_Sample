@@ -172,7 +172,7 @@ public class Editor
 	{
 		for (int i = 0; i < editorWindows.Length; i++) editorWindows[i].Update();
 
-		if (KeyboardInput.IsKeyDown(Keys.LeftControl) && KeyboardInput.IsKeyDown(Keys.S))
+		if (KeyboardInput.IsKeyDown(Keys.LeftSuper) && KeyboardInput.IsKeyDown(Keys.S))
 		{
 			if (Global.GameRunning == false)
 			{
@@ -180,7 +180,7 @@ public class Editor
 			}
 		}
 
-		if (KeyboardInput.IsKeyDown(Keys.LeftControl) && KeyboardInput.IsKeyDown(Keys.R))
+		if (KeyboardInput.IsKeyDown(Keys.LeftSuper) && KeyboardInput.IsKeyDown(Keys.R))
 		{
 			if (Global.GameRunning == false)
 			{

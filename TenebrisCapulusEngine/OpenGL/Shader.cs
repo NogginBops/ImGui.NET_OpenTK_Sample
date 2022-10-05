@@ -245,9 +245,10 @@ public class Shader : IDisposable
 
 	public static BufferType GetBufferTypeFromFileString(string shaderFile)
 	{
-		string typeString = shaderFile.Substring(shaderFile.IndexOf("[BUFFERTYPE]:") + 13,
-		                                         shaderFile.IndexOf("[VERTEX]") - shaderFile.IndexOf("[BUFFERTYPE]") - 13); //File.ReadA;
+		string typeString = shaderFile.Substring(shaderFile.IndexOf("["),
+		                                         shaderFile.IndexOf("]")); //File.ReadA;
 
+		typeString = typeString.Substring(12);
 		BufferType type;
 		Enum.TryParse(typeString, out type);
 

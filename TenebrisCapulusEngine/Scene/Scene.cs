@@ -131,6 +131,9 @@ public class Scene
 
 	public void Render()
 	{
+		// GL.Enable(EnableCap.DepthTest);
+		GL.Enable(EnableCap.CullFace);
+
 		GL.ClearColor(camera.color.ToOtherColor());
 		GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 

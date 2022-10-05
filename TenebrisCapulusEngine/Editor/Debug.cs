@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Engine;
 
@@ -19,7 +20,10 @@ public static class Debug
 			return;
 		}
 
+
 		logs.Add($"[{DateTime.Now.ToString("HH:mm:ss")}]" + message);
+
+		Window.I.Title = logs.Last();
 
 		if (logs.Count > LOG_LIMIT + 1)
 		{

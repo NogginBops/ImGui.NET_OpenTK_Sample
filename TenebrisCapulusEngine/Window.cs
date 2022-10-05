@@ -8,7 +8,7 @@ namespace Engine;
 public class Window : GameWindow
 {
 	public RenderTexture bloomDownscaledRenderTexture;
-	private ImGuiController imGuiController;
+	public ImGuiController imGuiController;
 	public RenderTexture postProcessRenderTexture;
 	public RenderTexture sceneRenderTexture;
 

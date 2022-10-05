@@ -24,6 +24,7 @@ public static class BuffersGenerator
 			CreateSpriteRendererBuffers(ref material.vao);
 			//CreateSpriteRendererBuffersz(ref material.vao, ref material.vbo);
 		}
+
 		if (material.shader.bufferType == BufferType.MODEL)
 		{
 			CreateModelBuffers(ref material.vao);
@@ -149,14 +150,12 @@ public static class BuffersGenerator
 		GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 	}
 
-	const int triangles = 6 * 2; // Number of triangles rendered
-
-	const int verticies_index = 0;
+	const int vertices_index = 0;
 	const int colors_index = 1;
 
 	public static void CreateModelBuffers(ref int vao)
 	{
-		GL.Enable(EnableCap.DepthTest);
+		//GL.Enable(EnableCap.DepthTest);
 		float[] vertices =
 		{
 			// Front face
@@ -215,14 +214,14 @@ public static class BuffersGenerator
 
 		int triangles_ebo = GL.GenBuffer();
 		GL.BindBuffer(BufferTarget.ElementArrayBuffer, triangles_ebo);
-		GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * triangle_indices.Length, triangle_indices, BufferUsageHint.StaticDraw);
+		GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(uint) * triangle_indices.Length, triangle_indices, BufferUsageHint.StaticDraw);
 
-		int  verticies_vbo = GL.GenBuffer();
-		GL.BindBuffer(BufferTarget.ArrayBuffer, verticies_vbo);
+		int vertices_vbo = GL.GenBuffer();
+		GL.BindBuffer(BufferTarget.ArrayBuffer, vertices_vbo);
 		GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
 
-		GL.VertexAttribPointer(verticies_index, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
-		GL.EnableVertexAttribArray(verticies_index);
+		GL.VertexAttribPointer(vertices_index, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
+		GL.EnableVertexAttribArray(vertices_index);
 
 
 		int colors_vbo = GL.GenBuffer();
