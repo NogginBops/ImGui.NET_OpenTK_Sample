@@ -1,4 +1,6 @@
 using System.Numerics;
+using ImGuiNET;
+using OpenTK.Mathematics;
 
 namespace Engine;
 
@@ -19,13 +21,6 @@ public class SceneNavigation
 			return;
 		}
 
-		Matrix4x4 dir = Matrix4x4.Identity
-		              * Matrix4x4.CreateTranslation(Vector3.Backward)
-		              * Matrix4x4.CreateFromYawPitchRoll(Camera.I.transform.Rotation.Y / 180 * Mathf.Pi,
-		                                                 -Camera.I.transform.Rotation.X / 180 * Mathf.Pi,
-		                                                 -Camera.I.transform.Rotation.Z / 180 * Mathf.Pi)
-		              * Matrix4x4.CreateRotationZ(-Camera.I.transform.Rotation.Z / 180f * Mathf.Pi);
-		Debug.Log("Camera direction:" + dir.Translation);
 		if (Global.EditorAttached)
 		{
 			// Z POSITION
@@ -39,14 +34,14 @@ public class SceneNavigation
 				}
 				else
 				{
-					Camera.I.transform.position += new Vector3(dir.Translation.X, dir.Translation.Y, dir.Translation.Z) * MouseInput.ScrollDelta;
+					Camera.I.transform.position += Camera.I.transform.TransformVector(Vector3.Forward) * MouseInput.ScrollDelta;
 				}
 			}
 
 			// PANNING
 			if (MouseInput.IsButtonDown(MouseInput.Buttons.Right))
 			{
-				Camera.I.transform.position -= MouseInput.ScreenDelta;
+				Camera.I.transform.position -= Camera.I.transform.TransformVector(MouseInput.ScreenDelta);
 				MouseInput.ScreenDelta -= MouseInput.ScreenDelta;
 			}
 

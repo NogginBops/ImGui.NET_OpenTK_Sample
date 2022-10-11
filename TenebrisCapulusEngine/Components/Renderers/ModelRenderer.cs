@@ -38,6 +38,7 @@ public class ModelRenderer : Renderer
 		//BatchingManager.RemoveAttribs(texture.id, gameObjectID);
 		base.OnDestroyed();
 	}
+	
 
 	public override void Render()
 	{
@@ -51,6 +52,7 @@ public class ModelRenderer : Renderer
 			return;
 		}
 
+		transform.Rotation += Vector3.One * Time.editorDeltaTime*60;
 		ShaderCache.UseShader(material.shader);
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 

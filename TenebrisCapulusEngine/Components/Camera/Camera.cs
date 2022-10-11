@@ -59,8 +59,7 @@ public class Camera : Component
 
 	private Matrix4x4 GetViewMatrix()
 	{
-		//Matrix4x4 _view = Matrix4x4.CreateLookAt(new Vector3(0, 0, 0), new Vector3(0, 0, 1), new Vector3(0, 1, 0));
-		Matrix4x4 _view = Matrix4x4.CreateLookAt(new Vector3(0, 0, 5), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+		Matrix4x4 _view = Matrix4x4.CreateLookAt(new Vector3(0, 0, 30), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
 		// Matrix4x4 _view = Matrix4x4.CreateLookAt(transform.position, transform.position + new Vector3(0, 0, 1), transform.position + new Vector3(0, 1, 0));
 		return _view;
 	}
@@ -82,7 +81,7 @@ public class Camera : Component
 		{
 			fieldOfView = Mathf.ClampMin(fieldOfView, 0.0001f);
 			nearPlaneDistance = Mathf.Clamp(nearPlaneDistance, 0.001f, farPlaneDistance);
-			farPlaneDistance = Mathf.Clamp(farPlaneDistance, nearPlaneDistance + 0.001f, 500);
+			farPlaneDistance = Mathf.Clamp(farPlaneDistance, nearPlaneDistance + 0.001f, Mathf.Infinity);
 			Matrix4x4 pm = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fieldOfView), size.X / size.Y, nearPlaneDistance, farPlaneDistance);
 
 			return GetTranslationMatrix() * pm;
@@ -95,7 +94,7 @@ public class Camera : Component
 		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
 		                                                            -transform.Rotation.X / 180 * Mathf.Pi,
 		                                                            -transform.Rotation.Z / 180 * Mathf.Pi);
-		return translationMatrix*rotationMatrix;
+		return translationMatrix * rotationMatrix;
 	}
 
 	private Matrix4x4 GetScaleMatrix()

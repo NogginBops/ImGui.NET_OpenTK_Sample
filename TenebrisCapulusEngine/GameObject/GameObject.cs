@@ -111,7 +111,7 @@ public class GameObject
 		Scene.I.AddGameObjectToScene(this);
 	}
 
-	public static GameObject Create(Vector2? position = null, Vector2? scale = null, string name = "", bool linkComponents = true, bool _silent = false)
+	public static GameObject Create(Vector3? position = null, Vector3? scale = null, string name = "", bool linkComponents = true, bool _silent = false)
 	{
 		GameObject go = new GameObject();
 

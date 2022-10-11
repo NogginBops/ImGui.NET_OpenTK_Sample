@@ -42,9 +42,9 @@ public class BoxRenderer : Renderer
 
 		//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-		//GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+		GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
-		GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+		//GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, 0);
 		Debug.CountStat("Draw Calls", 1);
 	}
 }

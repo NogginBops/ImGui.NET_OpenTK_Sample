@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Xml.Serialization;
-using Vector3 = Engine.Vector3;
+using OpenTK.Mathematics;
+using Quaternion = System.Numerics.Quaternion;
+
+//using Quaternion = Engine.Quaternion;
 
 namespace Scripts;
 
@@ -31,12 +34,13 @@ public class Transform : Component
 
 	public Vector3 pivot = new(0, 0, 0);
 	public Vector3 position = Vector3.Zero;
-	public Vector3 rotation = Vector3.Zero;
+	private Vector3 rotation = Vector3.Zero;
 	public Vector3 Rotation
 	{
 		get { return rotation; }
 		set { rotation = new Vector3(value.X % 360, value.Y % 360, value.Z % 360); }
 	}
+	public Vector3 forward { get; set; }
 
 	private Vector3? lastFramePosition = null;
 
@@ -121,20 +125,22 @@ public class Transform : Component
 		return Vector3.Zero;
 	}
 
-	public Vector3 TransformDirection(Vector3 vec)
+	public Vector3 TransformVector(Vector3 dir)
 	{
-		Matrix4x4 transformPositionMatrix = Matrix4x4.CreateTranslation(transform.position);
+		Vector3 direction = new Vector3(
+		                                (float) (MathHelper.Sin(MathHelper.DegreesToRadians(transform.Rotation.Y))
+		                                       * MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.X))),
+		                                (float) (MathHelper.Sin(MathHelper.DegreesToRadians(transform.Rotation.X))),
+		                                (float) (MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.Y))
+		                                       * MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.X)))
+		                               );
 
-		Matrix4x4 transformRotationMatrix = Matrix4x4.CreateTranslation(new Vector3(1, 1, 1))
-		                                  * Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
-		                                                                     -transform.Rotation.X / 180 * Mathf.Pi,
-		                                                                     -transform.Rotation.Z / 180 * Mathf.Pi)
-		                                  * Matrix4x4.CreateTranslation(-new Vector3(1, 1, 1));
+		direction = direction.Normalized();
 
+		Matrix4x4 mat = Matrix4x4.CreateTranslation(direction) * Matrix4x4.CreateLookAt(Vector3.Zero, dir, Vector3.Up);
 
-		Vector3 forwardOne = transformRotationMatrix.Translation;
-
-
-		return forwardOne;
+		direction = mat.Translation;
+		direction = direction.Normalized();
+		return dir;
 	}
 }

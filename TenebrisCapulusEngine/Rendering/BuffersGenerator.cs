@@ -76,41 +76,33 @@ public static class BuffersGenerator
 
 	private static void CreateBoxRendererBuffers(ref int vao)
 	{
-		float[] vertices = new float[]
-		                   {
-			                   0.5f, 0.5f, 0.0f, 0, // top right
-			                   0.5f, -0.5f, 0.0f, 0, // bottom right
-			                   -0.5f, -0.5f, 0.0f, 0, // bottom left
-			                   -0.5f, 0.5f, 0.0f, 0 // top left
-		                   };
-		int[] indices = new int[]
-		                {
-			                // note that we start from 0!
-			                0, 1, 3, // first Triangle
-			                1, 2, 3 // second Triangle
-		                };
-		int ebo;
-		int vbo;
-		// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-		GL.GenVertexArrays(1, out vao);
+		int vbo = GL.GenBuffer();
+
+		GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
+
+		float[] vertices =
+		{
+			-0.5f, -0.5f,
+			0.5f, -0.5f,
+			-0.5f, 0.5f,
+			-0.5f, 0.5f,
+			0.5f, -0.5f,
+			0.5f, 0.5f,
+		};
+
+		GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.DynamicDraw);
+
+		// now we define layout in vao
+		vao = GL.GenVertexArray();
+
 		GL.BindVertexArray(vao);
 
-		GL.GenBuffers(1, out vbo);
-		GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-		GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertices.Length, vertices, BufferUsageHint.StaticDraw);
-
-		GL.GenBuffers(1, out ebo);
-		GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-		GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(int) * indices.Length, indices, BufferUsageHint.StaticDraw);
-
-		GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 4 * sizeof(float), (IntPtr) 0);
 		GL.EnableVertexAttribArray(0);
+		GL.VertexAttribPointer(index: 0, size: 2, type: VertexAttribPointerType.Float, normalized: false,
+		                       stride: sizeof(float) * 2,
+		                       pointer: (IntPtr) 0);
 
-		// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
 		GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-		// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
 	public static void CreateSpriteRendererBuffers(ref int vao)

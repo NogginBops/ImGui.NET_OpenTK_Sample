@@ -124,7 +124,7 @@ public class TextRenderer : SpriteRenderer
 
 		for (int symbolIndex = 0; symbolIndex < text.text.Length; symbolIndex++)
 		{
-			transform.position = new Vector2(originalPosition.X + spacing * symbolIndex * transform.scale.X, originalPosition.Y);
+			transform.position = new Vector3(originalPosition.X + spacing * symbolIndex * transform.scale.X, originalPosition.Y, transform.position.Z);
 
 			UpdateMVP();
 			material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
