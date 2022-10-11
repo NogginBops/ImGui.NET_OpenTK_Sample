@@ -34,14 +34,14 @@ public class SceneNavigation
 				}
 				else
 				{
-					Camera.I.transform.position += Camera.I.transform.TransformVector(Vector3.Forward) * MouseInput.ScrollDelta;
+					Camera.I.transform.position += Camera.I.transform.TransformDirection(Vector3.Forward) * MouseInput.ScrollDelta;
 				}
 			}
 
 			// PANNING
 			if (MouseInput.IsButtonDown(MouseInput.Buttons.Right))
 			{
-				Camera.I.transform.position -= Camera.I.transform.TransformVector(MouseInput.ScreenDelta);
+				Camera.I.transform.position -= Camera.I.transform.TransformDirection(MouseInput.ScreenDelta);
 				MouseInput.ScreenDelta -= MouseInput.ScreenDelta;
 			}
 

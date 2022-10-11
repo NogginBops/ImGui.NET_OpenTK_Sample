@@ -125,22 +125,31 @@ public class Transform : Component
 		return Vector3.Zero;
 	}
 
-	public Vector3 TransformVector(Vector3 dir)
+	public Vector3 TransformDirection(Vector3 dir)
 	{
-		Vector3 direction = new Vector3(
-		                                (float) (MathHelper.Sin(MathHelper.DegreesToRadians(transform.Rotation.Y))
-		                                       * MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.X))),
-		                                (float) (MathHelper.Sin(MathHelper.DegreesToRadians(transform.Rotation.X))),
-		                                (float) (MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.Y))
-		                                       * MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.X)))
-		                               );
-
-		direction = direction.Normalized();
-
-		Matrix4x4 mat = Matrix4x4.CreateTranslation(direction) * Matrix4x4.CreateLookAt(Vector3.Zero, dir, Vector3.Up);
-
-		direction = mat.Translation;
-		direction = direction.Normalized();
-		return dir;
+		Vector3 forward = (Matrix4x4.CreateTranslation(dir)
+		                 * Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
+		                                                    -transform.Rotation.X / 180 * Mathf.Pi,
+		                                                    -transform.Rotation.Z / 180 * Mathf.Pi)).Translation;
+		return forward;
 	}
+
+	// public Vector3 TransformVector(Vector3 dir)
+	// {
+	// 	Vector3 direction = new Vector3(
+	// 	                                (float) (MathHelper.Sin(MathHelper.DegreesToRadians(transform.Rotation.Y))
+	// 	                                       * MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.X))),
+	// 	                                (float) (MathHelper.Sin(MathHelper.DegreesToRadians(transform.Rotation.X))),
+	// 	                                (float) (MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.Y))
+	// 	                                       * MathHelper.Cos(MathHelper.DegreesToRadians(transform.Rotation.X)))
+	// 	                               );
+	//
+	// 	direction = direction.Normalized();
+	//
+	// 	Matrix4x4 mat = Matrix4x4.CreateTranslation(direction) * Matrix4x4.CreateLookAt(Vector3.Zero, dir, Vector3.Up);
+	//
+	// 	direction = mat.Translation;
+	// 	direction = direction.Normalized();
+	// 	return dir;
+	// }
 }

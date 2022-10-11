@@ -51,6 +51,7 @@ public class ModelRenderer : Renderer
 		{
 			return;
 		}
+		
 
 		transform.Rotation += Vector3.One * Time.editorDeltaTime*60;
 		ShaderCache.UseShader(material.shader);
