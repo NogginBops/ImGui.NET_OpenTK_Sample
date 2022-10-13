@@ -50,8 +50,6 @@ public class TextRenderer : SpriteRenderer
 	[ShowIf(nameof(isGradient))]
 	public Color gradientColor2;
 
-	public float spacing = 300;
-
 	private Vector2 spritesCount = new Vector2(1, 1);
 	[Hide]
 	public Vector2 spriteSize;
@@ -120,16 +118,35 @@ public class TextRenderer : SpriteRenderer
 			material.shader.SetVector4("u_color_b", gradientColor2.ToVector4());
 		}
 
+		float charSpacing = text.size * 2 + transform.scale.X * text.size;
 		Vector2 originalPosition = transform.position;
 
-		for (int symbolIndex = 0; symbolIndex < text.text.Length; symbolIndex++)
+		int symbolInLineIndex = 0;
+		int line = 0;
+		float lineSpacing = text.size * 3 + transform.scale.Y * text.size;
+
+		Vector2 originalScale = transform.scale;
+		transform.scale = Vector3.One * Mathf.Clamp(text.size / 40f, 0, 1000);
+
+		for (int symbolIndex = 0;
+		     symbolIndex < text.text.Length;
+		     symbolIndex++,
+		     symbolInLineIndex++)
 		{
-			transform.position = new Vector3(originalPosition.X + spacing * symbolIndex * transform.scale.X, originalPosition.Y, transform.position.Z);
+			transform.position = new Vector3(originalPosition.X + charSpacing * symbolInLineIndex, originalPosition.Y - line * lineSpacing, transform.position.Z);
 
 			UpdateMVP();
 			material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 
 			char ch = text.text[symbolIndex].ToString().ToUpper()[0];
+			if (ch == '\n')
+			{
+				symbolInLineIndex = -1;
+				line++;
+				//symbolIndex++;
+				continue;
+			}
+
 			int glyphMappingIndex = 0;
 
 			if (fontMappings.ContainsKey(ch))
@@ -163,5 +180,6 @@ public class TextRenderer : SpriteRenderer
 		}
 
 		transform.position = originalPosition;
+		transform.scale = originalScale;
 	}
 }

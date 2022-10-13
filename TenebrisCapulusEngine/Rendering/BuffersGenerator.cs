@@ -143,7 +143,7 @@ public static class BuffersGenerator
 	}
 
 	const int vertices_index = 0;
-	const int colors_index = 1;
+	const int uvs_index = 1;
 
 	public static void CreateModelBuffers(ref int vao)
 	{
@@ -151,29 +151,48 @@ public static class BuffersGenerator
 		float[] vertices =
 		{
 			// Front face
-			0.5f, 0.5f, 0.5f,
-			-0.5f, 0.5f, 0.5f,
-			-0.5f, -0.5f, 0.5f,
-			0.5f, -0.5f, 0.5f,
+			0.5f, 0.5f, 0.5f, // top right
+			-0.5f, 0.5f, 0.5f, // top left
+			-0.5f, -0.5f, 0.5f, // down left
+			0.5f, -0.5f, 0.5f, // down right
 
 			// Back face
-			0.5f, 0.5f, -0.5f,
-			-0.5f, 0.5f, -0.5f,
-			-0.5f, -0.5f, -0.5f,
-			0.5f, -0.5f, -0.5f,
+			0.5f, 0.5f, -0.5f, // top right
+			-0.5f, 0.5f, -0.5f, // top left
+			-0.5f, -0.5f, -0.5f, // down left
+			0.5f, -0.5f, -0.5f, // down right
+			//
+			// // right face
+			// 0.5f, 0.5f, 0.5f,
+			// 0.5f, 0.5f, -0.5f,
+			// 0.5f, -0.5f, -0.5f,
+			// 0.5f, -0.5f, 0.5f,
+			//
+			//
+			// // bottom face
+			// 0.5f, -0.5f, -0.5f, // top right
+			// -0.5f, -0.5f, -0.5f, // top left
+			// -0.5f, 0.5f, -0.5f, // down left
+			// 0.5f, 0.5f, -0.5f, // down right
+			//
+			// // left
+			//
+			// // back
+			//
+			// // top
 		};
-
-		float[] vertex_colors =
+		
+		float[] uvs =
 		{
-			1.0f, 0.4f, 0.6f,
-			1.0f, 0.9f, 0.2f,
-			0.7f, 0.3f, 0.8f,
-			0.5f, 0.3f, 1.0f,
+			1, 1,
+			0, 1,
+			0, 0,
+			1, 0,
 
-			0.2f, 0.6f, 1.0f,
-			0.6f, 1.0f, 0.4f,
-			0.6f, 0.8f, 0.8f,
-			0.4f, 0.8f, 0.8f,
+			1, 1,
+			0, 1,
+			0, 0,
+			1, 0,
 		};
 		uint[] triangle_indices =
 		{
@@ -216,12 +235,12 @@ public static class BuffersGenerator
 		GL.EnableVertexAttribArray(vertices_index);
 
 
-		int colors_vbo = GL.GenBuffer();
-		GL.BindBuffer(BufferTarget.ArrayBuffer, colors_vbo);
-		GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * vertex_colors.Length, vertex_colors, BufferUsageHint.StaticDraw);
+		int uvs_vbo = GL.GenBuffer();
+		GL.BindBuffer(BufferTarget.ArrayBuffer, uvs_vbo);
+		GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * uvs.Length, uvs, BufferUsageHint.StaticDraw);
 
-		GL.VertexAttribPointer(colors_index, 3, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
-		GL.EnableVertexAttribArray(colors_index);
+		GL.VertexAttribPointer(uvs_index, 2, VertexAttribPointerType.Float, false, 0, IntPtr.Zero);
+		GL.EnableVertexAttribArray(uvs_index);
 
 		GL.BindVertexArray(0);
 		GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);

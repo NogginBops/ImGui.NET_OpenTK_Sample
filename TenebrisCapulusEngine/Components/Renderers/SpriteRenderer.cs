@@ -3,16 +3,13 @@ using Engine.Components.Renderers;
 
 namespace Engine;
 
-public class SpriteRenderer : Renderer
+public class SpriteRenderer : TextureRenderer
 {
-	public Texture texture;
-
 	[Hide] public virtual bool Batched { get; set; } = false;
-	[XmlIgnore] public Action SetNativeSize;
 
 	public override void Awake()
 	{
-		SetNativeSize += () => { UpdateBoxShapeSize();};
+		SetNativeSize += () => { UpdateBoxShapeSize(); };
 		CreateMaterial();
 		if (texture == null)
 		{
@@ -33,25 +30,6 @@ public class SpriteRenderer : Renderer
 		material.SetShader(shader);
 	}*/
 
-	public virtual void LoadTexture(string _texturePath)
-	{
-		if (_texturePath.Contains("Assets") == false)
-		{
-			_texturePath = Path.Combine("Assets", _texturePath);
-		}
-
-		if (File.Exists(_texturePath) == false)
-		{
-			return;
-		}
-
-		texture.Load(_texturePath);
-
-		if (Batched)
-		{
-			//BatchingManager.AddObjectToBatcher(texture.id, this);
-		}
-	}
 
 	internal virtual void UpdateBoxShapeSize()
 	{
@@ -67,7 +45,7 @@ public class SpriteRenderer : Renderer
 		{
 			material = MaterialCache.GetMaterial("SpriteRenderer");
 		}
-		
+
 		base.CreateMaterial();
 	}
 
@@ -100,12 +78,12 @@ public class SpriteRenderer : Renderer
 			                              color);
 			return;*/
 		}
-		
+
 		ShaderCache.UseShader(material.shader);
 		material.shader.SetVector2("u_resolution", texture.size);
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 		material.shader.SetColor("u_color", color.ToVector4());
-		
+
 		ShaderCache.BindVAO(material.vao);
 
 		if (material.additive)
@@ -122,7 +100,6 @@ public class SpriteRenderer : Renderer
 		GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
 
 		Debug.CountStat("Draw Calls", 1);
-
 	}
 }
 

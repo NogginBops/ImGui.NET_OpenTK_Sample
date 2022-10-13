@@ -68,7 +68,12 @@ public class Renderer : Component, IComparable<Renderer>
 	// 	return _scale * Matrix4x4.Identity * _rotation * _translation * Camera.I.viewMatrix * Camera.I.projectionMatrix;
 	// }
 
-	private Matrix4x4 GetModelViewProjectionFromBoxShape()
+	public virtual Matrix4x4 GetModelViewProjectionFromBoxShape()
+	{
+		return GetModelMatrix() * Camera.I.viewMatrix * Camera.I.translationMatrix * Camera.I.projectionMatrix;
+	}
+
+	public Matrix4x4 GetModelMatrix()
 	{
 		Vector2 pivotOffset = -(boxShape.size * transform.scale) / 2 + new Vector2(boxShape.size.X * transform.scale.X * transform.pivot.X, boxShape.size.Y * transform.scale.Y * transform.pivot.Y);
 
@@ -80,7 +85,7 @@ public class Renderer : Component, IComparable<Renderer>
 		                                                       -transform.Rotation.Z / 180 * Mathf.Pi);
 		Matrix4x4 _scale = Matrix4x4.CreateScale(boxShape.size.X * transform.scale.X, boxShape.size.Y * transform.scale.Y, transform.scale.Z * boxShape.size.Z);
 
-		return (_scale * Matrix4x4.Identity * _pivot * _rotation * _translation) * Camera.I.viewMatrix * Camera.I.projectionMatrix;
+		return (_scale * Matrix4x4.Identity * _pivot * _rotation * _translation);
 	}
 
 	public Vector4 GetSize()

@@ -398,17 +398,18 @@ public class EditorWindow_Inspector : EditorWindow
 						{
 							action?.Invoke();
 						}
+
 						ImGui.PopStyleColor(1);
 					}
-					else if (fieldOrPropertyType == typeof(Texture) && currentComponent is SpriteRenderer)
+					else if (fieldOrPropertyType == typeof(Texture) && currentComponent is TextureRenderer)
 					{
-						string textureName = Path.GetFileName((currentComponent as SpriteRenderer).texture.path);
+						string textureName = Path.GetFileName((currentComponent as TextureRenderer).texture?.path);
 
 						bool clicked = ImGui.Button(textureName, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetFrameHeight()));
 						//ImiGui.Text(textureName);
 						if (clicked)
 						{
-							EditorWindow_Browser.I.GoToFile((currentComponent as SpriteRenderer).texture.path);
+							EditorWindow_Browser.I.GoToFile((currentComponent as TextureRenderer).texture.path);
 						}
 
 						if (ImGui.BeginDragDropTarget())
@@ -421,7 +422,7 @@ public class EditorWindow_Inspector : EditorWindow
 
 								textureName = payload;
 
-								(currentComponent as SpriteRenderer).LoadTexture(textureName);
+								(currentComponent as TextureRenderer).LoadTexture(textureName);
 							}
 
 							ImGui.EndDragDropTarget();
@@ -572,7 +573,7 @@ public class EditorWindow_Inspector : EditorWindow
 					{
 						string fieldValue = info.GetValue(currentComponent).ToString();
 
-						if (ImGui.InputText("", ref fieldValue, 100))
+						if (ImGui.InputTextMultiline("", ref fieldValue, 100, new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, 200)))
 						{
 							info.SetValue(currentComponent, fieldValue);
 						}

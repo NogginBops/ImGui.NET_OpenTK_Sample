@@ -2,25 +2,39 @@ using System.IO;
 using Dear_ImGui_Sample;
 using Engine.Components.Renderers;
 
-public class ModelRenderer : Renderer
+public class ModelRenderer : TextureRenderer
 {
 	public Model model;
 
 	public override void Awake()
 	{
 		CreateMaterial();
-		/*
-		if (model == null)
+
+		if (texture == null)
 		{
-			model = new Model();
+			texture = new Texture();
 		}
 		else
 		{
 			LoadTexture(texture.path);
 		}
-		*/
 
 		base.Awake();
+	}
+
+	public virtual void LoadTexture(string _texturePath)
+	{
+		if (_texturePath.Contains("Assets") == false)
+		{
+			_texturePath = Path.Combine("Assets", _texturePath);
+		}
+
+		if (File.Exists(_texturePath) == false)
+		{
+			return;
+		}
+
+		texture.Load(_texturePath);
 	}
 
 	public override void CreateMaterial()
@@ -38,7 +52,6 @@ public class ModelRenderer : Renderer
 		//BatchingManager.RemoveAttribs(texture.id, gameObjectID);
 		base.OnDestroyed();
 	}
-	
 
 	public override void Render()
 	{
@@ -51,16 +64,30 @@ public class ModelRenderer : Renderer
 		{
 			return;
 		}
-		
 
-		transform.Rotation += Vector3.One * Time.editorDeltaTime*60;
+		if (texture.loaded == false)
+		{
+			return;
+		}
+		
+		transform.Rotation += Vector3.One * Time.deltaTime * 60;
 		ShaderCache.UseShader(material.shader);
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
-
+		material.shader.SetColor("u_rendererColor", color);
+		//material.shader.SetMatrix4x4("u_model", GetModelMatrix());
+		if (material.additive)
+		{
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusConstantColor);
+		}
+		else
+		{
+			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+		}
 		ShaderCache.BindVAO(material.vao);
 
 		//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-		
+		TextureCache.BindTexture(texture.id);
+
 		GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedInt, (IntPtr) null);
 
 		//GL.DrawArrays(PrimitiveType.Triangles, 0, 6 * 2 * 3);

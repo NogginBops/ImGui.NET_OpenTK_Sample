@@ -168,7 +168,7 @@ public class EditorWindow_Hierarchy : EditorWindow
 
 		if (currentGameObject.silent)
 		{
-			//return;
+			return;
 		}
 
 		//bool hasAnyChildren = false;

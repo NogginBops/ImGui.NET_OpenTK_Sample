@@ -20,6 +20,8 @@ public class Camera : Component
 	//public float cameraSize = 0.1f;
 	[XmlIgnore]
 	public Matrix4x4 projectionMatrix;
+	[XmlIgnore]
+	public Matrix4x4 translationMatrix;
 
 	public Vector2 size = new(1380, 900);
 	[XmlIgnore]
@@ -40,6 +42,7 @@ public class Camera : Component
 
 		projectionMatrix = GetProjectionMatrix();
 		viewMatrix = GetViewMatrix();
+		translationMatrix = GetTranslationMatrix();
 		/*	renderTarget = new RenderTarget2D(
 		  Scene.I.GraphicsDevice,
 		  (int)Size.X,
@@ -53,7 +56,7 @@ public class Camera : Component
 	{
 		projectionMatrix = GetProjectionMatrix();
 		viewMatrix = GetViewMatrix();
-
+		translationMatrix = GetTranslationMatrix();
 		base.Update();
 	}
 
@@ -75,7 +78,7 @@ public class Camera : Component
 
 			Matrix4x4 orthoMatrix = Matrix4x4.CreateOrthographicOffCenter(left, right, bottom, top, 0.00001f, 10000000f);
 
-			return GetTranslationMatrix() * orthoMatrix * GetScaleMatrix();
+			return orthoMatrix * GetScaleMatrix();
 		}
 		else
 		{
@@ -84,11 +87,11 @@ public class Camera : Component
 			farPlaneDistance = Mathf.Clamp(farPlaneDistance, nearPlaneDistance + 0.001f, Mathf.Infinity);
 			Matrix4x4 pm = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fieldOfView), size.X / size.Y, nearPlaneDistance, farPlaneDistance);
 
-			return GetTranslationMatrix() * pm;
+			return pm;
 		}
 	}
 
-	public Matrix4x4 GetTranslationMatrix()
+	private Matrix4x4 GetTranslationMatrix()
 	{
 		Matrix4x4 translationMatrix = Matrix4x4.CreateTranslation(-transform.position.X, -transform.position.Y, transform.position.Z);
 		Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
