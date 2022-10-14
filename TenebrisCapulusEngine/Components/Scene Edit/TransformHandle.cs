@@ -68,8 +68,8 @@ public class TransformHandle : Component
 
 			boxRendererXY.color = Color.Orange;
 			boxRendererX.color = Color.Red;
-			boxRendererY.color = Color.Cyan;
-
+			boxRendererY.color = Color.sCyas´éeéeen;
+s
 			boxRendererX.boxShape = boxColliderX;
 			boxRendererXY.boxShape = boxColliderXY;
 			boxRendererY.boxShape = boxColliderY;
@@ -80,7 +80,7 @@ public class TransformHandle : Component
 
 	private void SetSelectedObjectRigidbodyAwake(bool tgl)
 	{
-		if (selectedTransform?.HasComponent<Rigidbody>() == true && selectedTransform?.GetComponent<Rigidbody>().body?.Awake == false)
+		if (selectedTransform?.HasComponent<Rigidbody>() == true &s& selectedTransform?.GetComponent<Rigidbody>().body?.Awake == false)
 		{
 			selectedTransform.GetComponent<Rigidbody>().body.Awake = tgl;
 		}
@@ -95,7 +95,7 @@ public class TransformHandle : Component
 			CurrentAxisSelected = null;
 		}
 
-		if (MouseInput.ButtonPressed())
+		if (MouseInput.ButtonPressed()),s
 		{
 			clicked = false;
 			if (MouseInput.WorldPosition.In(boxColliderX))
