@@ -16,9 +16,9 @@ public class TransformHandle : Component
 
 	public BoxShape boxColliderXY;
 	public BoxShape boxColliderY;
-	public BoxRenderer boxRendererX;
-	public BoxRenderer boxRendererXY;
-	public BoxRenderer boxRendererY;
+	public ModelRenderer boxRendererX;
+	public ModelRenderer boxRendererXY;
+	public ModelRenderer boxRendererY;
 
 	public bool clicked;
 	public Axis? CurrentAxisSelected;
@@ -40,27 +40,27 @@ public class TransformHandle : Component
 			boxColliderX = GetComponent<BoxShape>(1);
 			boxColliderY = GetComponent<BoxShape>(2);
 
-			boxRendererXY = GetComponent<BoxRenderer>(0);
-			boxRendererX = GetComponent<BoxRenderer>(1);
-			boxRendererY = GetComponent<BoxRenderer>(2);
+			boxRendererXY = GetComponent<ModelRenderer>(0);
+			boxRendererX = GetComponent<ModelRenderer>(1);
+			boxRendererY = GetComponent<ModelRenderer>(2);
 		}
 		else
 		{
 			boxColliderXY = gameObject.AddComponent<BoxShape>();
-			boxColliderXY.size = new Vector2(15, 15);
+			boxColliderXY.size = new Vector3(15, 15, 50);
 			boxColliderXY.offset = new Vector2(5, 5);
 
 			boxColliderX = gameObject.AddComponent<BoxShape>();
-			boxColliderX.size = new Vector2(50, 5);
+			boxColliderX.size = new Vector3(50, 5, 50);
 			//boxColliderX.offset = new Vector2(25, 2.5f);
 
 			boxColliderY = gameObject.AddComponent<BoxShape>();
-			boxColliderY.size = new Vector2(5, 50);
+			boxColliderY.size = new Vector3(5, 50, 50);
 			//boxColliderY.offset = new Vector2(2.5f, 25);
 
-			boxRendererXY = gameObject.AddComponent<BoxRenderer>();
-			boxRendererX = gameObject.AddComponent<BoxRenderer>();
-			boxRendererY = gameObject.AddComponent<BoxRenderer>();
+			boxRendererXY = gameObject.AddComponent<ModelRenderer>();
+			boxRendererX = gameObject.AddComponent<ModelRenderer>();
+			boxRendererY = gameObject.AddComponent<ModelRenderer>();
 
 			boxRendererXY.Layer = 1000;
 			boxRendererX.Layer = 1000;
@@ -68,8 +68,8 @@ public class TransformHandle : Component
 
 			boxRendererXY.color = Color.Orange;
 			boxRendererX.color = Color.Red;
-			boxRendererY.color = Color.sCyas´éeéeen;
-s
+			boxRendererY.color = Color.Cyan;
+
 			boxRendererX.boxShape = boxColliderX;
 			boxRendererXY.boxShape = boxColliderXY;
 			boxRendererY.boxShape = boxColliderY;
@@ -80,10 +80,10 @@ s
 
 	private void SetSelectedObjectRigidbodyAwake(bool tgl)
 	{
-		if (selectedTransform?.HasComponent<Rigidbody>() == true &s& selectedTransform?.GetComponent<Rigidbody>().body?.Awake == false)
-		{
-			selectedTransform.GetComponent<Rigidbody>().body.Awake = tgl;
-		}
+		// if (selectedTransform?.HasComponent<Rigidbody>() == true & selectedTransform?.GetComponent<Rigidbody>().body?.Awake == false)
+		// {
+		// 	selectedTransform.GetComponent<Rigidbody>().body.Awake = tgl;
+		// }
 	}
 
 	public override void Update()
@@ -95,7 +95,7 @@ s
 			CurrentAxisSelected = null;
 		}
 
-		if (MouseInput.ButtonPressed()),s
+		if (MouseInput.ButtonPressed())
 		{
 			clicked = false;
 			if (MouseInput.WorldPosition.In(boxColliderX))

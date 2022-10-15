@@ -34,21 +34,23 @@ public class SceneNavigation
 				}
 				else
 				{
-					Camera.I.transform.position += Camera.I.transform.TransformDirection(Vector3.Forward) * MouseInput.ScrollDelta;
+					Camera.I.transform.position += Camera.I.transform.TransformDirection(Vector3.Forward) * MouseInput.ScrollDelta * 0.05f;
 				}
 			}
 
 			// PANNING
 			if (MouseInput.IsButtonDown(MouseInput.Buttons.Right))
 			{
-				Camera.I.transform.position -= Camera.I.transform.TransformDirection(MouseInput.ScreenDelta);
+				Camera.I.transform.position -= Camera.I.transform.TransformDirection(new Vector2(-MouseInput.ScreenDelta.X,-MouseInput.ScreenDelta.Y))*0.01f;
 				MouseInput.ScreenDelta -= MouseInput.ScreenDelta;
 			}
 
 			// ROTATING
 			if (MouseInput.IsButtonDown(MouseInput.Buttons.Left))
 			{
-				Camera.I.transform.Rotation += new Vector3(MouseInput.ScreenDelta.Y, MouseInput.ScreenDelta.X, 0) * 0.5f;
+				Camera.I.transform.Rotation += new Vector3(MouseInput.ScreenDelta.Y, MouseInput.ScreenDelta.X, 0) * 0.2f;
+				//Camera.I.transform.Rotation = new Vector3(Camera.I.transform.Rotation.X,Camera.I.transform.Rotation .Y, 0);
+
 			}
 		}
 	}

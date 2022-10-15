@@ -127,7 +127,7 @@ public class Transform : Component
 
 	public Vector3 TransformDirection(Vector3 dir)
 	{
-		Vector3 forward = (Matrix4x4.CreateTranslation(dir)
+		Vector3 forward = (Matrix4x4.CreateTranslation(new Vector3(-dir.X, dir.Y, -dir.Z))
 		                 * Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
 		                                                    -transform.Rotation.X / 180 * Mathf.Pi,
 		                                                    -transform.Rotation.Z / 180 * Mathf.Pi)).Translation;

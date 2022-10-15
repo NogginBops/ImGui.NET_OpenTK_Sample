@@ -70,7 +70,7 @@ public class Renderer : Component, IComparable<Renderer>
 
 	public virtual Matrix4x4 GetModelViewProjectionFromBoxShape()
 	{
-		return GetModelMatrix() * Camera.I.viewMatrix * Camera.I.translationMatrix * Camera.I.projectionMatrix;
+		return GetModelMatrix() * Camera.I.viewMatrix * Camera.I.projectionMatrix;
 	}
 
 	public Matrix4x4 GetModelMatrix()
@@ -78,14 +78,13 @@ public class Renderer : Component, IComparable<Renderer>
 		Vector2 pivotOffset = -(boxShape.size * transform.scale) / 2 + new Vector2(boxShape.size.X * transform.scale.X * transform.pivot.X, boxShape.size.Y * transform.scale.Y * transform.pivot.Y);
 
 		Matrix4x4 _pivot = Matrix4x4.CreateTranslation(-pivotOffset.X, -pivotOffset.Y, 0);
-		Matrix4x4 _translation = Matrix4x4.CreateTranslation(transform.position + boxShape.offset * transform.scale);
+		Matrix4x4 _translation = Matrix4x4.CreateTranslation(transform.position + boxShape.offset * transform.scale)* Matrix4x4.CreateScale(1,1,-1);
 
 		Matrix4x4 _rotation = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
 		                                                       -transform.Rotation.X / 180 * Mathf.Pi,
 		                                                       -transform.Rotation.Z / 180 * Mathf.Pi);
 		Matrix4x4 _scale = Matrix4x4.CreateScale(boxShape.size.X * transform.scale.X, boxShape.size.Y * transform.scale.Y, transform.scale.Z * boxShape.size.Z);
-
-		return (_scale * Matrix4x4.Identity * _pivot * _rotation * _translation);
+		return (_scale * Matrix4x4.Identity * _pivot * _rotation * _translation) * Matrix4x4.CreateScale(Units.OneWorldUnit);
 	}
 
 	public Vector4 GetSize()
