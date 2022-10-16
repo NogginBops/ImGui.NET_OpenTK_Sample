@@ -94,7 +94,10 @@ public class Scene
 		TweenManager.I.Update();
 
 		SceneNavigation.I.Update();
-
+		if (Time.elapsedTicks % 20 == 0)
+		{
+			SortRenderQueue();
+		}
 		for (int i = 0; i < gameObjects.Count; i++)
 		{
 			gameObjects[i].indexInHierarchy = i;
@@ -146,7 +149,6 @@ public class Scene
 		GL.Enable(EnableCap.StencilTest);
 		GL.DepthFunc(DepthFunction.Greater);
 
-		SortRenderQueue();
 		GL.ClearColor(camera.color.ToOtherColor());
 		GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 		//BatchingManager.RenderAllBatchers();
@@ -155,9 +157,15 @@ public class Scene
 		{
 			if (renderQueue[i].enabled && renderQueue[i].awoken && renderQueue[i].gameObject.activeInHierarchy)
 			{
+				if (renderQueue[i].gameObject == TransformHandle.I.gameObject)
+				{
+					continue;
+				}
 				renderQueue[i].Render();
 			}
 		}
+		
+		TransformHandle.I.gameObject.Render();
 	}
 
 	public SceneFile GetSceneFile()

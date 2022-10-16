@@ -8,6 +8,10 @@ public class Folders
 	{
 		get { return "Assets"; }
 	}
+	public static string Textures
+	{
+		get { return Path.Combine(Assets, "2D"); }
+	}
 	public static string Shaders
 	{
 		get { return Path.Combine(Assets, "Shaders"); }

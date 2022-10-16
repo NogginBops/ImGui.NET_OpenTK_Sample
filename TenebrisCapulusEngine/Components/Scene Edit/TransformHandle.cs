@@ -13,12 +13,13 @@ public class TransformHandle : Component
 
 	public static bool objectSelected;
 	public BoxShape boxColliderX;
-
 	public BoxShape boxColliderXY;
 	public BoxShape boxColliderY;
+	public BoxShape boxColliderZ;
 	public ModelRenderer boxRendererX;
 	public ModelRenderer boxRendererXY;
 	public ModelRenderer boxRendererY;
+	public ModelRenderer boxRendererZ;
 
 	public bool clicked;
 	public Axis? CurrentAxisSelected;
@@ -39,40 +40,51 @@ public class TransformHandle : Component
 			boxColliderXY = GetComponent<BoxShape>(0);
 			boxColliderX = GetComponent<BoxShape>(1);
 			boxColliderY = GetComponent<BoxShape>(2);
+			boxColliderZ = GetComponent<BoxShape>(3);
 
 			boxRendererXY = GetComponent<ModelRenderer>(0);
 			boxRendererX = GetComponent<ModelRenderer>(1);
 			boxRendererY = GetComponent<ModelRenderer>(2);
+			boxRendererZ = GetComponent<ModelRenderer>(3);
 		}
 		else
 		{
-			boxColliderXY = gameObject.AddComponent<BoxShape>();
-			boxColliderXY.size = new Vector3(15, 15, 50);
-			boxColliderXY.offset = new Vector2(5, 5);
 
 			boxColliderX = gameObject.AddComponent<BoxShape>();
-			boxColliderX.size = new Vector3(50, 5, 50);
+			boxColliderX.size = new Vector3(50, 5, 5)/Units.OneWorldUnit;
 			//boxColliderX.offset = new Vector2(25, 2.5f);
 
 			boxColliderY = gameObject.AddComponent<BoxShape>();
-			boxColliderY.size = new Vector3(5, 50, 50);
+			boxColliderY.size = new Vector3(5, 50, 5)/Units.OneWorldUnit;
+			
+			boxColliderZ = gameObject.AddComponent<BoxShape>();
+			boxColliderZ.size = new Vector3(5, 5, 50)/Units.OneWorldUnit;
 			//boxColliderY.offset = new Vector2(2.5f, 25);
+			
+			boxColliderXY = gameObject.AddComponent<BoxShape>();
+			boxColliderXY.size = new Vector3(10,10,10)/Units.OneWorldUnit;
+			//boxColliderXY.offset = new Vector3(5, 5,-5)/Units.OneWorldUnit;
 
-			boxRendererXY = gameObject.AddComponent<ModelRenderer>();
 			boxRendererX = gameObject.AddComponent<ModelRenderer>();
 			boxRendererY = gameObject.AddComponent<ModelRenderer>();
+			boxRendererZ = gameObject.AddComponent<ModelRenderer>();
+			boxRendererXY = gameObject.AddComponent<ModelRenderer>();
 
+			
+			PremadeComponentSetups.PrepareCube(boxRendererX);
+			PremadeComponentSetups.PrepareCube(boxRendererY);
+			PremadeComponentSetups.PrepareCube(boxRendererXY);
+			PremadeComponentSetups.PrepareCube(boxRendererZ);
+			
 			boxRendererXY.Layer = 1000;
 			boxRendererX.Layer = 1000;
 			boxRendererY.Layer = 1000;
-
-			boxRendererXY.color = Color.Orange;
-			boxRendererX.color = Color.Red;
-			boxRendererY.color = Color.Cyan;
-
+			boxRendererZ.Layer = 1000;
+			
 			boxRendererX.boxShape = boxColliderX;
 			boxRendererXY.boxShape = boxColliderXY;
 			boxRendererY.boxShape = boxColliderY;
+			boxRendererZ.boxShape = boxColliderZ;
 		}
 
 		base.Awake();
@@ -88,7 +100,15 @@ public class TransformHandle : Component
 
 	public override void Update()
 	{
-		transform.scale = Vector3.One * Global.EditorScale * Camera.I.ortographicSize;
+		if (Camera.I.isOrthographic)
+		{
+			transform.scale = Vector3.One * Global.EditorScale * Camera.I.ortographicSize * 1.5f;
+		}
+		else
+		{
+			transform.scale = Vector3.One* Vector3.Distance(transform.position,Camera.I.transform.position)*0.3f;
+
+		}
 
 		if (MouseInput.ButtonReleased())
 		{
@@ -158,7 +178,7 @@ public class TransformHandle : Component
 		}
 		else
 		{
-			boxRendererXY.color = Color.Orange;
+			boxRendererXY.color = Color.Gold;
 		}
 
 		base.Update();

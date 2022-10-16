@@ -18,6 +18,11 @@ public class TextureRenderer : Renderer
 			return;
 		}
 
+		if (texture == null)
+		{
+			texture = new Texture();
+		}
+
 		texture.Load(_texturePath);
 	}
 }

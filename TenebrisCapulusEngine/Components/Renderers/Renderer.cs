@@ -86,9 +86,12 @@ public class Renderer : Component, IComparable<Renderer>
 
 	public Matrix4x4 GetModelMatrix()
 	{
-		Vector2 pivotOffset = -(boxShape.size * transform.scale) / 2 + new Vector2(boxShape.size.X * transform.scale.X * transform.pivot.X, boxShape.size.Y * transform.scale.Y * transform.pivot.Y);
+		Vector3 pivotOffset = -(boxShape.size * transform.scale) / 2
+		                    + new Vector3(boxShape.size.X * transform.scale.X * transform.pivot.X,
+		                                  boxShape.size.Y * transform.scale.Y * transform.pivot.Y,
+		                                  boxShape.size.Z * transform.scale.Z * transform.pivot.Z);
 
-		Matrix4x4 _pivot = Matrix4x4.CreateTranslation(-pivotOffset.X, -pivotOffset.Y, 0);
+		Matrix4x4 _pivot = Matrix4x4.CreateTranslation(-pivotOffset.X, -pivotOffset.Y, -pivotOffset.Z);
 		Matrix4x4 _translation = Matrix4x4.CreateTranslation(transform.position + boxShape.offset * transform.scale) * Matrix4x4.CreateScale(1, 1, -1);
 
 		Matrix4x4 _rotation = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,
@@ -100,9 +103,12 @@ public class Renderer : Component, IComparable<Renderer>
 
 	public Matrix4x4 GetMVPForOutline()
 	{
-		Vector2 pivotOffset = -(boxShape.size * transform.scale) / 2 + new Vector2(boxShape.size.X * transform.scale.X * transform.pivot.X, boxShape.size.Y * transform.scale.Y * transform.pivot.Y);
-
-		Matrix4x4 _pivot = Matrix4x4.CreateTranslation(-pivotOffset.X, -pivotOffset.Y, 0);
+		Vector3 pivotOffset = -(boxShape.size * transform.scale) / 2
+		                    + new Vector3(boxShape.size.X * transform.scale.X * transform.pivot.X,
+		                                  boxShape.size.Y * transform.scale.Y * transform.pivot.Y,
+		                                  boxShape.size.Z * transform.scale.Z * transform.pivot.Z);
+		
+		Matrix4x4 _pivot = Matrix4x4.CreateTranslation(-pivotOffset.X, -pivotOffset.Y, -pivotOffset.Z);
 		Matrix4x4 _translation = Matrix4x4.CreateTranslation(transform.position + boxShape.offset * transform.scale) * Matrix4x4.CreateScale(1, 1, -1);
 
 		Matrix4x4 _rotation = Matrix4x4.CreateFromYawPitchRoll(transform.Rotation.Y / 180 * Mathf.Pi,

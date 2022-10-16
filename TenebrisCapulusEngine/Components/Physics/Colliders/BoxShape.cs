@@ -2,6 +2,6 @@
 
 public class BoxShape : Shape
 {
-	public Vector2 offset = Vector2.Zero;
+	public Vector3 offset = Vector3.Zero;
 	public Vector3 size;
 }

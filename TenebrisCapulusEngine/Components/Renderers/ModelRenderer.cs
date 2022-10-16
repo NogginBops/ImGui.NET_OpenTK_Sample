@@ -22,21 +22,6 @@ public class ModelRenderer : TextureRenderer
 		base.Awake();
 	}
 
-	public virtual void LoadTexture(string _texturePath)
-	{
-		if (_texturePath.Contains("Assets") == false)
-		{
-			_texturePath = Path.Combine("Assets", _texturePath);
-		}
-
-		if (File.Exists(_texturePath) == false)
-		{
-			return;
-		}
-
-		texture.Load(_texturePath);
-	}
-
 	public override void CreateMaterial()
 	{
 		if (material == null)
@@ -96,7 +81,6 @@ public class ModelRenderer : TextureRenderer
 
 
 		{
-			transform.Rotation += Vector3.One * Time.deltaTime * 60;
 			ShaderCache.UseShader(material.shader);
 			material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 			material.shader.SetColor("u_rendererColor", color);
