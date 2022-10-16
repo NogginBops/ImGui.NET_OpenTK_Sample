@@ -189,6 +189,10 @@ public class EditorWindow_Hierarchy : EditorWindow
 		ImGui.PushStyleColor(ImGuiCol.Text, nameColor);
 
 		bool opened = ImGui.TreeNodeEx( /*$"[{currentGameObject.id}]" +*/ currentGameObject.name, flags);
+		if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+		{
+			SceneNavigation.I.MoveToGameObject(Editor.I.GetSelectedGameObject());
+		}
 		if (ImGui.BeginDragDropSource(ImGuiDragDropFlags.None)) // DRAG N DROP
 		{
 			if (selectedGameObjectIndex != gameObjectIndexSelectedBefore)

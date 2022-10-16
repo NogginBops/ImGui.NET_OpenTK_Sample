@@ -22,7 +22,7 @@ public class Tween
 
 	public float GetValue()
 	{
-		return Mathf.Lerp(startValue, endValue, currentTime / duration);
+		return Mathf.Lerp(startValue, endValue, Mathf.Clamp(currentTime / duration,0,1));
 	}
 
 	public Tween SetLoop(LoopType lt)

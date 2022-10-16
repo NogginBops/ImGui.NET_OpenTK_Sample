@@ -82,11 +82,10 @@ public class Window : GameWindow
 		GL.Enable(EnableCap.Blend);
 		//GL.Enable(EnableCap.Multisample);
 		Scene.I.Render();
-		GL.Disable(EnableCap.Blend);
 
 		sceneRenderTexture.Unbind(); // end rendering to sceneRenderTexture
-
-
+		GL.Disable(EnableCap.Blend);
+		
 		postProcessRenderTexture.Bind();
 		GL.ClearColor(0, 0, 0, 0);
 
@@ -110,6 +109,7 @@ public class Window : GameWindow
 		//GL.Enable(EnableCap.Multisample);
 
 		imGuiController.Render();
+		
 		// ------------- IMGUI -------------
 
 

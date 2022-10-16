@@ -7,3 +7,4 @@ global using System;
 global using System.Collections.Generic;
 global using System.Xml.Serialization;
 global using Vector3 = Engine.Vector3;
+global using MathHelper = OpenTK.Mathematics.MathHelper;

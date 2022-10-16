@@ -69,31 +69,106 @@ public class ModelRenderer : TextureRenderer
 		{
 			return;
 		}
-		
-		transform.Rotation += Vector3.One * Time.deltaTime * 60;
-		ShaderCache.UseShader(material.shader);
-		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
-		material.shader.SetColor("u_rendererColor", color);
-		//material.shader.SetMatrix4x4("u_model", GetModelMatrix());
-		if (material.additive)
+
+		bool drawOutline = gameObject.selected;
+		if (drawOutline)
 		{
-			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusConstantColor);
+			GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+			GL.StencilMask(0xFF);
+
+			{
+				ShaderCache.UseShader(material.shader);
+				material.shader.SetMatrix4x4("u_mvp", GetMVPForOutline());
+				material.shader.SetColor("u_rendererColor", Color.White.ToVector4());
+
+				ShaderCache.BindVAO(material.vao);
+
+				//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+				TextureCache.BindTexture(texture.id);
+
+				GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedInt, (IntPtr) null);
+			}
+
+			GL.StencilFunc(StencilFunction.Notequal, 1, 0xFF);
+			GL.StencilMask(0x00);
+			GL.Disable(EnableCap.DepthTest);
 		}
-		else
+
+
 		{
-			GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			transform.Rotation += Vector3.One * Time.deltaTime * 60;
+			ShaderCache.UseShader(material.shader);
+			material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
+			material.shader.SetColor("u_rendererColor", color);
+			//material.shader.SetMatrix4x4("u_model", GetModelMatrix());
+			if (material.additive)
+			{
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusConstantColor);
+			}
+			else
+			{
+				GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			}
+
+			ShaderCache.BindVAO(material.vao);
+
+			//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			TextureCache.BindTexture(texture.id);
+
+			GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedInt, (IntPtr) null);
 		}
-		ShaderCache.BindVAO(material.vao);
 
-		//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-		TextureCache.BindTexture(texture.id);
+		if (drawOutline)
+		{
+			GL.StencilMask(0xFF);
+			GL.StencilFunc(StencilFunction.Always, 1, 0xFF);
+			GL.Enable(EnableCap.DepthTest);
 
-		GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedInt, (IntPtr) null);
-
-		//GL.DrawArrays(PrimitiveType.Triangles, 0, 6 * 2 * 3);
+			GL.BindVertexArray(0);
+		}
 
 		Debug.CountStat("Draw Calls", 1);
 	}
+	// public override void Render()
+	// {
+	// 	if (onScreen == false)
+	// 	{
+	// 		return;
+	// 	}
+	//
+	// 	if (boxShape == null)
+	// 	{
+	// 		return;
+	// 	}
+	//
+	// 	if (texture.loaded == false)
+	// 	{
+	// 		return;
+	// 	}
+	//
+	// 	transform.Rotation += Vector3.One * Time.deltaTime * 60;
+	// 	ShaderCache.UseShader(material.shader);
+	// 	material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
+	// 	material.shader.SetColor("u_rendererColor", color);
+	// 	//material.shader.SetMatrix4x4("u_model", GetModelMatrix());
+	// 	if (material.additive)
+	// 	{
+	// 		GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusConstantColor);
+	// 	}
+	// 	else
+	// 	{
+	// 		GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+	// 	}
+	//
+	// 	ShaderCache.BindVAO(material.vao);
+	//
+	// 	//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+	// 	TextureCache.BindTexture(texture.id);
+	//
+	// 	GL.DrawElements(PrimitiveType.Triangles, 6 * 2 * 3, DrawElementsType.UnsignedInt, (IntPtr) null);
+	//
+	// 	Debug.CountStat("Draw Calls", 1);
+	// }
 }
 
 // STENCIL working

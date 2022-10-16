@@ -68,7 +68,7 @@ public class Camera : Component
 		Vector3 forward = transform.TransformDirection(Vector3.Forward);
 		Vector3 up = Vector3.Up;
 
-		Debug.Log($"pos:{pos}|forward:{forward}|up:{up}");
+		//Debug.Log($"pos:{pos}|forward:{forward}|up:{up}");
 
 		//Matrix4x4 _view = Matrix4x4.CreateLookAt(forward, pos, up);
 		Matrix4x4 _view = Matrix4x4.CreateWorld(pos,forward,up);
