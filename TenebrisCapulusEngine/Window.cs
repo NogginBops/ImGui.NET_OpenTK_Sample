@@ -1,9 +1,9 @@
-﻿using Dear_ImGui_Sample;
-using OpenTK.Mathematics;
+﻿using OpenTK.Mathematics
+	;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class Window : GameWindow
 {
@@ -17,7 +17,7 @@ public class Window : GameWindow
 	                       {Size = new Vector2i(2560, 1600), APIVersion = new Version(4, 1), Flags = ContextFlags.ForwardCompatible, Profile = ContextProfile.Core, NumberOfSamples = 8})
 	{
 		I = this;
-		
+
 		WindowState = WindowState.Maximized;
 		//WindowState = WindowState.Fullscreen;
 	}
@@ -26,7 +26,7 @@ public class Window : GameWindow
 
 	protected override void OnLoad()
 	{
-		Title = $"TenebrisCapulus Engine | {GL.GetString(StringName.Version)}";
+		Title = $"Tofu3D | {GL.GetString(StringName.Version)}";
 
 		//MaterialCache.CacheAllMaterialsInProject();
 		imGuiController = new ImGuiController(ClientSize.X, ClientSize.Y);
@@ -73,7 +73,7 @@ public class Window : GameWindow
 		Debug.CountStat("Draw Calls", 0);
 		Debug.StartTimer("Scene Render");
 
-		GL.ClearColor(0, 33, 0, 33);
+		GL.ClearColor(0, 0, 0, 0);
 		GL.Clear(ClearBufferMask.ColorBufferBit);
 
 		sceneRenderTexture.Bind(); // start rendering to sceneRenderTexture
@@ -85,14 +85,14 @@ public class Window : GameWindow
 
 		sceneRenderTexture.Unbind(); // end rendering to sceneRenderTexture
 		GL.Disable(EnableCap.Blend);
-		
+
 		postProcessRenderTexture.Bind();
 		GL.ClearColor(0, 0, 0, 0);
-
 		GL.Clear(ClearBufferMask.ColorBufferBit);
 
 		// draw sceneRenderTexture.colorAttachment with post process- into postProcessRenderTexture target
 		postProcessRenderTexture.Render(sceneRenderTexture.colorAttachment);
+
 		//postProcessRenderTexture.RenderWithPostProcess(sceneRenderTexture.colorAttachment);
 		//postProcessRenderTexture.RenderSnow(sceneRenderTexture.colorAttachment);
 
@@ -109,7 +109,7 @@ public class Window : GameWindow
 		//GL.Enable(EnableCap.Multisample);
 
 		imGuiController.Render();
-		
+
 		// ------------- IMGUI -------------
 
 

@@ -1,8 +1,5 @@
 using System.IO;
-using System.Numerics;
-using System.Reflection;
-using Engine.Components.Renderers;
-using Vector2 = Engine.Vector2;
+using Tofu3D.Components.Renderers;
 
 namespace Scripts;
 
@@ -109,7 +106,7 @@ public class TextRenderer : SpriteRenderer
 		material.shader.SetVector2("u_resolution", texture.size);
 		material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 		material.shader.SetColor("u_color", color.ToVector4());
-		material.shader.SetVector2("u_scale", boxShape.size);
+		material.shader.SetVector2("u_scale", boxShape.size/Units.OneWorldUnit);
 		material.shader.SetVector2("zoomAmount", spritesCount);
 		material.shader.SetFloat("isGradient", isGradient ? 1 : 0);
 		if (isGradient)
@@ -119,6 +116,7 @@ public class TextRenderer : SpriteRenderer
 		}
 
 		float charSpacing = text.size * 2 + transform.scale.X * text.size;
+		//charSpacing = charSpacing / Units.OneWorldUnit;
 		Vector2 originalPosition = transform.position;
 
 		int symbolInLineIndex = 0;
@@ -134,7 +132,7 @@ public class TextRenderer : SpriteRenderer
 		     symbolInLineIndex++)
 		{
 			transform.position = new Vector3(originalPosition.X + charSpacing * symbolInLineIndex, originalPosition.Y - line * lineSpacing, transform.position.Z);
-
+			transform.position = originalPosition;
 			UpdateMVP();
 			material.shader.SetMatrix4x4("u_mvp", LatestModelViewProjection);
 

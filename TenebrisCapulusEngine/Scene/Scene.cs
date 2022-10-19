@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Engine.Tweening;
+﻿using System.IO;
+using Tofu3D.Physics;
+using Tofu3D.Tweening;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class Scene
 {
@@ -75,7 +75,7 @@ public class Scene
 
 	public void Start()
 	{
-		Physics.Init();
+		PhysicsController.Init();
 
 		if (Serializer.lastScene != "" && File.Exists(Serializer.lastScene))
 		{
@@ -98,6 +98,7 @@ public class Scene
 		{
 			SortRenderQueue();
 		}
+
 		for (int i = 0; i < gameObjects.Count; i++)
 		{
 			gameObjects[i].indexInHierarchy = i;
@@ -134,7 +135,6 @@ public class Scene
 
 		for (int i = 0; i < renderQueue.Count; i++) renderQueue[i].layerFromHierarchy = renderQueue[i].gameObject.indexInHierarchy * 0.00000000000000000000000000000001f;
 		SortRenderQueue();
-		
 	}
 
 	public void SortRenderQueue()
@@ -161,10 +161,11 @@ public class Scene
 				{
 					continue;
 				}
+
 				renderQueue[i].Render();
 			}
 		}
-		
+
 		TransformHandle.I.gameObject.Render();
 	}
 

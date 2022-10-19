@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Engine;
+﻿namespace Tofu3D;
 
 public struct SceneFile
 {

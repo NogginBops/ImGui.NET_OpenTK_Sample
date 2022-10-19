@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 public class CubeSpawner : Component
 {
 	public override void Start()

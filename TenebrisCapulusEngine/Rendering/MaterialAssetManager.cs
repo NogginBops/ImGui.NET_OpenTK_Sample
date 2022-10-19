@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using System.Xml.Serialization;
 
-namespace Engine;
+namespace Tofu3D;
 
 public static class MaterialAssetManager
 {

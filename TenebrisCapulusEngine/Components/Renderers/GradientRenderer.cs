@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Linq;
-using Engine.Components.Renderers;
+﻿using Tofu3D.Components.Renderers;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class GradientRenderer : Renderer
 {

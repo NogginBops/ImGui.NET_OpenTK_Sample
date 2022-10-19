@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Runtime.Serialization;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         Represents the right-handed 4x4 floating point matrix, which can store translation, scale and rotation

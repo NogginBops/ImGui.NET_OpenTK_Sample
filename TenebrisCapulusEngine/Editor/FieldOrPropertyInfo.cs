@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class FieldOrPropertyInfo
 {

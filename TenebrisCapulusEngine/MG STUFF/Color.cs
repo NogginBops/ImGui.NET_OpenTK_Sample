@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         Describes a 32-bit packed color.

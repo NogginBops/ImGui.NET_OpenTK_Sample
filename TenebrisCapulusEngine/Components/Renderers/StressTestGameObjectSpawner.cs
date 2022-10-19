@@ -1,4 +1,4 @@
-namespace Engine.Components.Renderers;
+namespace Tofu3D.Components.Renderers;
 
 public class StressTestGameObjectSpawner : Component
 {

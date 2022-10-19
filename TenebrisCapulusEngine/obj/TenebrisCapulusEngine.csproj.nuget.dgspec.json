@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/TenebrisCapulusEngine.csproj",
-        "projectName": "TenebrisCapulusEngine",
+        "projectName": "Tofu3D",
         "projectPath": "/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/TenebrisCapulusEngine.csproj",
         "packagesPath": "/Users/hexiy/.nuget/packages/",
         "outputPath": "/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/",
@@ -38,10 +38,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Genbox.VelcroPhysics": {
-              "target": "Package",
-              "version": "[0.1.0-alpha.2, )"
-            },
             "ImGui.NET": {
               "target": "Package",
               "version": "[1.87.3, )"

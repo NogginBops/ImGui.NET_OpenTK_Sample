@@ -1,6 +1,6 @@
 using ImGuiNET;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class EditorWindow
 {

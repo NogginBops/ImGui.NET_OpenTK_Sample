@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Numerics;
-using System.Xml.Serialization;
+﻿using System.IO;
 
-namespace Engine;
+namespace Tofu3D;
 
 [Serializable]
 public class Shader : IDisposable

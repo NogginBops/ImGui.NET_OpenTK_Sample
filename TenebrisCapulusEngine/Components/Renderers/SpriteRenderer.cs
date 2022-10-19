@@ -1,7 +1,6 @@
-﻿using System.IO;
-using Engine.Components.Renderers;
+﻿using Tofu3D.Components.Renderers;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class SpriteRenderer : TextureRenderer
 {

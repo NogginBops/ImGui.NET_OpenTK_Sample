@@ -1,9 +1,3 @@
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.dll.config
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.deps.json
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.runtimeconfig.json
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.dll
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/TenebrisCapulusEngine.pdb
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/roslyn/csc.exe
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/roslyn/csc.exe.config
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/roslyn/csc.rsp
@@ -58,7 +52,6 @@
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/roslyn/vbc.rsp
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/roslyn/VBCSCompiler.exe
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/roslyn/VBCSCompiler.exe.config
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Genbox.VelcroPhysics.dll
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Humanizer.dll
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/ImGui.NET.dll
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Microsoft.Bcl.AsyncInterfaces.dll
@@ -130,8 +123,14 @@
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.AssemblyInfo.cs
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.csproj.CoreCompileInputs.cache
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.csproj.CopyComplete
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.dll
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/refint/TenebrisCapulusEngine.dll
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.pdb
 /Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/TenebrisCapulusEngine.genruntimeconfig.cache
-/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/ref/TenebrisCapulusEngine.dll
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Tofu3D
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Tofu3D.dll.config
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Tofu3D.deps.json
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Tofu3D.runtimeconfig.json
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Tofu3D.dll
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/bin/Debug/net6.0/Tofu3D.pdb
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/Tofu3D.dll
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/refint/Tofu3D.dll
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/Tofu3D.pdb
+/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/TenebrisCapulusEngine/obj/Debug/net6.0/ref/Tofu3D.dll

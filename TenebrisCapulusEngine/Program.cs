@@ -1,9 +1,6 @@
-﻿using Engine.Tweening;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using Window = Engine.Window;
+﻿using Tofu3D.Tweening;
 
-namespace Dear_ImGui_Sample;
+namespace Tofu3D;
 
 public static class Program
 {

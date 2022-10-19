@@ -5,7 +5,7 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         An efficient mathematical representation for three dimensional rotations.

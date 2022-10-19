@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Xml.Serialization;
-
 namespace Scripts;
 
 public class PolygonShape : Shape

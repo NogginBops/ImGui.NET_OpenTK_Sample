@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using System.Numerics;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class RenderTexture
 {

@@ -5,8 +5,9 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Text;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         Describes a 2D-vector.
@@ -27,12 +28,14 @@ public struct Vector2 : IEquatable<Vector2>
 	/// <summary>
 	///         The x coordinate of this <see cref="Vector2" />.
 	/// </summary>
-	[DataMember] public float X;
+	[DataMember]
+	public float X;
 
 	/// <summary>
 	///         The y coordinate of this <see cref="Vector2" />.
 	/// </summary>
-	[DataMember] public float Y;
+	[DataMember]
+	public float Y;
 
 	#endregion
 
@@ -125,24 +128,6 @@ public struct Vector2 : IEquatable<Vector2>
 	public static implicit operator System.Numerics.Vector2(Vector2 value)
 	{
 		return new System.Numerics.Vector2(value.X, value.Y);
-	}
-
-	/// <summary>
-	///         Converts a <see cref="System.Numerics.Vector2" /> to a <see cref="tainicom.Aether.Physics2D.Common.Vector2" />.
-	/// </summary>
-	/// <param name="value">The converted value.</param>
-	public static implicit operator Vector2(Microsoft.Xna.Framework.Vector2 value)
-	{
-		return new Vector2(value.X, value.Y);
-	}
-
-	/// <summary>
-	///         Converts a <see cref="System.Numerics.Vector2" /> to a <see cref="tainicom.Aether.Physics2D.Common.Vector2" />.
-	/// </summary>
-	/// <param name="value">The converted value.</param>
-	public static implicit operator Microsoft.Xna.Framework.Vector2(Vector2 value)
-	{
-		return new Microsoft.Xna.Framework.Vector2(value.X, value.Y);
 	}
 
 	/// <summary>
@@ -1103,7 +1088,13 @@ public struct Vector2 : IEquatable<Vector2>
 	/// <returns>A <see cref="String" /> representation of this <see cref="Vector2" />.</returns>
 	public override string ToString()
 	{
-		return "{X:" + X + " Y:" + Y + "}";
+		StringBuilder sb = new StringBuilder(32);
+		sb.Append("[");
+		sb.Append(X.ToString("F1"));
+		sb.Append(" | ");
+		sb.Append(Y.ToString("F1"));
+		sb.Append("]");
+		return sb.ToString();
 	}
 
 	/// <summary>

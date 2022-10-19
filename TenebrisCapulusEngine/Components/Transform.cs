@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
-using System.Xml.Serialization;
-using OpenTK.Mathematics;
-using Quaternion = System.Numerics.Quaternion;
+﻿
 
 //using Quaternion = Engine.Quaternion;
 

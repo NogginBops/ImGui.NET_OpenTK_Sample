@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 
-namespace Engine;
+namespace Tofu3D;
 
 public static class Debug
 {
@@ -23,7 +22,7 @@ public static class Debug
 
 		logs.Add($"[{DateTime.Now.ToString("HH:mm:ss")}]" + message);
 
-		Window.I.Title = logs.Last();
+		//Window.I.Title = logs.Last();
 
 		if (logs.Count > LOG_LIMIT + 1)
 		{

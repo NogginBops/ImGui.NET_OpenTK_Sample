@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Engine;
+namespace Tofu3D;
 
 public static class PremadeComponentSetups
 {

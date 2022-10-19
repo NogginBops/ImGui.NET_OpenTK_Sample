@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         Describes a 3D-vector.
@@ -107,9 +107,9 @@ public struct Vector3 : IEquatable<Vector3>
 		get
 		{
 			return string.Concat(
-			                     X.ToString(), "  ",
-			                     Y.ToString(), "  ",
-			                     Z.ToString()
+			                     X.ToString("F"), "  ",
+			                     Y.ToString("F"), "  ",
+			                     Z.ToString("F")
 			                    );
 		}
 	}
@@ -989,13 +989,13 @@ public struct Vector3 : IEquatable<Vector3>
 	public override string ToString()
 	{
 		StringBuilder sb = new StringBuilder(32);
-		sb.Append("{X:");
-		sb.Append(X);
-		sb.Append(" Y:");
-		sb.Append(Y);
-		sb.Append(" Z:");
-		sb.Append(Z);
-		sb.Append("}");
+		sb.Append("[");
+		sb.Append(X.ToString("F1"));
+		sb.Append(" | ");
+		sb.Append(Y.ToString("F1"));
+		sb.Append(" | ");
+		sb.Append(Z.ToString("F1"));
+		sb.Append("]");
 		return sb.ToString();
 	}
 
@@ -1417,15 +1417,6 @@ public struct Vector3 : IEquatable<Vector3>
 	public static implicit operator Vector3(Vector2 value)
 	{
 		return new Vector3(value.X, value.Y, 0);
-	}
-
-	/// <summary>
-	///         Converts a <see cref="System.Numerics.Vector2" /> to a <see cref="tainicom.Aether.Physics2D.Common.Vector2" />.
-	/// </summary>
-	/// <param name="value">The converted value.</param>
-	public static implicit operator Microsoft.Xna.Framework.Vector2(Vector3 value)
-	{
-		return new Microsoft.Xna.Framework.Vector2(value.X, value.Y);
 	}
 
 	/// <summary>

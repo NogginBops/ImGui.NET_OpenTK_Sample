@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Point = System.Drawing.Point;
-using Vector4 = System.Numerics.Vector4;
 
 public static class Extensions
 {
@@ -139,7 +137,7 @@ public static class Extensions
 		return new Vector3(0, vector.Y, 0);
 	}
 
-	public static Color ToColor(this Vector4 vector)
+	public static Color ToColor(this System.Numerics.Vector4 vector)
 	{
 		return new Color(vector.X, vector.Y, vector.Z, vector.W);
 	}
@@ -149,7 +147,7 @@ public static class Extensions
 		return new Color(vector.X, vector.Y, vector.Z);
 	}
 
-	public static Color ToColor(this Engine.Vector4 vector)
+	public static Color ToColor(this Vector4 vector)
 	{
 		return new Color(vector.X, vector.Y, vector.Z, vector.W);
 	}

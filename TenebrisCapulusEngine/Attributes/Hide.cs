@@ -1,4 +1,4 @@
-﻿namespace Engine;
+﻿namespace Tofu3D;
 
 [Hide]
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class, Inherited = false)]

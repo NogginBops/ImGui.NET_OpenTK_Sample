@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using ImGuiNET;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class BrowserContextItem
 {

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
-
-namespace Scripts;
+﻿namespace Scripts;
 
 public class InspectorObjectReferencesTest : Component
 {

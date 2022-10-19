@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
+using Tofu3D.Physics;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class EditorWindow_SceneView : EditorWindow
 {
@@ -26,19 +27,19 @@ public class EditorWindow_SceneView : EditorWindow
 
 			ImGui.SetCursorPosX(Camera.I.size.X / 2 - 150);
 
-			Vector4 activeColor = new Color(0.21f, 0.9f, 0.98f, 1f).ToVector4();
-			Vector4 inactiveColor = new Color(1f, 1f, 1f, 1f).ToVector4();
-			ImGui.PushStyleColor(ImGuiCol.Text, Physics.Running ? activeColor : inactiveColor);
+			Vector4 activeColor = ImGui.GetStyle().Colors[(int) ImGuiCol.Text];
+			Vector4 inactiveColor = ImGui.GetStyle().Colors[(int) ImGuiCol.TextDisabled];
+			ImGui.PushStyleColor(ImGuiCol.Text, PhysicsController.Running ? activeColor : inactiveColor);
 			bool physicsButtonClicked = ImGui.Button("physics");
 			if (physicsButtonClicked)
 			{
-				if (Physics.Running == false)
+				if (PhysicsController.Running == false)
 				{
-					Physics.StartPhysics();
+					PhysicsController.StartPhysics();
 				}
-				else if (Physics.Running)
+				else if (PhysicsController.Running)
 				{
-					Physics.StopPhysics();
+					PhysicsController.StopPhysics();
 				}
 			}
 

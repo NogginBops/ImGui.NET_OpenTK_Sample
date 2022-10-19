@@ -1,6 +1,4 @@
-using System.Reflection;
-
-namespace Engine;
+namespace Tofu3D;
 
 [ShowIfNot(null)]
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class, Inherited = false)]

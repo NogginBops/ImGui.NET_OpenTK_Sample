@@ -1,16 +1,10 @@
 ﻿using ImGuiNET;
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using System.Diagnostics;
 using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
 using Keys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
-using Vector2 = Engine.Vector2;
 
 public class ImGuiController : IDisposable
 {

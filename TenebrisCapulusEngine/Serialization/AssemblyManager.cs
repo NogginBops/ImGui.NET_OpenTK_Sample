@@ -1,17 +1,7 @@
-namespace Engine;
+namespace Tofu3D;
 
-using Microsoft.CodeDom.Providers.DotNetCompilerPlatform;
-using Scripts;
-using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Security.Permissions;
 
 public static class AssemblyManager
 {

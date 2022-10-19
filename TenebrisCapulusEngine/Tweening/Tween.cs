@@ -1,4 +1,4 @@
-namespace Engine.Tweening;
+namespace Tofu3D.Tweening;
 
 public class Tween
 {

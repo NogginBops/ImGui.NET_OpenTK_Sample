@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Scripts;
+﻿namespace Scripts;
 
 public class Pool
 {

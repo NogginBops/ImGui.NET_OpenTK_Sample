@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Engine.Tweening;
+namespace Tofu3D.Tweening;
 
 public class TweenManager
 {

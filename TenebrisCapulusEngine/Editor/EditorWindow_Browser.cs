@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class EditorWindow_Browser : EditorWindow
 {
@@ -20,7 +19,7 @@ public class EditorWindow_Browser : EditorWindow
 	private Texture[] textures = new Texture[0];
 	public static EditorWindow_Browser I { get; private set; }
 
-	private Vector2 iconSize = new Vector2(100, 90) * Global.EditorScale;
+	private Vector2 iconSize = new Vector2(98, 90) * Global.EditorScale;
 
 	public override void Init()
 	{
@@ -109,7 +108,7 @@ public class EditorWindow_Browser : EditorWindow
 			return;
 		}
 
-		ImGui.SetNextWindowSize(new Vector2(Window.I.ClientSize.X / 2 + 1, Window.I.ClientSize.Y - Editor.sceneViewSize.Y + 1), ImGuiCond.Always);
+		ImGui.SetNextWindowSize(new Vector2(Window.I.ClientSize.X - 1600, Window.I.ClientSize.Y - Editor.sceneViewSize.Y + 1), ImGuiCond.Always);
 		ImGui.SetNextWindowPos(new Vector2(0, Window.I.ClientSize.Y), ImGuiCond.Always, new Vector2(0, 1));
 		//ImGui.SetNextWindowBgAlpha (0);
 		ImGui.Begin("Browser", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoResize);
@@ -182,12 +181,12 @@ public class EditorWindow_Browser : EditorWindow
 			string assetExtension = Path.GetExtension(assets[assetIndex]).ToLower();
 			PushNextID();
 
+			//ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0,0,0,0));
+
 			if (isDirectory)
 			{
-				ImGui.PushStyleColor(ImGuiCol.Button, new Color(13, 27, 30).ToVector4());
 				ImGui.ImageButton((IntPtr) directoryIcon.id, iconSize);
 				//ImGui.ImageButton((IntPtr) 0, new Vector2(100, 90));
-				ImGui.PopStyleColor();
 			}
 			else
 			{
@@ -201,6 +200,8 @@ public class EditorWindow_Browser : EditorWindow
 					ImGui.ImageButton((IntPtr) fileIcon.id, iconSize);
 				}
 			}
+			//ImGui.PopStyleColor();
+
 
 			if (assetExtension.ToLower().Contains(".jpg") || assetExtension.ToLower().Contains(".png") || assetExtension.ToLower().Contains(".jpeg"))
 			{

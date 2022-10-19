@@ -1,14 +1,13 @@
-using System.Numerics;
-using Engine.Tweening;
-using ImGuiNET;
-using OpenTK.Mathematics;
+using Tofu3D.Tweening;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class SceneNavigation
 {
 	public static SceneNavigation I { get; private set; }
-	private float targetOrthoSize = 1;
+	private float targetOrthoSize = -1;
+
+	private bool clickedInsideScene = false;
 
 	public SceneNavigation()
 	{
@@ -25,14 +24,15 @@ public class SceneNavigation
 			cameraEndPos = targetGO.transform.position + new Vector3(0, 0, -2);
 		}
 
-		Tweener.Tween(0, 1, 0.3f, (progress) =>
-		{
-			Camera.I.transform.position = Vector3.Lerp(cameraStartPos, cameraEndPos, progress);
-		});
+		Tweener.Tween(0, 1, 0.3f, (progress) => { Camera.I.transform.position = Vector3.Lerp(cameraStartPos, cameraEndPos, progress); });
 	}
 
 	public void Update()
 	{
+		if (targetOrthoSize == -1 && Camera.I != null)
+		{
+			targetOrthoSize = Camera.I.orthographicSize;
+		}
 		if (TransformHandle.I.clicked)
 		{
 			return;
@@ -48,14 +48,36 @@ public class SceneNavigation
 			MoveToGameObject(Editor.I.GetSelectedGameObject());
 		}
 
+
+		bool isMouseOverSceneView = MouseInput.ScreenPosition.X < Camera.I.size.X && MouseInput.ScreenPosition.Y < Camera.I.size.Y;
+
+		bool justClicked = MouseInput.ButtonPressed();
+		if (justClicked)
+		{
+			clickedInsideScene = isMouseOverSceneView;
+		}
+
+		if (isMouseOverSceneView)
+		{
+			if ((justClicked && clickedInsideScene) || justClicked == false)
+			{
+				HandleMouseControls();
+			}
+		}
+	}
+
+	private void HandleMouseControls()
+	{
 		// Z POSITION
 		if (MouseInput.ScrollDelta != 0)
 		{
 			if (Camera.I.isOrthographic)
 			{
-				targetOrthoSize += -MouseInput.ScrollDelta * (targetOrthoSize > 1 ? targetOrthoSize * 0.1f : 0.05f);
+				targetOrthoSize += -MouseInput.ScrollDelta * ( targetOrthoSize*0.04f);
 				targetOrthoSize = Mathf.Clamp(targetOrthoSize, 0.1f, Mathf.Infinity);
-				Camera.I.ortographicSize = Mathf.Eerp(Camera.I.ortographicSize, targetOrthoSize, Time.editorDeltaTime * 7f);
+				// Camera.I.ortographicSize = Mathf.Eerp(Camera.I.ortographicSize, targetOrthoSize, Time.editorDeltaTime * 10f);
+				// macbook trackpad has smooth scrolling so no eerping
+				Camera.I.orthographicSize = targetOrthoSize;
 			}
 			else
 			{
@@ -66,15 +88,15 @@ public class SceneNavigation
 		}
 
 		// PANNING
-		if (MouseInput.IsButtonDown(MouseInput.Buttons.Right))
+		if (MouseInput.IsButtonDown(MouseInput.Buttons.Left))
 		{
-			MoveCameraInDirection(new Vector2(-MouseInput.ScreenDelta.X, -MouseInput.ScreenDelta.Y));
-			// Camera.I.transform.position -= Camera.I.transform.TransformDirection(new Vector2(-MouseInput.ScreenDelta.X, -MouseInput.ScreenDelta.Y)) * 0.01f;
+			//MoveCameraInDirection(new Vector2(-MouseInput.ScreenDelta.X, -MouseInput.ScreenDelta.Y));
+			Camera.I.transform.position -= Camera.I.transform.TransformDirection(new Vector2(MouseInput.ScreenDelta.X, MouseInput.ScreenDelta.Y)) / Units.OneWorldUnit * Camera.I.orthographicSize;
 			MouseInput.ScreenDelta -= MouseInput.ScreenDelta;
 		}
 
 		// ROTATING
-		if (MouseInput.IsButtonDown(MouseInput.Buttons.Left))
+		if (MouseInput.IsButtonDown(MouseInput.Buttons.Left) && false)
 		{
 			Camera.I.transform.Rotation += new Vector3(MouseInput.ScreenDelta.Y, MouseInput.ScreenDelta.X, 0) * 0.2f;
 			//Camera.I.transform.Rotation = new Vector3(Camera.I.transform.Rotation.X,Camera.I.transform.Rotation .Y, 0);

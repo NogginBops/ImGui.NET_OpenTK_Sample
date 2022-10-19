@@ -1,8 +1,4 @@
-﻿using System.Numerics;
-using System.Xml.Serialization;
-using OpenTK.Mathematics;
-
-namespace Engine;
+﻿namespace Tofu3D;
 
 public class Camera : Component
 {
@@ -11,7 +7,7 @@ public class Camera : Component
 	public Color color = new(34, 34, 34);
 
 	[ShowIf(nameof(isOrthographic))]
-	public float ortographicSize = 2;
+	public float orthographicSize = 2;
 	[ShowIfNot(nameof(isOrthographic))]
 	public float fieldOfView = 2;
 	public float nearPlaneDistance = 1;
@@ -71,9 +67,9 @@ public class Camera : Component
 		//Debug.Log($"pos:{pos}|forward:{forward}|up:{up}");
 
 		//Matrix4x4 _view = Matrix4x4.CreateLookAt(forward, pos, up);
-		Matrix4x4 _view = Matrix4x4.CreateWorld(pos,forward,up);
+		Matrix4x4 _view = Matrix4x4.CreateWorld(pos, forward, up);
 		// Matrix4x4 _view = Matrix4x4.CreateLookAt(pos,forward,up);
-		
+
 		// Matrix4x4 _view = Matrix4x4.CreateLookAt(transform.position,transform.TransformDirection(Vector3.Forward),transform.TransformDirection(Vector3.Up));
 		return Matrix4x4.Identity;
 	}
@@ -82,24 +78,34 @@ public class Camera : Component
 	{
 		if (isOrthographic)
 		{
-			float left = -size.X / 2;
-			float right = size.X / 2;
-			float bottom = -size.Y / 2;
-			float top = size.Y / 2;
-
-			Matrix4x4 orthoMatrix = Matrix4x4.CreateOrthographicOffCenter(left, right, bottom, top, 0.00001f, 10000000f);
-
-			return translationMatrix * orthoMatrix * GetScaleMatrix();
+			return GetOrthographicProjectionMatrix();
 		}
 		else
 		{
-			fieldOfView = Mathf.ClampMin(fieldOfView, 0.0001f);
-			nearPlaneDistance = Mathf.Clamp(nearPlaneDistance, 0.001f, farPlaneDistance);
-			farPlaneDistance = Mathf.Clamp(farPlaneDistance, nearPlaneDistance + 0.001f, Mathf.Infinity);
-			Matrix4x4 pm = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fieldOfView), size.X / size.Y, nearPlaneDistance, farPlaneDistance);
-
-			return translationMatrix * pm;
+			return GetPerspectiveProjectionMatrix();
 		}
+	}
+
+	private Matrix4x4 GetPerspectiveProjectionMatrix()
+	{
+		fieldOfView = Mathf.ClampMin(fieldOfView, 0.0001f);
+		nearPlaneDistance = Mathf.Clamp(nearPlaneDistance, 0.001f, farPlaneDistance);
+		farPlaneDistance = Mathf.Clamp(farPlaneDistance, nearPlaneDistance + 0.001f, Mathf.Infinity);
+		Matrix4x4 pm = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(fieldOfView), size.X / size.Y, nearPlaneDistance, farPlaneDistance);
+
+		return translationMatrix * pm;
+	}
+
+	private Matrix4x4 GetOrthographicProjectionMatrix()
+	{
+		float left = -size.X / 2;
+		float right = size.X / 2;
+		float bottom = -size.Y / 2;
+		float top = size.Y / 2;
+
+		Matrix4x4 orthoMatrix = Matrix4x4.CreateOrthographicOffCenter(left, right, bottom, top, 0.00001f, 10000000f);
+
+		return translationMatrix * orthoMatrix * GetScaleMatrix();
 	}
 
 	private Matrix4x4 GetTranslationRotationMatrix()
@@ -113,7 +119,7 @@ public class Camera : Component
 
 	private Matrix4x4 GetScaleMatrix()
 	{
-		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(1 / ortographicSize);
+		Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(1 / orthographicSize);
 		return scaleMatrix;
 	}
 
@@ -129,9 +135,27 @@ public class Camera : Component
 
 	public Vector2 ScreenToWorld(Vector2 screenPosition)
 	{
-		return Vector2.Transform(screenPosition / size * 2,
-		                         Matrix.Invert(GetProjectionMatrix()))
-		     - size * ortographicSize / 2;
+		Vector3 worldPos;
+		if (Camera.I.isOrthographic)
+		{
+			worldPos = Vector3.Transform(screenPosition / size * 2,
+			                             Matrix.Invert(projectionMatrix))
+			         - size * orthographicSize / 2;
+
+			worldPos = worldPos / Units.OneWorldUnit;
+		}
+
+		else
+		{
+			worldPos = Vector3.Transform(screenPosition / size * 2, Matrix.Invert(projectionMatrix));
+			worldPos = worldPos / Units.OneWorldUnit;
+		}
+
+		// worldPos = Vector2.Transform(screenPosition / size * 2,Matrix.Invert(projectionMatrix)) - size;
+		// worldPos = worldPos / Units.OneWorldUnit;
+
+		//Debug.Log($"SCREEN:{screenPosition} | WORLD:{worldPos}");
+		return worldPos;
 	}
 
 	public Vector2 CenterOfScreenToWorld()
@@ -141,7 +165,7 @@ public class Camera : Component
 
 	public bool RectangleVisible(BoxShape shape)
 	{
-		bool isIn = Vector2.Distance(shape.transform.position, transform.position) < size.X * 1.1f * (ortographicSize / 2) + shape.size.X / 2 * shape.transform.scale.MaxVectorMember();
+		bool isIn = Vector2.Distance(shape.transform.position, transform.position) < size.X * 1.1f * (orthographicSize / 2) + shape.size.X / 2 * shape.transform.scale.MaxVectorMember();
 
 		return isIn;
 	}

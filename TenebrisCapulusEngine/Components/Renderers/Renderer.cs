@@ -1,11 +1,4 @@
-﻿using System.Numerics;
-using System.Xml.Serialization;
-using Engine.Components.Renderers;
-using OpenTK.Mathematics;
-using Vector2 = Engine.Vector2;
-using Vector4 = Engine.Vector4;
-
-namespace Scripts;
+﻿namespace Scripts;
 
 public class Renderer : Component, IComparable<Renderer>
 {
@@ -33,6 +26,16 @@ public class Renderer : Component, IComparable<Renderer>
 	}
 	[XmlIgnore] public Matrix4x4 LatestModelViewProjection { get; private set; }
 
+	public int CompareTo(Renderer comparePart)
+	{
+		// A null value means that this object is greater.
+		if (comparePart == null)
+		{
+			return 1;
+		}
+	
+		return Layer.CompareTo(comparePart.Layer + comparePart.layerFromHierarchy);
+	}
 	// public int CompareTo(Renderer comparePart)
 	// {
 	// 	// A null value means that this object is greater.
@@ -41,18 +44,8 @@ public class Renderer : Component, IComparable<Renderer>
 	// 		return 1;
 	// 	}
 	//
-	// 	return Layer.CompareTo(comparePart.Layer + comparePart.layerFromHierarchy);
+	// 	return comparePart.distanceFromCamera.CompareTo(distanceFromCamera);
 	// }
-	public int CompareTo(Renderer comparePart)
-	{
-		// A null value means that this object is greater.
-		if (comparePart == null)
-		{
-			return 1;
-		}
-
-		return comparePart.distanceFromCamera.CompareTo(distanceFromCamera);
-	}
 
 	public override void Awake()
 	{

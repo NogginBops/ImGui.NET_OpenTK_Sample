@@ -5,7 +5,7 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         Describes a 4D-vector.

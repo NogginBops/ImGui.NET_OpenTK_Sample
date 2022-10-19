@@ -1,6 +1,6 @@
 ﻿using ImGuiNET;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class EditorWindow_Floating : EditorWindow
 {
@@ -20,7 +20,7 @@ public class EditorWindow_Floating : EditorWindow
 
 		//ImGui.SetNextWindowBgAlpha (0);
 		ImGui.Begin("Floating", ImGuiWindowFlags.NoCollapse);
-
+		
 		ImGui.Image((IntPtr) Window.I.sceneRenderTexture.colorAttachment, new Vector2(300, 300));
 
 		ImGui.End();

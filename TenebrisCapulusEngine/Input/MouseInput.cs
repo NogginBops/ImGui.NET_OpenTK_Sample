@@ -1,6 +1,6 @@
 ﻿using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace Engine;
+namespace Tofu3D;
 
 public static class MouseInput
 {
@@ -81,7 +81,7 @@ public static class MouseInput
 
 	public static Vector2 WorldDelta
 	{
-		get { return ScreenDelta * Camera.I.ortographicSize; }
+		get { return ScreenDelta * Camera.I.orthographicSize / Units.OneWorldUnit; }
 	}
 
 	public static Vector2 WorldPosition
@@ -124,10 +124,10 @@ public static class MouseInput
 
 	public static bool ButtonPressed(Buttons button = Buttons.Left)
 	{
-		if (IsMouseInSceneView() == false)
-		{
-			return false;
-		}
+		// if (IsMouseInSceneView() == false)
+		// {
+		// 	return false;
+		// }
 
 		return Window.I.MouseState.WasButtonDown((MouseButton) button) == false && Window.I.MouseState.IsButtonDown((MouseButton) button);
 	}

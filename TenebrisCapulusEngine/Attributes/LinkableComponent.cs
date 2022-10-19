@@ -1,4 +1,4 @@
-﻿namespace Engine;
+﻿namespace Tofu3D;
 
 /// <summary>
 ///         TARGET MUST BE PUBLIC

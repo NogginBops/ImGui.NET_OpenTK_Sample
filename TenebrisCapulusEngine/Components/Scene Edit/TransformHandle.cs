@@ -1,4 +1,4 @@
-﻿namespace Engine;
+﻿namespace Tofu3D;
 
 public class TransformHandle : Component
 {
@@ -15,11 +15,11 @@ public class TransformHandle : Component
 	public BoxShape boxColliderX;
 	public BoxShape boxColliderXY;
 	public BoxShape boxColliderY;
-	public BoxShape boxColliderZ;
+	//public BoxShape boxColliderZ;
 	public ModelRenderer boxRendererX;
 	public ModelRenderer boxRendererXY;
 	public ModelRenderer boxRendererY;
-	public ModelRenderer boxRendererZ;
+	//public ModelRenderer boxRendererZ;
 
 	public bool clicked;
 	public Axis? CurrentAxisSelected;
@@ -31,60 +31,55 @@ public class TransformHandle : Component
 		objectSelected = false;
 		gameObject.updateWhenDisabled = true;
 
-		gameObject.AddComponent<Rigidbody>().useGravity = true;
-		GetComponent<Rigidbody>().isStatic = false;
-		GetComponent<Rigidbody>().isButton = true;
-
 		if (GetComponents<BoxRenderer>().Count > 2)
 		{
 			boxColliderXY = GetComponent<BoxShape>(0);
 			boxColliderX = GetComponent<BoxShape>(1);
 			boxColliderY = GetComponent<BoxShape>(2);
-			boxColliderZ = GetComponent<BoxShape>(3);
+			//boxColliderZ = GetComponent<BoxShape>(3);
 
 			boxRendererXY = GetComponent<ModelRenderer>(0);
 			boxRendererX = GetComponent<ModelRenderer>(1);
 			boxRendererY = GetComponent<ModelRenderer>(2);
-			boxRendererZ = GetComponent<ModelRenderer>(3);
+			//boxRendererZ = GetComponent<ModelRenderer>(3);
 		}
 		else
 		{
-
 			boxColliderX = gameObject.AddComponent<BoxShape>();
-			boxColliderX.size = new Vector3(50, 5, 5)/Units.OneWorldUnit;
+			boxColliderX.size = new Vector3(50, 5, 5) / Units.OneWorldUnit;
 			//boxColliderX.offset = new Vector2(25, 2.5f);
 
 			boxColliderY = gameObject.AddComponent<BoxShape>();
-			boxColliderY.size = new Vector3(5, 50, 5)/Units.OneWorldUnit;
-			
-			boxColliderZ = gameObject.AddComponent<BoxShape>();
-			boxColliderZ.size = new Vector3(5, 5, 50)/Units.OneWorldUnit;
+			boxColliderY.size = new Vector3(5, 50, 5) / Units.OneWorldUnit;
+
+			// boxColliderZ = gameObject.AddComponent<BoxShape>();
+			// boxColliderZ.size = new Vector3(5, 5, 50)/Units.OneWorldUnit;
 			//boxColliderY.offset = new Vector2(2.5f, 25);
-			
+
 			boxColliderXY = gameObject.AddComponent<BoxShape>();
-			boxColliderXY.size = new Vector3(10,10,10)/Units.OneWorldUnit;
+			boxColliderXY.size = new Vector3(10, 10, 10) / Units.OneWorldUnit;
 			//boxColliderXY.offset = new Vector3(5, 5,-5)/Units.OneWorldUnit;
 
 			boxRendererX = gameObject.AddComponent<ModelRenderer>();
 			boxRendererY = gameObject.AddComponent<ModelRenderer>();
-			boxRendererZ = gameObject.AddComponent<ModelRenderer>();
+			// boxRendererZ = gameObject.AddComponent<ModelRenderer>();
 			boxRendererXY = gameObject.AddComponent<ModelRenderer>();
 
-			
+
 			PremadeComponentSetups.PrepareCube(boxRendererX);
 			PremadeComponentSetups.PrepareCube(boxRendererY);
 			PremadeComponentSetups.PrepareCube(boxRendererXY);
-			PremadeComponentSetups.PrepareCube(boxRendererZ);
-			
+			// PremadeComponentSetups.PrepareCube(boxRendererZ);
+
 			boxRendererXY.Layer = 1000;
 			boxRendererX.Layer = 1000;
 			boxRendererY.Layer = 1000;
-			boxRendererZ.Layer = 1000;
-			
+			// boxRendererZ.Layer = 1000;
+
 			boxRendererX.boxShape = boxColliderX;
 			boxRendererXY.boxShape = boxColliderXY;
 			boxRendererY.boxShape = boxColliderY;
-			boxRendererZ.boxShape = boxColliderZ;
+			// boxRendererZ.boxShape = boxColliderZ;
 		}
 
 		base.Awake();
@@ -102,12 +97,11 @@ public class TransformHandle : Component
 	{
 		if (Camera.I.isOrthographic)
 		{
-			transform.scale = Vector3.One * Global.EditorScale * Camera.I.ortographicSize * 1.5f;
+			transform.scale = Vector3.One * Global.EditorScale * Camera.I.orthographicSize * 1.5f;
 		}
 		else
 		{
-			transform.scale = Vector3.One* Vector3.Distance(transform.position,Camera.I.transform.position)*0.3f;
-
+			transform.scale = Vector3.One * Vector3.Distance(transform.position, Camera.I.transform.position) * 0.3f;
 		}
 
 		if (MouseInput.ButtonReleased())
@@ -205,18 +199,18 @@ public class TransformHandle : Component
 
 		// todo just do the position delta move in transform component for (int i = 0; i < selectedTransform.children.Count; i++) selectedTransform.children[i].position += moveVector;
 
-		if (selectedTransform.HasComponent<Rigidbody>() && selectedTransform.GetComponent<Rigidbody>().isButton == false)
-		{
-			lock (Physics.World)
-			{
-				Rigidbody rigidbody = selectedTransform.GetComponent<Rigidbody>();
-				rigidbody.Velocity = Vector2.Zero;
-				if (rigidbody.body != null)
-				{
-					rigidbody.body.Position = selectedTransform.position;
-				}
-			}
-		}
+		// if (selectedTransform.HasComponent<Rigidbody>() && selectedTransform.GetComponent<Rigidbody>().isButton == false)
+		// {
+		// 	lock (Physics.World)
+		// 	{
+		// 		Rigidbody rigidbody = selectedTransform.GetComponent<Rigidbody>();
+		// 		rigidbody.Velocity = Vector2.Zero;
+		// 		if (rigidbody.body != null)
+		// 		{
+		// 			rigidbody.body.Position = selectedTransform.position;
+		// 		}
+		// 	}
+		// }
 
 		if (KeyboardInput.IsKeyDown(Keys.LeftShift))
 		{

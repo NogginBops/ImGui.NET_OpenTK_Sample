@@ -1,6 +1,6 @@
-using Engine.Tweening;
+using Tofu3D.Tweening;
 
-namespace Engine.Components;
+namespace Tofu3D.Components;
 
 public class UIController : Component
 {

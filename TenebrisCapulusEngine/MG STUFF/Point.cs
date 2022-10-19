@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-namespace Engine;
+namespace Tofu3D;
 
 /// <summary>
 ///         Describes a 2D-point.

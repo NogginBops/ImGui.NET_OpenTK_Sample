@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using ImGuiNET;
 
-namespace Engine;
+namespace Tofu3D;
 
 public class EditorWindow_Hierarchy : EditorWindow
 {
@@ -179,7 +178,8 @@ public class EditorWindow_Hierarchy : EditorWindow
 			flags = (selectedGameObjectIndex == goIndex ? ImGuiTreeNodeFlags.Selected : 0) | ImGuiTreeNodeFlags.Leaf;
 		}
 
-		Vector4 nameColor = currentGameObject.activeInHierarchy ? Color.White.ToVector4() : new Color(1, 1, 1, 0.4f).ToVector4();
+
+		Vector4 nameColor = currentGameObject.activeInHierarchy ? ImGui.GetStyle().Colors[(int) ImGuiCol.Text] : ImGui.GetStyle().Colors[(int) ImGuiCol.TextDisabled];
 
 		if (currentGameObject.isPrefab)
 		{
@@ -189,10 +189,12 @@ public class EditorWindow_Hierarchy : EditorWindow
 		ImGui.PushStyleColor(ImGuiCol.Text, nameColor);
 
 		bool opened = ImGui.TreeNodeEx( /*$"[{currentGameObject.id}]" +*/ currentGameObject.name, flags);
-		if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left))
+
+		if (ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Left) && false) // todo remove false
 		{
 			SceneNavigation.I.MoveToGameObject(Editor.I.GetSelectedGameObject());
 		}
+
 		if (ImGui.BeginDragDropSource(ImGuiDragDropFlags.None)) // DRAG N DROP
 		{
 			if (selectedGameObjectIndex != gameObjectIndexSelectedBefore)

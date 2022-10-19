@@ -1,6 +1,4 @@
-using System.IO;
-using Dear_ImGui_Sample;
-using Engine.Components.Renderers;
+using Tofu3D.Components.Renderers;
 
 public class ModelRenderer : TextureRenderer
 {

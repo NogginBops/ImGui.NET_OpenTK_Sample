@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using ImGuiNET;
-
-namespace Engine;
+﻿namespace Tofu3D;
 
 public static class BuffersGenerator
 {

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
-namespace Engine.Components.Renderers;
+namespace Tofu3D.Components.Renderers;
 
 public class MaterialCache
 {
