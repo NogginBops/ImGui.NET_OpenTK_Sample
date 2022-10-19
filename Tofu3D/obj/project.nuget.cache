@@ -1,0 +1,59 @@
+{
+  "version": 2,
+  "dgSpecHash": "7YukiswW9mXjTdZTgz4Xrf2zr69nq7JfcrXMjweeZHWojF2Yj2can4wNY6LWgSn12A0HAI1iA6p0NElqOUsCcw==",
+  "success": true,
+  "projectFilePath": "/Users/hexiy/Desktop/dev/TenebrisCapulusEngine/Tofu3D/Tofu3D.csproj",
+  "expectedPackageFiles": [
+    "/Users/hexiy/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/imgui.net/1.87.3/imgui.net.1.87.3.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/microsoft.codeanalysis.analyzers/3.3.3/microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/microsoft.codeanalysis.common/4.4.0-1.final/microsoft.codeanalysis.common.4.4.0-1.final.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/microsoft.codeanalysis.workspaces.common/4.4.0-1.final/microsoft.codeanalysis.workspaces.common.4.4.0-1.final.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/microsoft.codedom.providers.dotnetcompilerplatform/4.1.0-preview1/microsoft.codedom.providers.dotnetcompilerplatform.4.1.0-preview1.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/microsoft.win32.systemevents/7.0.0-preview.7.22375.6/microsoft.win32.systemevents.7.0.0-preview.7.22375.6.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk/4.7.4/opentk.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.compute/4.7.4/opentk.compute.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.core/4.7.4/opentk.core.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.graphics/4.7.4/opentk.graphics.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.input/4.7.4/opentk.input.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.mathematics/4.7.4/opentk.mathematics.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.openal/4.7.4/opentk.openal.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.redist.glfw/3.3.7.27/opentk.redist.glfw.3.3.7.27.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.windowing.common/4.7.4/opentk.windowing.common.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.windowing.desktop/4.7.4/opentk.windowing.desktop.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/opentk.windowing.graphicslibraryframework/4.7.4/opentk.windowing.graphicslibraryframework.4.7.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/sixlabors.imagesharp/1.0.4/sixlabors.imagesharp.1.0.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.buffers/4.4.0/system.buffers.4.4.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.codedom/7.0.0-preview.7.22375.6/system.codedom.7.0.0-preview.7.22375.6.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.collections.immutable/5.0.0/system.collections.immutable.5.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.composition/6.0.0/system.composition.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.composition.attributedmodel/6.0.0/system.composition.attributedmodel.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.composition.convention/6.0.0/system.composition.convention.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.composition.hosting/6.0.0/system.composition.hosting.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.composition.runtime/6.0.0/system.composition.runtime.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.composition.typedparts/6.0.0/system.composition.typedparts.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.drawing.common/7.0.0-preview.7.22375.6/system.drawing.common.7.0.0-preview.7.22375.6.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.io.pipelines/6.0.1/system.io.pipelines.6.0.1.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.memory/4.5.4/system.memory.4.5.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.numerics.vectors/4.4.0/system.numerics.vectors.4.4.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.reflection.metadata/5.0.0/system.reflection.metadata.5.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.security.permissions/7.0.0-preview.7.22375.6/system.security.permissions.7.0.0-preview.7.22375.6.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.text.encoding.codepages/6.0.0/system.text.encoding.codepages.6.0.0.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512",
+    "/Users/hexiy/.nuget/packages/system.windows.extensions/7.0.0-preview.7.22375.6/system.windows.extensions.7.0.0-preview.7.22375.6.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Microsoft.CodeDom.Providers.DotNetCompilerPlatform 4.1.0-preview1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Microsoft.CodeDom.Providers.DotNetCompilerPlatform",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
+}
