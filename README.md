@@ -1,5 +1,5 @@
-# NoiceEngine
-Simple 2D C# OpenTK game engine with component based architecture.
+# Tofu3D game engine
+Simple C# OpenTK game engine with component based architecture.
 
 Features editor with
 * Inspector
