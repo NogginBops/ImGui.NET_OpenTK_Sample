@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ImGuiNET;
 using System.Drawing;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
@@ -46,7 +46,7 @@ namespace Dear_ImGui_Sample
 
             _controller.Update(this, (float)e.Time);
 
-            GL.ClearColor(new Color4(0, 32, 48, 255));
+            GL.ClearColor(new Color4<Rgba>(0, 32, 48, 255));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
             ImGui.ShowDemoWindow();
