@@ -1,8 +1,8 @@
 # Dear Imgui Sample using OpenTK
 
-## OpenTK 4
+## OpenTK 5
 
-This version of the repo is targeting OpenTK 4. 
+This version of the repo is targeting OpenTK 5. 
 The minimum OpenGL version is 3.3.
 
 ## Your OpenGL state will be untouched!
