@@ -37,6 +37,9 @@ namespace Dear_ImGui_Sample
 
         private static bool KHRDebugAvailable = false;
 
+        private int GLVersion;
+        private bool CompatibilityProfile;
+
         /// <summary>
         /// Constructs a new ImGuiController.
         /// </summary>
@@ -48,7 +51,11 @@ namespace Dear_ImGui_Sample
             int major = GL.GetInteger(GetPName.MajorVersion);
             int minor = GL.GetInteger(GetPName.MinorVersion);
 
+            GLVersion = major * 100 + minor * 10;
+
             KHRDebugAvailable = (major == 4 && minor >= 3) || IsExtensionSupported("KHR_debug");
+
+            CompatibilityProfile = (GL.GetInteger((GetPName)All.ContextProfileMask) & (int)All.ContextCompatibilityProfileBit) != 0;
 
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
@@ -342,7 +349,25 @@ void main()
                     GL.GetInteger(GetPName.ScissorBox, iptr);
                 }
             }
+            Span<int> prevPolygonMode = stackalloc int[2];
+            unsafe
+            {
+                fixed(int* iptr = &prevPolygonMode[0])
+                {
+                    GL.GetInteger(GetPName.PolygonMode, iptr);
+                }
+            }
 
+            if (GLVersion <= 310 || CompatibilityProfile)
+            {
+                GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
+                GL.PolygonMode(MaterialFace.Back, PolygonMode.Fill);
+            }
+            else
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            }
+            
             // Bind the element buffer (thru the VAO) so that we can resize it.
             GL.BindVertexArray(_vertexArray);
             // Bind the vertex buffer so that we can resize it.
@@ -462,6 +487,15 @@ void main()
             if (prevDepthTestEnabled) GL.Enable(EnableCap.DepthTest); else GL.Disable(EnableCap.DepthTest);
             if (prevCullFaceEnabled) GL.Enable(EnableCap.CullFace); else GL.Disable(EnableCap.CullFace);
             if (prevScissorTestEnabled) GL.Enable(EnableCap.ScissorTest); else GL.Disable(EnableCap.ScissorTest);
+            if (GLVersion <= 310 || CompatibilityProfile)
+            {
+                GL.PolygonMode(MaterialFace.Front, (PolygonMode)prevPolygonMode[0]);
+                GL.PolygonMode(MaterialFace.Back, (PolygonMode)prevPolygonMode[1]);
+            }
+            else
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, (PolygonMode)prevPolygonMode[0]);
+            }
         }
 
         /// <summary>
