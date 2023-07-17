@@ -13,7 +13,7 @@ using OpenTK.Graphics;
 
 namespace Dear_ImGui_Sample
 {
-    public class ImGuiController : IDisposable
+    public sealed class ImGuiController : IDisposable
     {
         private bool _frameBegun;
 
@@ -38,6 +38,9 @@ namespace Dear_ImGui_Sample
 
         private static bool KHRDebugAvailable = false;
 
+        private int GLVersion;
+        private bool CompatibilityProfile;
+
         /// <summary>
         /// Constructs a new ImGuiController.
         /// </summary>
@@ -49,7 +52,13 @@ namespace Dear_ImGui_Sample
             int major = 0;  GL.GetInteger(GetPName.MajorVersion, ref major);
             int minor = 0;  GL.GetInteger(GetPName.MinorVersion, ref minor);
 
+            GLVersion = major * 100 + minor * 10;
+
             KHRDebugAvailable = (major == 4 && minor >= 3) || IsExtensionSupported("KHR_debug");
+
+            int profileMask = default;
+            GL.GetInteger(GetPName.ContextProfileMask, ref profileMask);
+            CompatibilityProfile = (profileMask & (int)ContextProfileMask.ContextCompatibilityProfileBit) != 0;
 
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
@@ -337,6 +346,18 @@ void main()
             int prevTexture2D = 0;  GL.GetInteger(GetPName.TextureBinding2d, ref prevTexture2D);
             Span<int> prevScissorBox = stackalloc int[4];
             GL.GetInteger(GetPName.ScissorBox, prevScissorBox);
+            Span<int> prevPolygonMode = stackalloc int[2];
+            GL.GetInteger(GetPName.PolygonMode, prevPolygonMode);
+
+            if (GLVersion <= 310 || CompatibilityProfile)
+            {
+                GL.PolygonMode(TriangleFace.Front, PolygonMode.Fill);
+                GL.PolygonMode(TriangleFace.Back, PolygonMode.Fill);
+            }
+            else
+            {
+                GL.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Fill);
+            }
 
             // Bind the element buffer (thru the VAO) so that we can resize it.
             GL.BindVertexArray(_vertexArray);
@@ -457,6 +478,15 @@ void main()
             if (prevDepthTestEnabled) GL.Enable(EnableCap.DepthTest); else GL.Disable(EnableCap.DepthTest);
             if (prevCullFaceEnabled) GL.Enable(EnableCap.CullFace); else GL.Disable(EnableCap.CullFace);
             if (prevScissorTestEnabled) GL.Enable(EnableCap.ScissorTest); else GL.Disable(EnableCap.ScissorTest);
+            if (GLVersion <= 310 || CompatibilityProfile)
+            {
+                GL.PolygonMode(TriangleFace.Front, (PolygonMode)prevPolygonMode[0]);
+                GL.PolygonMode(TriangleFace.Back, (PolygonMode)prevPolygonMode[1]);
+            }
+            else
+            {
+                GL.PolygonMode(TriangleFace.FrontAndBack, (PolygonMode)prevPolygonMode[0]);
+            }
         }
 
         /// <summary>
