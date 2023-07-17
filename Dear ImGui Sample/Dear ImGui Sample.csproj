@@ -15,8 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ImGui.NET" Version="1.78.0" />
-    <PackageReference Include="OpenTK" Version="4.4.0" />
+    <PackageReference Include="ImGui.NET" Version="1.89.7.1" />
+    <PackageReference Include="OpenTK" Version="4.7.7" />
   </ItemGroup>
 
 </Project>
