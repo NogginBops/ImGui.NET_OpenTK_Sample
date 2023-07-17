@@ -33,6 +33,9 @@ namespace Dear_ImGui_Sample
 
         private static bool KHRDebugAvailable = false;
 
+        private int GLVersion;
+        private bool CompatibilityProfile;
+
         /// <summary>
         /// Constructs a new ImGuiController.
         /// </summary>
@@ -44,7 +47,11 @@ namespace Dear_ImGui_Sample
             int major = GL.GetInteger(GetPName.MajorVersion);
             int minor = GL.GetInteger(GetPName.MinorVersion);
 
+            GLVersion = major * 100 + minor * 10;
+
             KHRDebugAvailable = (major == 4 && minor >= 3) || IsExtensionSupported("KHR_debug");
+
+            CompatibilityProfile = (GL.GetInteger((GetPName)All.ContextProfileMask) & (int)ContextProfileMask.ContextCompatibilityProfileBit) != 0;
 
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
@@ -308,7 +315,7 @@ void main()
             io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
         }
 
-        private void RenderImDrawData(ImDrawDataPtr draw_data)
+        private unsafe void RenderImDrawData(ImDrawDataPtr draw_data)
         {
             if (draw_data.CmdListsCount == 0)
             {
@@ -332,8 +339,20 @@ void main()
             int prevActiveTexture = GL.GetInteger(GetPName.ActiveTexture);
             GL.ActiveTexture(TextureUnit.Texture0);
             int prevTexture2D = GL.GetInteger(GetPName.Texture2D);
-            int[] prevScissorBox = new int[4];
+            int* prevScissorBox = stackalloc int[4];
             GL.GetInteger(GetPName.ScissorBox, prevScissorBox);
+            int* prevPolygonMode = stackalloc int[2];
+            GL.GetInteger(GetPName.PolygonMode, prevPolygonMode);
+
+            if (GLVersion <= 310 || CompatibilityProfile)
+            {
+                GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
+                GL.PolygonMode(MaterialFace.Back, PolygonMode.Fill);
+            }
+            else
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            }
 
             // Bind the element buffer (thru the VAO) so that we can resize it.
             GL.BindVertexArray(_vertexArray);
@@ -454,6 +473,15 @@ void main()
             if (prevDepthTestEnabled) GL.Enable(EnableCap.DepthTest); else GL.Disable(EnableCap.DepthTest);
             if (prevCullFaceEnabled) GL.Enable(EnableCap.CullFace); else GL.Disable(EnableCap.CullFace);
             if (prevScissorTestEnabled) GL.Enable(EnableCap.ScissorTest); else GL.Disable(EnableCap.ScissorTest);
+            if (GLVersion <= 310 || CompatibilityProfile)
+            {
+                GL.PolygonMode(MaterialFace.Front, (PolygonMode)prevPolygonMode[0]);
+                GL.PolygonMode(MaterialFace.Back, (PolygonMode)prevPolygonMode[1]);
+            }
+            else
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, (PolygonMode)prevPolygonMode[0]);
+            }
         }
 
         /// <summary>
