@@ -49,6 +49,9 @@ namespace Dear_ImGui_Sample
             GL.ClearColor(new Color4(0, 32, 48, 255));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
 
+            // Enable Docking
+            ImGui.DockSpaceOverViewport();
+
             ImGui.ShowDemoWindow();
 
             _controller.Render();
