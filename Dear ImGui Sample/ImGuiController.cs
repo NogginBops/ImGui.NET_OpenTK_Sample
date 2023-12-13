@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.Diagnostics;
@@ -29,7 +28,7 @@ namespace Dear_ImGui_Sample
         private int _shader;
         private int _shaderFontTextureLocation;
         private int _shaderProjectionMatrixLocation;
-        
+
         private int _windowWidth;
         private int _windowHeight;
 
@@ -63,9 +62,10 @@ namespace Dear_ImGui_Sample
             io.Fonts.AddFontDefault();
 
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
+            // Enable Docking
+            io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
 
             CreateDeviceResources();
-            SetKeyMappings();
 
             SetPerFrameImGuiData(1f / 60f);
 
@@ -260,14 +260,14 @@ void main()
             var screenPoint = new Vector2i((int)MouseState.X, (int)MouseState.Y);
             var point = screenPoint;//wnd.PointToClient(screenPoint);
             io.MousePos = new System.Numerics.Vector2(point.X, point.Y);
-            
+
             foreach (Keys key in Enum.GetValues(typeof(Keys)))
             {
                 if (key == Keys.Unknown)
                 {
                     continue;
                 }
-                io.KeysDown[(int)key] = KeyboardState.IsKeyDown(key);
+                io.AddKeyEvent(TranslateKey(key), KeyboardState.IsKeyDown(key));
             }
 
             foreach (var c in PressedChars)
@@ -290,33 +290,9 @@ void main()
         internal void MouseScroll(Vector2 offset)
         {
             ImGuiIOPtr io = ImGui.GetIO();
-            
+
             io.MouseWheel = offset.Y;
             io.MouseWheelH = offset.X;
-        }
-
-        private static void SetKeyMappings()
-        {
-            ImGuiIOPtr io = ImGui.GetIO();
-            io.KeyMap[(int)ImGuiKey.Tab] = (int)Keys.Tab;
-            io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Keys.Left;
-            io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Keys.Right;
-            io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Keys.Up;
-            io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Keys.Down;
-            io.KeyMap[(int)ImGuiKey.PageUp] = (int)Keys.PageUp;
-            io.KeyMap[(int)ImGuiKey.PageDown] = (int)Keys.PageDown;
-            io.KeyMap[(int)ImGuiKey.Home] = (int)Keys.Home;
-            io.KeyMap[(int)ImGuiKey.End] = (int)Keys.End;
-            io.KeyMap[(int)ImGuiKey.Delete] = (int)Keys.Delete;
-            io.KeyMap[(int)ImGuiKey.Backspace] = (int)Keys.Backspace;
-            io.KeyMap[(int)ImGuiKey.Enter] = (int)Keys.Enter;
-            io.KeyMap[(int)ImGuiKey.Escape] = (int)Keys.Escape;
-            io.KeyMap[(int)ImGuiKey.A] = (int)Keys.A;
-            io.KeyMap[(int)ImGuiKey.C] = (int)Keys.C;
-            io.KeyMap[(int)ImGuiKey.V] = (int)Keys.V;
-            io.KeyMap[(int)ImGuiKey.X] = (int)Keys.X;
-            io.KeyMap[(int)ImGuiKey.Y] = (int)Keys.Y;
-            io.KeyMap[(int)ImGuiKey.Z] = (int)Keys.Z;
         }
 
         private void RenderImDrawData(ImDrawDataPtr draw_data)
@@ -354,7 +330,7 @@ void main()
             Span<int> prevPolygonMode = stackalloc int[2];
             unsafe
             {
-                fixed(int* iptr = &prevPolygonMode[0])
+                fixed (int* iptr = &prevPolygonMode[0])
                 {
                     GL.GetInteger(GetPName.PolygonMode, iptr);
                 }
@@ -369,20 +345,20 @@ void main()
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             }
-            
+
             // Bind the element buffer (thru the VAO) so that we can resize it.
             GL.BindVertexArray(_vertexArray);
             // Bind the vertex buffer so that we can resize it.
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBuffer);
             for (int i = 0; i < draw_data.CmdListsCount; i++)
             {
-                ImDrawListPtr cmd_list = draw_data.CmdListsRange[i];
+                ImDrawListPtr cmd_list = draw_data.CmdLists[i];
 
                 int vertexSize = cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>();
                 if (vertexSize > _vertexBufferSize)
                 {
                     int newSize = (int)Math.Max(_vertexBufferSize * 1.5f, vertexSize);
-                    
+
                     GL.BufferData(BufferTarget.ArrayBuffer, newSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
                     _vertexBufferSize = newSize;
 
@@ -430,7 +406,7 @@ void main()
             // Render command lists
             for (int n = 0; n < draw_data.CmdListsCount; n++)
             {
-                ImDrawListPtr cmd_list = draw_data.CmdListsRange[n];
+                ImDrawListPtr cmd_list = draw_data.CmdLists[n];
 
                 GL.BufferSubData(BufferTarget.ArrayBuffer, IntPtr.Zero, cmd_list.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>(), cmd_list.VtxBuffer.Data);
                 CheckGLError($"Data Vert {n}");
@@ -586,6 +562,73 @@ void main()
             {
                 Debug.Print($"{title} ({i++}): {error}");
             }
+        }
+    }
+
+    public static ImGuiKey TranslateKey(Keys key)
+    {
+        if (key >= Keys.D0 && key <= Keys.D9)
+            return key - Keys.D0 + ImGuiKey._0;
+
+        if (key >= Keys.A && key <= Keys.Z)
+            return key - Keys.A + ImGuiKey.A;
+
+        if (key >= Keys.KeyPad0 && key <= Keys.KeyPad9)
+            return key - Keys.KeyPad0 + ImGuiKey.KeyPad0;
+
+        if (key >= Keys.F1 && key <= Keys.F24)
+            return key - Keys.F1 + ImGuiKey.F24;
+
+        switch (key)
+        {
+            case Keys.Tab: return ImGuiKey.Tab;
+            case Keys.Left: return ImGuiKey.LeftArrow;
+            case Keys.Right: return ImGuiKey.RightArrow;
+            case Keys.Up: return ImGuiKey.UpArrow;
+            case Keys.Down: return ImGuiKey.DownArrow;
+            case Keys.PageUp: return ImGuiKey.PageUp;
+            case Keys.PageDown: return ImGuiKey.PageDown;
+            case Keys.Home: return ImGuiKey.Home;
+            case Keys.End: return ImGuiKey.End;
+            case Keys.Insert: return ImGuiKey.Insert;
+            case Keys.Delete: return ImGuiKey.Delete;
+            case Keys.Backspace: return ImGuiKey.Backspace;
+            case Keys.Space: return ImGuiKey.Space;
+            case Keys.Enter: return ImGuiKey.Enter;
+            case Keys.Escape: return ImGuiKey.Escape;
+            case Keys.Apostrophe: return ImGuiKey.Apostrophe;
+            case Keys.Comma: return ImGuiKey.Comma;
+            case Keys.Minus: return ImGuiKey.Minus;
+            case Keys.Period: return ImGuiKey.Period;
+            case Keys.Slash: return ImGuiKey.Slash;
+            case Keys.Semicolon: return ImGuiKey.Semicolon;
+            case Keys.Equal: return ImGuiKey.Equal;
+            case Keys.LeftBracket: return ImGuiKey.LeftBracket;
+            case Keys.Backslash: return ImGuiKey.Backslash;
+            case Keys.RightBracket: return ImGuiKey.RightBracket;
+            case Keys.GraveAccent: return ImGuiKey.GraveAccent;
+            case Keys.CapsLock: return ImGuiKey.CapsLock;
+            case Keys.ScrollLock: return ImGuiKey.ScrollLock;
+            case Keys.NumLock: return ImGuiKey.NumLock;
+            case Keys.PrintScreen: return ImGuiKey.PrintScreen;
+            case Keys.Pause: return ImGuiKey.Pause;
+            case Keys.KeyPadDecimal: return ImGuiKey.KeypadDecimal;
+            case Keys.KeyPadDivide: return ImGuiKey.KeypadDivide;
+            case Keys.KeyPadMultiply: return ImGuiKey.KeypadMultiply;
+            case Keys.KeyPadSubtract: return ImGuiKey.KeypadSubtract;
+            case Keys.KeyPadAdd: return ImGuiKey.KeypadAdd;
+            case Keys.KeyPadEnter: return ImGuiKey.KeypadEnter;
+            case Keys.KeyPadEqual: return ImGuiKey.KeypadEqual;
+            case Keys.LeftShift: return ImGuiKey.LeftShift;
+            case Keys.LeftControl: return ImGuiKey.LeftCtrl;
+            case Keys.LeftAlt: return ImGuiKey.LeftAlt;
+            case Keys.LeftSuper: return ImGuiKey.LeftSuper;
+            case Keys.RightShift: return ImGuiKey.RightShift;
+            case Keys.RightControl: return ImGuiKey.RightCtrl;
+            case Keys.RightAlt: return ImGuiKey.RightAlt;
+            case Keys.RightSuper: return ImGuiKey.RightSuper;
+            case Keys.Menu: return ImGuiKey.Menu;
+            default: return ImGuiKey.None;
         }
     }
 }
