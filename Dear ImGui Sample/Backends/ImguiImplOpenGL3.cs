@@ -1,5 +1,5 @@
 ﻿using ImGuiNET;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using System;
 using System.Runtime.CompilerServices;
@@ -108,7 +108,7 @@ namespace Dear_ImGui_Sample.Backends
 
             GL.Enable(EnableCap.Blend);
             GL.BlendEquation(BlendEquationMode.FuncAdd);
-            GL.BlendFuncSeparate(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha, BlendingFactorSrc.One, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFuncSeparate(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha, BlendingFactor.One, BlendingFactor.OneMinusSrcAlpha);
             GL.Disable(EnableCap.CullFace);
             GL.Disable(EnableCap.DepthTest);
             GL.Disable(EnableCap.StencilTest);
@@ -119,8 +119,8 @@ namespace Dear_ImGui_Sample.Backends
             GL.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Fill);
 
             bool clip_origin_lower_left = true;
-            ClipOrigin clip_origin = (ClipOrigin)GL.GetInteger(GetPName.ClipOrigin);
-            if (clip_origin == ClipOrigin.UpperLeft)
+            int clip_origin = GL.GetInteger((GetPName)All.ClipOrigin);
+            if (clip_origin == (int)All.UpperLeft)
                 clip_origin_lower_left = false;
 
             GL.Viewport(0, 0, fbWidth, fbHeight);
@@ -132,20 +132,20 @@ namespace Dear_ImGui_Sample.Backends
                 (T, B) = (B, T); // Swap top and bottom if origin is upper left.
             Matrix4 mvp = Matrix4.CreateOrthographicOffCenter(L, R, B, T, -1, 1);
             GL.UseProgram(bd->ShaderHandle);
-            GL.Uniform1(bd->UniformLocationTex, 0);
-            GL.UniformMatrix4(bd->UniformLocationProjMtx, true, ref mvp);
+            GL.Uniform1i(bd->UniformLocationTex, 0);
+            GL.UniformMatrix4f(bd->UniformLocationProjMtx, 1, true, ref mvp);
 
             GL.BindSampler(0, 0);
 
             GL.BindVertexArray(vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, bd->VboHandle);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, bd->EboHandle);
-            GL.EnableVertexAttribArray(bd->AttribLocationVtxPos);
-            GL.EnableVertexAttribArray(bd->AttribLocationVtxUV);
-            GL.EnableVertexAttribArray(bd->AttribLocationVtxColor);
-            GL.VertexAttribPointer(bd->AttribLocationVtxPos, 2, VertexAttribPointerType.Float, false, sizeof(ImDrawVert),  0);
-            GL.VertexAttribPointer(bd->AttribLocationVtxUV, 2, VertexAttribPointerType.Float, false, sizeof(ImDrawVert),  8);
-            GL.VertexAttribPointer(bd->AttribLocationVtxColor, 4, VertexAttribPointerType.UnsignedByte, true, sizeof(ImDrawVert), 16);
+            GL.EnableVertexAttribArray((uint)bd->AttribLocationVtxPos);
+            GL.EnableVertexAttribArray((uint)bd->AttribLocationVtxUV);
+            GL.EnableVertexAttribArray((uint)bd->AttribLocationVtxColor);
+            GL.VertexAttribPointer((uint)bd->AttribLocationVtxPos, 2, VertexAttribPointerType.Float, false, sizeof(ImDrawVert),  0);
+            GL.VertexAttribPointer((uint)bd->AttribLocationVtxUV, 2, VertexAttribPointerType.Float, false, sizeof(ImDrawVert),  8);
+            GL.VertexAttribPointer((uint)bd->AttribLocationVtxColor, 4, VertexAttribPointerType.UnsignedByte, true, sizeof(ImDrawVert), 16);
         }
 
         public static void RenderDrawData(ImDrawDataPtr drawData)
@@ -158,7 +158,7 @@ namespace Dear_ImGui_Sample.Backends
             int last_active_texture = GL.GetInteger(GetPName.ActiveTexture);
             GL.ActiveTexture(TextureUnit.Texture0);
             int last_program = GL.GetInteger(GetPName.CurrentProgram);
-            int last_texture = GL.GetInteger(GetPName.TextureBinding2D);
+            int last_texture = GL.GetInteger(GetPName.TextureBinding2d);
             int last_sampler = GL.GetInteger(GetPName.SamplerBinding);
             int last_array_buffer = GL.GetInteger(GetPName.ArrayBufferBinding);
             int last_vao = GL.GetInteger(GetPName.VertexArrayBinding);
@@ -194,8 +194,8 @@ namespace Dear_ImGui_Sample.Backends
 
                 nint vtx_buffer_size = drawList.VtxBuffer.Size * (int)sizeof(ImDrawVert);
                 nint idx_buffer_size = drawList.IdxBuffer.Size * (int)sizeof(ushort);
-                GL.BufferData(BufferTarget.ArrayBuffer, vtx_buffer_size, drawList.VtxBuffer.Data, BufferUsageHint.StreamDraw);
-                GL.BufferData(BufferTarget.ElementArrayBuffer, idx_buffer_size, drawList.IdxBuffer.Data, BufferUsageHint.StreamDraw);
+                GL.BufferData(BufferTarget.ArrayBuffer, vtx_buffer_size, drawList.VtxBuffer.Data, BufferUsage.StreamDraw);
+                GL.BufferData(BufferTarget.ElementArrayBuffer, idx_buffer_size, drawList.IdxBuffer.Data, BufferUsage.StreamDraw);
 
                 for (int cmd_i = 0; cmd_i < drawList.CmdBuffer.Size; cmd_i++)
                 {
@@ -224,7 +224,7 @@ namespace Dear_ImGui_Sample.Backends
 
                         GL.Scissor((int)clip_min.X, (int)((float)fbHeight - clip_max.Y), (int)(clip_max.X - clip_min.X), (int)(clip_max.Y - clip_min.Y));
 
-                        GL.BindTexture(TextureTarget.Texture2D, (int)cmdPtr.GetTexID());
+                        GL.BindTexture(TextureTarget.Texture2d, (int)cmdPtr.GetTexID());
                         
                         GL.DrawElementsBaseVertex(PrimitiveType.Triangles, (int)cmd.ElemCount, DrawElementsType.UnsignedShort, (int)(cmd.IdxOffset * sizeof(ushort)), (int)cmd.VtxOffset);
                     }
@@ -234,13 +234,13 @@ namespace Dear_ImGui_Sample.Backends
             GL.DeleteVertexArray(vao);
 
             if (last_program == 0 || GL.IsProgram(last_program)) GL.UseProgram(last_program);
-            GL.BindTexture(TextureTarget.Texture2D, last_texture);
+            GL.BindTexture(TextureTarget.Texture2d, last_texture);
             GL.BindSampler(0, last_sampler);
             GL.ActiveTexture((TextureUnit)last_active_texture);
             GL.BindVertexArray(last_vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, last_array_buffer);
             GL.BlendEquationSeparate((BlendEquationMode)last_blend_equation_rgb, (BlendEquationMode)last_blend_equation_alpha);
-            GL.BlendFuncSeparate((BlendingFactorSrc)last_blend_src_rgb, (BlendingFactorDest)last_blend_dst_rgb, (BlendingFactorSrc)last_blend_src_alpha, (BlendingFactorDest)last_blend_dst_alpha);
+            GL.BlendFuncSeparate((BlendingFactor)last_blend_src_rgb, (BlendingFactor)last_blend_dst_rgb, (BlendingFactor)last_blend_src_alpha, (BlendingFactor)last_blend_dst_alpha);
             if (last_enable_blend) GL.Enable(EnableCap.Blend); else GL.Disable(EnableCap.Blend);
             if (last_enable_cull_face) GL.Enable(EnableCap.CullFace); else GL.Disable(EnableCap.CullFace);
             if (last_enable_depth_test) GL.Enable(EnableCap.DepthTest); else GL.Disable(EnableCap.DepthTest);
@@ -275,19 +275,19 @@ namespace Dear_ImGui_Sample.Backends
             //io.Fonts.AddFontDefault();
             io.Fonts.GetTexDataAsRGBA32(out byte* pixels, out int width, out int height);
 
-            int last_texture = GL.GetInteger(GetPName.TextureBinding2D);
+            int last_texture = GL.GetInteger(GetPName.TextureBinding2d);
             bd->FontTexture = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, bd->FontTexture);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-            GL.PixelStore(PixelStoreParameter.UnpackRowLength, 0);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)pixels);
+            GL.BindTexture(TextureTarget.Texture2d, bd->FontTexture);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+            GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+            GL.PixelStorei(PixelStoreParameter.UnpackRowLength, 0);
+            GL.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)pixels);
 
             io.Fonts.SetTexID(bd->FontTexture);
 
-            GL.BindTexture(TextureTarget.Texture2D, last_texture);
+            GL.BindTexture(TextureTarget.Texture2d, last_texture);
         }
 
         static void DestroyFontsTexture()
@@ -305,15 +305,15 @@ namespace Dear_ImGui_Sample.Backends
 
         static bool CheckShader(int handle, string desc)
         {
-            GL.GetShader(handle, ShaderParameter.CompileStatus, out int status);
-            GL.GetShader(handle, ShaderParameter.InfoLogLength, out int logLength);
+            GL.GetShaderi(handle, ShaderParameterName.CompileStatus, out int status);
+            GL.GetShaderi(handle, ShaderParameterName.InfoLogLength, out int logLength);
             if (status == 0)
             {
                 Console.Error.WriteLine($"ERROR: ImguiImplOpenGL3.CheckShader: Failed to compile {desc}!");
             }
             if (logLength > 1)
             {
-                string log = GL.GetShaderInfoLog(handle);
+                GL.GetShaderInfoLog(handle, out string log);
                 Console.Error.WriteLine(log);
             }
             return status == 1;
@@ -321,15 +321,15 @@ namespace Dear_ImGui_Sample.Backends
 
         static bool CheckProgram(int handle, string desc)
         {
-            GL.GetProgram(handle, GetProgramParameterName.LinkStatus, out int status);
-            GL.GetProgram(handle, GetProgramParameterName.InfoLogLength, out int logLength);
+            GL.GetProgrami(handle, ProgramProperty.LinkStatus, out int status);
+            GL.GetProgrami(handle, ProgramProperty.InfoLogLength, out int logLength);
             if (status == 0)
             {
                 Console.Error.WriteLine($"ERROR: ImguiImplOpenGL3.CheckProgram: Failed to link {desc}!");
             }
             if (logLength > 1)
             {
-                string log = GL.GetProgramInfoLog(handle);
+                GL.GetProgramInfoLog(handle, out string log);
                 Console.Error.WriteLine(log);
             }
             return status == 1;
@@ -339,7 +339,7 @@ namespace Dear_ImGui_Sample.Backends
         {
             RendererData* bd = GetBackendData();
 
-            int last_texture = GL.GetInteger(GetPName.TextureBinding2D);
+            int last_texture = GL.GetInteger(GetPName.TextureBinding2d);
             int last_array_buffer = GL.GetInteger(GetPName.ArrayBufferBinding);
             int last_pixel_unpack_buffer = GL.GetInteger(GetPName.PixelUnpackBufferBinding);
             int last_vertex_array = GL.GetInteger(GetPName.VertexArray);
@@ -520,7 +520,7 @@ namespace Dear_ImGui_Sample.Backends
 
             CreateFontsTexture();
 
-            GL.BindTexture(TextureTarget.Texture2D, last_texture);
+            GL.BindTexture(TextureTarget.Texture2d, last_texture);
             GL.BindBuffer(BufferTarget.ArrayBuffer, last_array_buffer);
             GL.BindBuffer(BufferTarget.PixelUnpackBuffer, last_pixel_unpack_buffer);
             GL.BindVertexArray(last_vertex_array);

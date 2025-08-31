@@ -67,7 +67,7 @@ namespace Dear_ImGui_Sample
 
             ImGui.Render();
             GL.Viewport(0, 0, FramebufferSize.X, FramebufferSize.Y);
-            GL.ClearColor(new Color4(0, 32, 48, 255));
+            GL.ClearColor(new Color4<Rgba>(0, 32, 48, 255));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
             ImguiImplOpenGL3.RenderDrawData(ImGui.GetDrawData());
 
@@ -87,8 +87,8 @@ namespace Dear_ImGui_Sample
             ImguiImplOpenTK4.Shutdown();
         }
 
-        public readonly static DebugProc DebugProcCallback = Window_DebugProc;
-        private static void Window_DebugProc(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr messagePtr, IntPtr userParam)
+        public readonly static GLDebugProc DebugProcCallback = Window_DebugProc;
+        private static void Window_DebugProc(DebugSource source, DebugType type, uint id, DebugSeverity severity, int length, IntPtr messagePtr, IntPtr userParam)
         {
             string message = Marshal.PtrToStringAnsi(messagePtr, length);
 
