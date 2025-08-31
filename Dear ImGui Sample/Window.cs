@@ -1,23 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Dear_ImGui_Sample.Backends;
 using ImGuiNET;
-using System.Drawing;
+using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Dear_ImGui_Sample
 {
     public class Window : GameWindow
     {
-        ImGuiController _controller;
-
-        public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ Size = new Vector2i(1600, 900), APIVersion = new Version(3, 3) })
+        public Window() : base(GameWindowSettings.Default, new NativeWindowSettings(){ ClientSize = new Vector2i(1600, 900), APIVersion = new Version(3, 3) })
         { }
 
         protected override void OnLoad()
@@ -26,54 +29,111 @@ namespace Dear_ImGui_Sample
 
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
 
-            _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
-        }
-        
-        protected override void OnResize(ResizeEventArgs e)
-        {
-            base.OnResize(e);
+            GL.DebugMessageCallback(DebugProcCallback, IntPtr.Zero);
+            GL.Enable(EnableCap.DebugOutput);
+            GL.Enable(EnableCap.DebugOutputSynchronous);
 
-            // Update the opengl viewport
-            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
+            ImGui.CreateContext();
+            ImGuiIOPtr io = ImGui.GetIO();
+            io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
+            io.ConfigFlags |= ImGuiConfigFlags.NavEnableGamepad;
+            io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
+            io.ConfigFlags |= ImGuiConfigFlags.ViewportsEnable;
 
-            // Tell ImGui of the new size
-            _controller.WindowResized(ClientSize.X, ClientSize.Y);
+            ImGui.StyleColorsDark();
+
+            ImGuiStylePtr style = ImGui.GetStyle();
+            if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0)
+            {
+                style.WindowRounding = 0.0f;
+                style.Colors[(int)ImGuiCol.WindowBg].W = 1.0f;
+            }
+
+            ImguiImplOpenTK4.Init(this);
+            ImguiImplOpenGL3.Init();
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
 
-            _controller.Update(this, (float)e.Time);
+            ImguiImplOpenGL3.NewFrame();
+            ImguiImplOpenTK4.NewFrame();
+            ImGui.NewFrame();
 
-            GL.ClearColor(new Color4(0, 32, 48, 255));
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
-
-            // Enable Docking
             ImGui.DockSpaceOverViewport();
 
             ImGui.ShowDemoWindow();
 
-            _controller.Render();
+            ImGui.Render();
+            GL.Viewport(0, 0, FramebufferSize.X, FramebufferSize.Y);
+            GL.ClearColor(new Color4(0, 32, 48, 255));
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+            ImguiImplOpenGL3.RenderDrawData(ImGui.GetDrawData());
 
-            ImGuiController.CheckGLError("End of frame");
+            if (ImGui.GetIO().ConfigFlags.HasFlag(ImGuiConfigFlags.ViewportsEnable))
+            {
+                ImGui.UpdatePlatformWindows();
+                ImGui.RenderPlatformWindowsDefault();
+                Context.MakeCurrent();
+            }
 
             SwapBuffers();
         }
 
-        protected override void OnTextInput(TextInputEventArgs e)
+        public void OnClosed()
         {
-            base.OnTextInput(e);
-            
-            
-            _controller.PressChar((char)e.Unicode);
+            ImguiImplOpenGL3.Shutdown();
+            ImguiImplOpenTK4.Shutdown();
         }
 
-        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        public readonly static DebugProc DebugProcCallback = Window_DebugProc;
+        private static void Window_DebugProc(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr messagePtr, IntPtr userParam)
         {
-            base.OnMouseWheel(e);
-            
-            _controller.MouseScroll(e.Offset);
+            string message = Marshal.PtrToStringAnsi(messagePtr, length);
+
+            bool showMessage = true;
+
+            switch (source)
+            {
+                case DebugSource.DebugSourceApplication:
+                    showMessage = false;
+                    break;
+                case DebugSource.DontCare:
+                case DebugSource.DebugSourceApi:
+                case DebugSource.DebugSourceWindowSystem:
+                case DebugSource.DebugSourceShaderCompiler:
+                case DebugSource.DebugSourceThirdParty:
+                case DebugSource.DebugSourceOther:
+                default:
+                    showMessage = true;
+                    break;
+            }
+
+            if (showMessage)
+            {
+                switch (severity)
+                {
+                    case DebugSeverity.DontCare:
+                        Console.WriteLine($"[DontCare] [{source}] {message}");
+                        break;
+                    case DebugSeverity.DebugSeverityNotification:
+                        //Logger?.LogDebug($"[{source}] {message}");
+                        break;
+                    case DebugSeverity.DebugSeverityHigh:
+                        Console.Error.WriteLine($"Error: [{source}] {message}");
+                        break;
+                    case DebugSeverity.DebugSeverityMedium:
+                        Console.WriteLine($"Warning: [{source}] {message}");
+                        break;
+                    case DebugSeverity.DebugSeverityLow:
+                        Console.WriteLine($"Info: [{source}] {message}");
+                        break;
+                    default:
+                        Console.WriteLine($"[default] [{source}] {message}");
+                        break;
+                }
+            }
         }
     }
 }
