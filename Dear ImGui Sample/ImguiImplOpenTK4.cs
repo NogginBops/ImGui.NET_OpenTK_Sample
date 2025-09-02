@@ -13,16 +13,17 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 using SNVector2 = System.Numerics.Vector2;
 
-namespace Dear_ImGui_Sample.Backends
+namespace ImGui_OpenTK.Backends
 {
-    internal unsafe static class ImguiImplOpenTK4
+    public unsafe static class ImguiImplOpenTK4
     {
         struct BackendData
         {
             public nint Context;
-            public IntPtr WindowPtr;
+            public nint WindowPtr;
 
             public long Time;
 
@@ -123,7 +124,7 @@ namespace Dear_ImGui_Sample.Backends
             }
         }
 
-        static readonly Dictionary<IntPtr, NativeWindow> WindowMap = new Dictionary<nint, NativeWindow>();
+        static readonly Dictionary<nint, NativeWindow> WindowMap = new Dictionary<nint, NativeWindow>();
         static readonly Dictionary<NativeWindow, WindowCallbacks> CallbackMap = new Dictionary<NativeWindow, WindowCallbacks>();
 
         private static BackendData* GetBackendData()
@@ -259,17 +260,17 @@ namespace Dear_ImGui_Sample.Backends
             io.BackendFlags |= ImGuiBackendFlags.HasMouseHoveredViewport;
             
             BackendData* bd = (BackendData*)NativeMemory.AllocZeroed((uint)sizeof(BackendData));
-            io.BackendPlatformUserData = (IntPtr)bd;
+            io.BackendPlatformUserData = (nint)bd;
             io.NativePtr->BackendPlatformName = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference("opentk_impl_opentk4"u8));
-            WindowMap.Add((IntPtr)window.WindowPtr, window);
+            WindowMap.Add((nint)window.WindowPtr, window);
 
             bd->Context = ImGui.GetCurrentContext();
-            bd->WindowPtr = (IntPtr)window.WindowPtr;
+            bd->WindowPtr = (nint)window.WindowPtr;
             bd->WantUpdateMonitors = true;
 
             var platformIO = ImGui.GetPlatformIO();
-            platformIO.NativePtr->Platform_SetClipboardTextFn = (IntPtr)(delegate* unmanaged[Cdecl]<nint, byte*, void>)(&Platform_SetClipboardText);
-            platformIO.NativePtr->Platform_GetClipboardTextFn = (IntPtr)(delegate* unmanaged[Cdecl]<nint, byte*>)(&Platform_GetClipboardText);
+            platformIO.NativePtr->Platform_SetClipboardTextFn = (nint)(delegate* unmanaged[Cdecl]<nint, byte*, void>)(&Platform_SetClipboardText);
+            platformIO.NativePtr->Platform_GetClipboardTextFn = (nint)(delegate* unmanaged[Cdecl]<nint, byte*>)(&Platform_GetClipboardText);
 
             platformIO.NativePtr->Monitors = default;
 
@@ -279,7 +280,7 @@ namespace Dear_ImGui_Sample.Backends
             Monitors.OnMonitorConnected += Monitors_OnMonitorConnected;
 
             ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
-            mainViewport.PlatformHandle = (IntPtr)window.WindowPtr;
+            mainViewport.PlatformHandle = (nint)window.WindowPtr;
 
             InitMultiViewportSupport();
 
@@ -419,13 +420,12 @@ namespace Dear_ImGui_Sample.Backends
 
             if (platformIO.NativePtr->Monitors.Data != 0)
                 Marshal.FreeHGlobal(platformIO.NativePtr->Monitors.Data);
-            platformIO.NativePtr->Monitors = new ImVector(monitors.Count, monitors.Count, (IntPtr)Marshal.AllocHGlobal(monitors.Count * sizeof(ImGuiPlatformMonitor)));
+            platformIO.NativePtr->Monitors = new ImVector(monitors.Count, monitors.Count, Marshal.AllocHGlobal(monitors.Count * sizeof(ImGuiPlatformMonitor)));
             NativeMemory.Clear((void*)platformIO.NativePtr->Monitors.Data, (nuint)(platformIO.NativePtr->Monitors.Capacity * sizeof(ImGuiPlatformMonitor)));
             for (int i = 0; i < monitors.Count; i++)
             {
                 ref ImGuiPlatformMonitor monitor = ref Unsafe.Add(ref Unsafe.AsRef<ImGuiPlatformMonitor>((void*)platformIO.Monitors.Data), i);
 
-                var mode = monitors[i].CurrentVideoMode;
                 var clientArea = monitors[i].ClientArea;
                 monitor.MainPos = new(clientArea.Min.X, clientArea.Min.Y);
                 monitor.MainSize = new(clientArea.Size.X, clientArea.Size.Y);
@@ -461,24 +461,27 @@ namespace Dear_ImGui_Sample.Backends
             {
                 currentTime = bd->Time + 1;
             }
-            io.DeltaTime = bd->Time > 0.0 ? ((currentTime - bd->Time) / (float)Stopwatch.Frequency) : (1.0f / 60.0f);
+            io.DeltaTime = bd->Time > 0.0 ? (currentTime - bd->Time) / (float)Stopwatch.Frequency : 1.0f / 60.0f;
             bd->Time = currentTime;
 
             UpdateMouseData();
             UpdateMouseCursor();
+
             // UpdateGamepads()
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
         static void Platform_SetClipboardText(nint ctx, byte* text)
         {
-            Marshal.PtrToStringUTF8((IntPtr)text);
+            BackendData* bd = GetBackendData();
+            GLFW.SetClipboardString((OpenTK.Windowing.GraphicsLibraryFramework.Window*)bd->WindowPtr, Marshal.PtrToStringUTF8((nint)text));
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
         static byte* Platform_GetClipboardText(nint ctx)
         {
-            return default;
+            BackendData* bd = GetBackendData();
+            return GLFW.GetClipboardStringRaw((OpenTK.Windowing.GraphicsLibraryFramework.Window*)bd->WindowPtr);
         }
 
         struct ViewportData
@@ -494,41 +497,26 @@ namespace Dear_ImGui_Sample.Backends
             var platformIO = ImGui.GetPlatformIO();
             BackendData* bd = GetBackendData();
 
-            //var a0 = (ImGuiNET.Platform_CreateWindow)Platform_CreateWindow;
-            //var a1 = (ImGuiNET.Platform_DestroyWindow)Platform_DestroyWindow;
-            //var a2 = (ImGuiNET.Platform_ShowWindow)Platform_ShowWindow;
-            //var a3 = (ImGuiNET.Platform_GetWindowPos)Platform_GetWindowPos;
-            //var a4 = (ImGuiNET.Platform_SetWindowPos)Platform_SetWindowPos;
-            //var a5 = (ImGuiNET.Platform_GetWindowSize)Platform_GetWindowSize;
-            //var a6 = (ImGuiNET.Platform_SetWindowSize)Platform_SetWindowSize;
-            //var a7 = (ImGuiNET.Platform_SetWindowTitle)Platform_SetWindowTitle;
-            //var a8 = (ImGuiNET.Platform_SetWindowFocus)Platform_SetWindowFocus;
-            //var a9 = (ImGuiNET.Platform_GetWindowFocus)Platform_GetWindowFocus;
-            //var a10 = (ImGuiNET.Platform_GetWindowMinimized)Platform_GetWindowMinimized;
-            //var a11 = (ImGuiNET.Platform_SetWindowAlpha)Platform_SetWindowAlpha;
-            //var a12 = (ImGuiNET.Platform_RenderWindow)Platform_RenderWindow;
-            //var a13 = (ImGuiNET.Platform_SwapBuffers)Platform_SwapBuffers;
-
-            platformIO.Platform_CreateWindow = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_CreateWindow;
-            platformIO.Platform_DestroyWindow = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_DestroyWindow;
-            platformIO.Platform_ShowWindow = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_ShowWindow;
-            ImGuiNative.ImGuiPlatformIO_Set_Platform_GetWindowPos(platformIO, (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2 *, void>)&Platform_GetWindowPos);
-            platformIO.Platform_SetWindowPos = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2, void>)&Platform_SetWindowPos;
-            ImGuiNative.ImGuiPlatformIO_Set_Platform_GetWindowSize(platformIO, (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2*, void>)&Platform_GetWindowSize);
-            platformIO.Platform_SetWindowSize = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2, void>)&Platform_SetWindowSize;
-            platformIO.Platform_SetWindowTitle = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, nint, void>)&Platform_SetWindowTitle;
-            platformIO.Platform_SetWindowFocus = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_SetWindowFocus;
-            platformIO.Platform_GetWindowFocus = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, byte>)&Platform_GetWindowFocus;
-            platformIO.Platform_GetWindowMinimized = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, byte>)&Platform_GetWindowMinimized;
-            platformIO.Platform_SetWindowAlpha = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, float, void>)&Platform_SetWindowAlpha;
-            platformIO.Platform_RenderWindow = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void*, void>)&Platform_RenderWindow;
-            platformIO.Platform_SwapBuffers = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void*, void>)&Platform_SwapBuffers;
+            platformIO.Platform_CreateWindow = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_CreateWindow;
+            platformIO.Platform_DestroyWindow = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_DestroyWindow;
+            platformIO.Platform_ShowWindow = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_ShowWindow;
+            ImGuiNative.ImGuiPlatformIO_Set_Platform_GetWindowPos(platformIO, (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2 *, void>)&Platform_GetWindowPos);
+            platformIO.Platform_SetWindowPos = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2, void>)&Platform_SetWindowPos;
+            ImGuiNative.ImGuiPlatformIO_Set_Platform_GetWindowSize(platformIO, (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2*, void>)&Platform_GetWindowSize);
+            platformIO.Platform_SetWindowSize = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, SNVector2, void>)&Platform_SetWindowSize;
+            platformIO.Platform_SetWindowTitle = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, nint, void>)&Platform_SetWindowTitle;
+            platformIO.Platform_SetWindowFocus = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Platform_SetWindowFocus;
+            platformIO.Platform_GetWindowFocus = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, byte>)&Platform_GetWindowFocus;
+            platformIO.Platform_GetWindowMinimized = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, byte>)&Platform_GetWindowMinimized;
+            platformIO.Platform_SetWindowAlpha = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, float, void>)&Platform_SetWindowAlpha;
+            platformIO.Platform_RenderWindow = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void*, void>)&Platform_RenderWindow;
+            platformIO.Platform_SwapBuffers = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void*, void>)&Platform_SwapBuffers;
             
             ImGuiViewportPtr mainViewport = ImGui.GetMainViewport();
             ViewportData* vd = (ViewportData*)NativeMemory.AllocZeroed((uint)sizeof(ViewportData));
             vd->WindowPtr = bd->WindowPtr;
             vd->WindowOwned = false;
-            mainViewport.PlatformUserData = (IntPtr)vd;
+            mainViewport.PlatformUserData = (nint)vd;
             mainViewport.PlatformHandle = bd->WindowPtr;
         }
 
@@ -554,7 +542,7 @@ namespace Dear_ImGui_Sample.Backends
             NativeWindow mainWindow = WindowMap[bd->WindowPtr];
 
             ViewportData* vd = (ViewportData*)NativeMemory.AllocZeroed((uint)sizeof(ViewportData));
-            viewport.PlatformUserData = (IntPtr)vd;
+            viewport.PlatformUserData = (nint)vd;
 
             // FIXME??
             GLFW.WindowHint(WindowHintBool.FocusOnShow, false);
@@ -567,9 +555,9 @@ namespace Dear_ImGui_Sample.Backends
                 SharedContext = mainWindow.Context,
                 Title = "No Title Yet",
             });
-            WindowMap.Add((IntPtr)window.WindowPtr, window);
+            WindowMap.Add((nint)window.WindowPtr, window);
 
-            vd->WindowPtr = (IntPtr)window.WindowPtr;
+            vd->WindowPtr = (nint)window.WindowPtr;
             vd->WindowOwned = true;
             viewport.PlatformHandle = vd->WindowPtr;
 
@@ -637,11 +625,11 @@ namespace Dear_ImGui_Sample.Backends
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        static void Platform_GetWindowSize(ImGuiViewportPtr viewport, SNVector2* outPos)
+        static void Platform_GetWindowSize(ImGuiViewportPtr viewport, SNVector2* outSize)
         {
             ViewportData* vd = (ViewportData*)viewport.PlatformUserData;
             NativeWindow window = WindowMap[vd->WindowPtr];
-            *outPos = new(window.ClientSize.X, window.ClientSize.Y);
+            *outSize = new(window.ClientSize.X, window.ClientSize.Y);
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

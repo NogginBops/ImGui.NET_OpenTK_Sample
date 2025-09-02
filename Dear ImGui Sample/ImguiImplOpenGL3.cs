@@ -5,7 +5,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Dear_ImGui_Sample.Backends
+namespace ImGui_OpenTK.Backends
 {
     public unsafe static class ImguiImplOpenGL3
     {
@@ -61,7 +61,7 @@ namespace Dear_ImGui_Sample.Backends
             RendererData* bd = (RendererData*)NativeMemory.AllocZeroed((uint)sizeof(RendererData));
             bd->GlslVersion = 410;
 
-            io.BackendRendererUserData = (IntPtr)bd;
+            io.BackendRendererUserData = (nint)bd;
             io.NativePtr->BackendRendererName = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference("opentk_impl_opengl3"u8));
 
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
@@ -83,7 +83,7 @@ namespace Dear_ImGui_Sample.Backends
             io.NativePtr->BackendRendererName = null;
             io.NativePtr->BackendRendererUserData = null;
 
-            io.BackendFlags &= ~(ImGuiBackendFlags.RendererHasVtxOffset);
+            io.BackendFlags &= ~ImGuiBackendFlags.RendererHasVtxOffset;
 
             NativeMemory.Free(bd);
         }
@@ -192,8 +192,8 @@ namespace Dear_ImGui_Sample.Backends
             {
                 ImDrawListPtr drawList = drawData.CmdLists[n];
 
-                nint vtx_buffer_size = drawList.VtxBuffer.Size * (int)sizeof(ImDrawVert);
-                nint idx_buffer_size = drawList.IdxBuffer.Size * (int)sizeof(ushort);
+                nint vtx_buffer_size = drawList.VtxBuffer.Size * sizeof(ImDrawVert);
+                nint idx_buffer_size = drawList.IdxBuffer.Size * sizeof(ushort);
                 GL.BufferData(BufferTarget.ArrayBuffer, vtx_buffer_size, drawList.VtxBuffer.Data, BufferUsage.StreamDraw);
                 GL.BufferData(BufferTarget.ElementArrayBuffer, idx_buffer_size, drawList.IdxBuffer.Data, BufferUsage.StreamDraw);
 
@@ -222,7 +222,7 @@ namespace Dear_ImGui_Sample.Backends
                         if (clip_max.X <= clip_min.X || clip_max.Y <= clip_min.Y)
                             continue;
 
-                        GL.Scissor((int)clip_min.X, (int)((float)fbHeight - clip_max.Y), (int)(clip_max.X - clip_min.X), (int)(clip_max.Y - clip_min.Y));
+                        GL.Scissor((int)clip_min.X, (int)(fbHeight - clip_max.Y), (int)(clip_max.X - clip_min.X), (int)(clip_max.Y - clip_min.Y));
 
                         GL.BindTexture(TextureTarget.Texture2d, (int)cmdPtr.GetTexID());
                         
@@ -283,7 +283,7 @@ namespace Dear_ImGui_Sample.Backends
             GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
             GL.TexParameteri(TextureTarget.Texture2d, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
             GL.PixelStorei(PixelStoreParameter.UnpackRowLength, 0);
-            GL.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (IntPtr)pixels);
+            GL.TexImage2D(TextureTarget.Texture2d, 0, InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, (nint)pixels);
 
             io.Fonts.SetTexID(bd->FontTexture);
 
@@ -554,7 +554,7 @@ namespace Dear_ImGui_Sample.Backends
         static void InitMultiViewportSupport()
         {
             var platformIO = ImGui.GetPlatformIO();
-            platformIO.Renderer_RenderWindow = (IntPtr)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Renderer_RenderWindow;
+            platformIO.Renderer_RenderWindow = (nint)(delegate* unmanaged[Cdecl]<ImGuiViewportPtr, void>)&Renderer_RenderWindow;
         }
 
         static void ShutdownMultiViewportSupport()

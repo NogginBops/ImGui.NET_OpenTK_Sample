@@ -1,4 +1,4 @@
-﻿using Dear_ImGui_Sample.Backends;
+﻿using ImGui_OpenTK.Backends;
 using ImGuiNET;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dear_ImGui_Sample
+namespace OpenTK4_OpenGL_Sample
 {
     public class Window : GameWindow
     {

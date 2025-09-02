@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <StartupObject>Dear_ImGui_Sample.Program</StartupObject>
     <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
 
