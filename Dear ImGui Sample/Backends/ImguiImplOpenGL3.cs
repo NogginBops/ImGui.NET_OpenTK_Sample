@@ -47,6 +47,7 @@ namespace Dear_ImGui_Sample.Backends
             public bool HasClipOrigin;
 
             public int GlslVersion;
+            public bool KHRDebugAvailable;
         }
 
         static RendererData* GetBackendData()
@@ -54,7 +55,7 @@ namespace Dear_ImGui_Sample.Backends
             return ImGui.GetCurrentContext() == 0 ? null : (RendererData*)ImGui.GetIO().BackendRendererUserData;
         }
 
-        public static bool Init()
+        public static bool Init(bool useKHRDebugIfAvailable = true)
         {
             var io = ImGui.GetIO();
 
@@ -81,6 +82,11 @@ namespace Dear_ImGui_Sample.Backends
                 _ => 110,
             };
 
+            if (useKHRDebugIfAvailable)
+                bd->KHRDebugAvailable = (major == 4 && minor >= 3) || IsExtensionSupported("KHR_debug");
+            else
+                bd->KHRDebugAvailable = false;
+
             io.BackendRendererUserData = (IntPtr)bd;
             io.NativePtr->BackendRendererName = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference("opentk_impl_opengl3"u8));
 
@@ -90,6 +96,18 @@ namespace Dear_ImGui_Sample.Backends
             InitMultiViewportSupport();
 
             return true;
+
+            static bool IsExtensionSupported(string name)
+            {
+                int n = GL.GetInteger(GetPName.NumExtensions);
+                for (int i = 0; i < n; i++)
+                {
+                    string extension = GL.GetString(StringNameIndexed.Extensions, i);
+                    if (extension == name) return true;
+                }
+
+                return false;
+            }
         }
 
         public static void Shutdown()
@@ -166,6 +184,11 @@ namespace Dear_ImGui_Sample.Backends
             GL.VertexAttribPointer(bd->AttribLocationVtxPos, 2, VertexAttribPointerType.Float, false, sizeof(ImDrawVert),  0);
             GL.VertexAttribPointer(bd->AttribLocationVtxUV, 2, VertexAttribPointerType.Float, false, sizeof(ImDrawVert),  8);
             GL.VertexAttribPointer(bd->AttribLocationVtxColor, 4, VertexAttribPointerType.UnsignedByte, true, sizeof(ImDrawVert), 16);
+
+            if (bd->KHRDebugAvailable)
+            {
+                GL.ObjectLabel(ObjectLabelIdentifier.VertexArray, vao, -1, "OpenTK_ImGui: VAO");
+            }
         }
 
         public static void RenderDrawData(ImDrawDataPtr drawData)
@@ -308,6 +331,11 @@ namespace Dear_ImGui_Sample.Backends
             io.Fonts.SetTexID(bd->FontTexture);
 
             GL.BindTexture(TextureTarget.Texture2D, last_texture);
+
+            if (bd->KHRDebugAvailable)
+            {
+                GL.ObjectLabel(ObjectLabelIdentifier.Texture, bd->FontTexture, -1, "OpenTK_ImGui: Font Texture");
+            }
         }
 
         static void DestroyFontsTexture()
@@ -544,6 +572,13 @@ namespace Dear_ImGui_Sample.Backends
             GL.BindBuffer(BufferTarget.ArrayBuffer, last_array_buffer);
             GL.BindBuffer(BufferTarget.PixelUnpackBuffer, last_pixel_unpack_buffer);
             GL.BindVertexArray(last_vertex_array);
+
+            if (bd->KHRDebugAvailable)
+            {
+                GL.ObjectLabel(ObjectLabelIdentifier.Buffer, bd->VboHandle, -1, "OpenTK_ImGui: VBO");
+                GL.ObjectLabel(ObjectLabelIdentifier.Buffer, bd->EboHandle, -1, "OpenTK_ImGui: EBO");
+                GL.ObjectLabel(ObjectLabelIdentifier.Shader, bd->ShaderHandle, -1, "OpenTK_ImGui: Shader");
+            }
         }
 
         static void DestroyDeviceObjects()
