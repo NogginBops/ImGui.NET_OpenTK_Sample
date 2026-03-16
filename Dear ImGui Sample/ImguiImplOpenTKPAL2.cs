@@ -333,7 +333,6 @@ namespace ImGui_OpenTK.Backends
                     Console.WriteLine($"Current viewport: {viewportID} (frame: {ImGui.GetFrameCount()})");
                     lastViewportID = viewportID;
                 }
-                
             }
         }
         static uint lastViewportID = 0;
@@ -464,6 +463,14 @@ namespace ImGui_OpenTK.Backends
                 io.AddMousePosEvent(-float.MaxValue, -float.MaxValue);
                 Console.WriteLine($"Resetting mouse window. (frame: {ImGui.GetFrameCount()})");
             }
+
+            // From: https://github.com/ocornut/imgui/blob/947aa9c9722bd6ff740dd757da609ff41f4d3ba3/backends/imgui_impl_sdl3.cpp#L887-L888
+            // | Our io.AddMouseViewportEvent() calls will only be valid when not capturing.
+            // | Technically speaking testing for 'bd->MouseButtonsDown == 0' would be more rigorous, but testing for payload reduces noise and potential side-effects.
+            if (ImGui.GetDragDropPayload().NativePtr == null)
+                io.BackendFlags |= ImGuiBackendFlags.HasMouseHoveredViewport;
+            else
+                io.BackendFlags &= ~ImGuiBackendFlags.HasMouseHoveredViewport;
 
             UpdateMouseData(window);
             UpdateMouseCursor(window);
@@ -654,13 +661,16 @@ namespace ImGui_OpenTK.Backends
                 graphicsSettings = new VulkanGraphicsApiHints();
             }
 
-            OpenTK.Core.Utility.LogLevel prevFilter = Toolkit.Window.Logger.Filter;
-            Toolkit.Window.Logger.Filter = OpenTK.Core.Utility.LogLevel.Info;
+            
+
             WindowHandle window = Toolkit.Window.Create(graphicsSettings);
-            Toolkit.Window.Logger.Filter = prevFilter;
 
             if (viewport.Flags.HasFlag(ImGuiViewportFlags.NoDecoration))
             {
+                // In OpenTK 5.0-pre15 this causes the window to loose focus which causes
+                // the new viewport to loose the mouse grab that allows imgui to move it seamlessly.
+                // This will be fixed in OpenTK 5.0-pre16.
+                // - Noggin_bops 2026-03-16
                 Toolkit.Window.SetBorderStyle(window, WindowBorderStyle.Borderless);
             }
             else
@@ -687,9 +697,7 @@ namespace ImGui_OpenTK.Backends
             OpenGLContextHandle glContext = null;
             if (useOpenGL)
             {
-                Toolkit.Window.Logger.Filter = OpenTK.Core.Utility.LogLevel.Info;
                 glContext = Toolkit.OpenGL.CreateFromWindow(window);
-                Toolkit.Window.Logger.Filter = prevFilter;
 
                 Toolkit.OpenGL.SetCurrentContext(glContext);
                 Toolkit.OpenGL.SetSwapInterval(0);
