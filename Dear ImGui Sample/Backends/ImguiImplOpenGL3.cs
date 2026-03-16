@@ -59,7 +59,27 @@ namespace Dear_ImGui_Sample.Backends
             var io = ImGui.GetIO();
 
             RendererData* bd = (RendererData*)NativeMemory.AllocZeroed((uint)sizeof(RendererData));
-            bd->GlslVersion = 410;
+
+            int major = GL.GetInteger(GetPName.MajorVersion);
+            int minor = GL.GetInteger(GetPName.MinorVersion);
+
+            bd->GlslVersion = (major, minor) switch
+            {
+                (4, 6) => 460,
+                (4, 5) => 450,
+                (4, 4) => 440,
+                (4, 3) => 430,
+                (4, 2) => 420,
+                (4, 1) => 410,
+                (4, 0) => 400,
+                (3, 3) => 330,
+                (3, 2) => 150,
+                (3, 1) => 140,
+                (3, 0) => 130,
+                (2, 1) => 120,
+                (2, 0) => 110,
+                _ => 110,
+            };
 
             io.BackendRendererUserData = (IntPtr)bd;
             io.NativePtr->BackendRendererName = (byte*)Unsafe.AsPointer(ref MemoryMarshal.GetReference("opentk_impl_opengl3"u8));
