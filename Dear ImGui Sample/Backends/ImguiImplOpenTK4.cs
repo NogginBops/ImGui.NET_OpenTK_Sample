@@ -472,13 +472,15 @@ namespace Dear_ImGui_Sample.Backends
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
         static void Platform_SetClipboardText(nint ctx, byte* text)
         {
-            Marshal.PtrToStringUTF8((IntPtr)text);
+            BackendData* bd = GetBackendData();
+            GLFW.SetClipboardStringRaw((OpenTK.Windowing.GraphicsLibraryFramework.Window*)bd->WindowPtr, text);
         }
 
         [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
         static byte* Platform_GetClipboardText(nint ctx)
         {
-            return default;
+            BackendData* bd = GetBackendData();
+            return GLFW.GetClipboardStringRaw((OpenTK.Windowing.GraphicsLibraryFramework.Window*)bd->WindowPtr);
         }
 
         struct ViewportData
